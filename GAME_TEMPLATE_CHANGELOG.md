@@ -6,7 +6,7 @@
 
 現在の版は、`tools/graph/layers/game-template.toml`の`version`に書く。版の付け方と見出しの書き方は、[PROJECT_TEMPLATE_CHANGELOG.md](PROJECT_TEMPLATE_CHANGELOG.md)の「版の付け方」に合わせる。
 
-## 0.3.1（2026-10-22）
+## 0.3.2（2026-10-22）
 
 ### 修正
 
@@ -17,6 +17,20 @@ CCGSの`.claude/hooks/session-start.sh`と`/setup-engine`が、エンジンの�
 ### 取り込む側の作業
 
 無い。
+
+---
+
+## 0.3.1（2026-10-22）
+
+### 修正
+
+CCGSの`/architecture-decision`で`docs/architecture/`にADRを書くと、フロントマターが無いので`make check`が`G001`で落ちていた（#12）。`graph.toml`の`exclude`に`docs/architecture/`を足し、graphの検証から外した。
+
+ADRの置き場は、役割で2か所に分けた。`docs/50-adr/`にはテンプレートと開発の進め方の決定をgraphの書き方で書き、`docs/architecture/`には作品のゲームの技術の決定をCCGSの書式で書く。番号は別々に数える。決めたことはADR-0006に書き、UC-02と`docs/50-adr/index.md`に案内を足した。
+
+### 取り込む側の作業
+
+無い。`graph.toml`の変更は`make update`で届く。
 
 ---
 

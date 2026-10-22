@@ -14,6 +14,8 @@ tags: [index]
 決定を変えるときは、既存のADRを書き換えず、新しいADRを起こして`supersedes`で繋ぐ。
 置き換えられた側は`status: deprecated`にする。番号は4桁のゼロ埋めで振り、欠番を作らない。
 
+ここに置くのは、テンプレートと開発の進め方の決定である。作品のゲームの技術の決定は、CCGSの`/architecture-decision`が`docs/architecture/`に書く。そちらはgraphの検証から外してあり、番号も別に数える（[ADR-0006](./adr-0006-adr-location.md)）。
+
 ## ノード一覧
 
 <!-- graph:children:start -->
@@ -22,6 +24,7 @@ tags: [index]
 - [ADR-0003 graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む](./adr-0003-ccgs-import.md)
 - [ADR-0004 ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す](./adr-0004-claude-md-split.md)
 - [ADR-0005 言語をGDScriptにする](./adr-0005-gdscript.md)
+- [ADR-0006 ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない](./adr-0006-adr-location.md)
 - [ADR-0007 CCGSのsession-start.shとsetup-engineを、rulesのファイルから読み込みの行を探す形に直す](./adr-0007-engine-import-in-rules.md)
 <!-- graph:children:end -->
 
