@@ -17,6 +17,7 @@ tags: [index]
 
 <!-- graph:children:start -->
 - [UC-01 予約を確定する](./uc-01-sample-confirm-booking.md)
+- [UC-02 CCGSの更新を取り込む](./uc-02-ccgs-upgrade.md)
 <!-- graph:children:end -->
 
 ## 追加するとき

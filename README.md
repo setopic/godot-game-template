@@ -120,15 +120,23 @@ graph LR
   end
   subgraph usecase["ユースケース"]
     UC-01["UC-01<br/>予約を確定する"]
+    UC-02["UC-02<br/>CCGSの更新を取り込む"]
   end
   subgraph contract["契約"]
     CON-01["CON-01<br/>予約確定エンドポイント"]
   end
   subgraph adr["決定記録"]
     ADR-0001["ADR-0001<br/>設計文書をグラフとして管理する"]
+    ADR-0002["ADR-0002<br/>Godotの版を4.7.2にする"]
+    ADR-0003["ADR-0003<br/>graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む"]
+    ADR-0004["ADR-0004<br/>ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す"]
   end
   ADR-0001 -.->|decides| META-01
   ADR-0001 -.->|decides| ARCH-01
+  ADR-0002 -.-|related| ADR-0003
+  ADR-0003 -.-|related| ADR-0004
+  ADR-0003 -.->|decides| UC-02
+  ADR-0004 -.->|decides| UC-02
   ARCH-02 -->|refines| ARCH-01
   CON-01 -->|depends_on| UC-01
   CON-01 -->|depends_on| DOM-01
