@@ -130,6 +130,7 @@ graph LR
     ADR-0002["ADR-0002<br/>Godotの版を4.7.2にする"]
     ADR-0003["ADR-0003<br/>graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む"]
     ADR-0004["ADR-0004<br/>ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す"]
+    ADR-0005["ADR-0005<br/>言語をGDScriptにする"]
   end
   ADR-0001 -.->|decides| META-01
   ADR-0001 -.->|decides| ARCH-01
@@ -137,6 +138,7 @@ graph LR
   ADR-0003 -.-|related| ADR-0004
   ADR-0003 -.->|decides| UC-02
   ADR-0004 -.->|decides| UC-02
+  ADR-0005 -.->|decides| UC-02
   ARCH-02 -->|refines| ARCH-01
   CON-01 -->|depends_on| UC-01
   CON-01 -->|depends_on| DOM-01

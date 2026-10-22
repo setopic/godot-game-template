@@ -53,9 +53,10 @@ CCGSは、[ADR-0003](../50-adr/adr-0003-ccgs-import.md)のとおり、選んだ�
    ```bash
    git checkout ccgs/main -- .claude/agents .claude/skills .claude/hooks .claude/scripts .claude/docs .claude/rules .claude/statusline.sh docs/engine-reference docs/WORKFLOW-GUIDE.md docs/COLLABORATIVE-DESIGN-PRINCIPLE.md docs/skill-flow-diagrams.md docs/migration-guide-v1.1.md docs/CLAUDE.md design/CLAUDE.md src/CLAUDE.md studio-tests/CLAUDE.md studio-tests production/.gdignore .worktreeinclude UPGRADING.md CHANGELOG.md
    git show ccgs/main:LICENSE > LICENSE-CCGS
+   git checkout HEAD -- .claude/docs/technical-preferences.md
    ```
 
-   2行目は、CCGSの`LICENSE`を`LICENSE-CCGS`に写す。graph側の`LICENSE`は写さない。
+   2行目は、CCGSの`LICENSE`を`LICENSE-CCGS`に写す。graph側の`LICENSE`は写さない。3行目は、1行目で上書きした`technical-preferences.md`を、この層で書いたものに戻す。このファイルには、`/setup-engine`の値を書いてある（[ADR-0005](../50-adr/adr-0005-gdscript.md)）。
 
    CCGSの版に、上の一覧に無い新しいパスがあれば、`UPGRADING.md`の「Safe to Overwrite」で確かめてから足す。
 
@@ -66,6 +67,7 @@ CCGSは、[ADR-0003](../50-adr/adr-0003-ccgs-import.md)のとおり、選んだ�
    | `.claude/rules/ccgs-studio.md` | `CLAUDE.md` | CCGSの差を写す。`@`のパスは、このファイルからの相対（`@../docs/`、`@../../docs/`）に直す（[ADR-0004](../50-adr/adr-0004-claude-md-split.md)） |
    | `.claude/settings.json` | `.claude/settings.json` | この層で手を入れていなければ、CCGSのもので上書きする。入れていれば、`UPGRADING.md`のMerge Carefullyの指示に従う |
    | `project.yaml` | `project.yaml` | CCGSの差を写す。`framework.version`を新しい版にする |
+   | `.claude/docs/technical-preferences.md` | 同じパス | CCGSの差のうち、節や項目の増減を写す。`/setup-engine`で書いた値は残す |
    | `.gitattributes` | `.gitattributes` | CCGSで増えた行を、末尾のCCGSの節に足す |
    | `.gitignore` | `.gitignore` | CCGSで増えた行のうち、要るものを足す |
    | `docs/architecture/`、`docs/registry/`、`design/registry/` | 同じパス | 作品が書き足すファイルである。この層では手を入れていないので、CCGSのもので上書きしてよい |
@@ -91,7 +93,7 @@ CCGSは、[ADR-0003](../50-adr/adr-0003-ccgs-import.md)のとおり、選んだ�
 | --- | --- |
 | 1 → 3 | 手順3で使う`v<いまの版>`のタグは、手順1の`git fetch --tags`で取ってくる |
 | 3 → 4 | 手順4のあとでは、`CHANGELOG.md`がもう新しい版になっていて、いまの版が分からなくなる。手順3でいまの版を使い終えてから写す |
-| 手順5は、手順4の前でも後でもよい | 手順4は、手順5で合わせるファイルに触れない |
+| 4 → 5 | 手順4は`.claude/docs`ごと写し、`technical-preferences.md`をコミットした状態に戻す。手順5で合わせた変更を先に作ると、手順4で消える |
 | `.claude/hooks`と`.claude/scripts`は同じ手順で写す | フックが`.claude/scripts/`の補助を呼ぶ。片方だけ新しいと、フックが動かなくなる（CCGSの`UPGRADING.md`の1.2.0の節） |
 | 手順6と7は、どちらからでもよい | 互いに結果を使わない |
 
@@ -129,5 +131,6 @@ CCGSは、[ADR-0003](../50-adr/adr-0003-ccgs-import.md)のとおり、選んだ�
 
 - (decides) [ADR-0003 graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む](../50-adr/adr-0003-ccgs-import.md)
 - (decides) [ADR-0004 ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す](../50-adr/adr-0004-claude-md-split.md)
+- (decides) [ADR-0005 言語をGDScriptにする](../50-adr/adr-0005-gdscript.md)
 
 <!-- graph:auto:end -->
