@@ -1,7 +1,7 @@
 name = "game-template"
 label = "game"
 below = "graph-project-template"
-version = "0.3.2"
+version = "0.4.0"
 changelog = "GAME_TEMPLATE_CHANGELOG.md"
 repository = "https://github.com/setopic/game-template.git"
 versioned_title = true

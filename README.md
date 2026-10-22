@@ -32,7 +32,7 @@ issueとPRの流れ（雛形、PRのidの確認、Projectへの追加）は、�
 2. 上流（ドメイン）を変えたとき、下流（ユースケース・契約）が追従していないことに気づけない
 3. 人もAIも、文書どうしの前提関係を毎回読み直して推測する
 
-目次を手で整えても、2と3は解決しない。前提関係そのものを機械が読める形にして検証する、というのがこのテンプレートの主張である。詳しくは[ADR-0001](docs/50-adr/adr-0001-graph-driven-docs.md)にある。
+目次を手で整えても、2と3は解決しない。前提関係そのものを機械が読める形にして検証する、というのがこのテンプレートの主張である。詳しくは[PDR-0001](./docs/50-pdr/pdr-0001-graph-driven-docs.md)にある。
 
 ## 向くもの・向かないもの
 
@@ -81,7 +81,9 @@ docs/
   20-domain/            層 20: 概念・不変条件・用語
   30-usecases/          層 30: 誰が何をして何が起きるか
   40-contracts/         層 40: 境界をまたぐ約束事
-  50-adr/               横断: 決定・理由・却下案
+  50-pdr/               横断: 開発の進め方の決定
+  51-tdr/               横断: ゲームの外の技術の決定
+  52-adr/               横断: ゲームの中の構成の決定
 tools/graph/            検証・可視化・生成ツール（依存なし）
 ```
 
@@ -125,26 +127,17 @@ graph LR
   subgraph contract["契約"]
     CON-01["CON-01<br/>予約確定エンドポイント"]
   end
-  subgraph adr["決定記録"]
-    ADR-0001["ADR-0001<br/>設計文書をグラフとして管理する"]
-    ADR-0002["ADR-0002<br/>Godotの版を4.7.2にする"]
-    ADR-0003["ADR-0003<br/>graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む"]
-    ADR-0004["ADR-0004<br/>ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す"]
-    ADR-0005["ADR-0005<br/>言語をGDScriptにする"]
-    ADR-0006["ADR-0006<br/>ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない"]
-    ADR-0007["ADR-0007<br/>CCGSのsession-start.shとsetup-engineを、rulesのファイルから読み込みの行を探す形に直す"]
+  subgraph pdr["開発の進め方の決定"]
+    PDR-0001["PDR-0001<br/>設計文書をグラフとして管理する"]
+    PDR-0002["PDR-0002<br/>graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む"]
+    PDR-0003["PDR-0003<br/>ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す"]
+    PDR-0004["PDR-0004<br/>ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない"]
+    PDR-0005["PDR-0005<br/>CCGSのsession-start.shとsetup-engineを、rulesのファイルから読み込みの行を探す形に直す"]
   end
-  ADR-0001 -.->|decides| META-01
-  ADR-0001 -.->|decides| ARCH-01
-  ADR-0002 -.-|related| ADR-0003
-  ADR-0003 -.-|related| ADR-0004
-  ADR-0003 -.-|related| ADR-0006
-  ADR-0003 -.->|decides| UC-02
-  ADR-0004 -.-|related| ADR-0007
-  ADR-0004 -.->|decides| UC-02
-  ADR-0005 -.->|decides| UC-02
-  ADR-0006 -.->|decides| UC-02
-  ADR-0007 -.->|decides| UC-02
+  subgraph tdr["ゲームの外の技術の決定"]
+    TDR-0001["TDR-0001<br/>Godotの版を4.7.2にする"]
+    TDR-0002["TDR-0002<br/>言語をGDScriptにする"]
+  end
   ARCH-02 -->|refines| ARCH-01
   CON-01 -->|depends_on| UC-01
   CON-01 -->|depends_on| DOM-01
@@ -156,6 +149,17 @@ graph LR
   META-04 -.-|related| META-05
   META-04 -.-|related| META-06
   META-07 -.-|related| META-08
+  PDR-0001 -.->|decides| META-01
+  PDR-0001 -.->|decides| ARCH-01
+  PDR-0002 -.-|related| TDR-0001
+  PDR-0002 -.-|related| PDR-0003
+  PDR-0002 -.-|related| PDR-0004
+  PDR-0002 -.->|decides| UC-02
+  PDR-0003 -.-|related| PDR-0005
+  PDR-0003 -.->|decides| UC-02
+  PDR-0004 -.->|decides| UC-02
+  PDR-0005 -.->|decides| UC-02
+  TDR-0002 -.->|decides| UC-02
   UC-01 -->|depends_on| DOM-01
   classDef draft stroke-dasharray: 4\,3;
   classDef deprecated opacity:0.5;
@@ -330,7 +334,7 @@ python -m tools.graph linkify
 
    `tags`に`sample`を持つノード（ARCH-01・ARCH-02・DOM-01・UC-01・CON-01）を削除し、各`index.md`の一覧からも外す。**ほかのノードからの参照は自動では消さない。** 残った参照は、`check`が`G004`（リンク切れ）として挙げるので、それを見て直す
 
-2. ADR-0001を残すかを決める。この進め方自体を採用するなら残す。残す場合は、サンプルを削除して切れた`decides`の参照を、実際のプロジェクトのノードに張り替える
+2. PDR-0001を残すかを決める。この進め方自体を採用するなら残す。残す場合は、サンプルを削除して切れた`decides`の参照を、実際のプロジェクトのノードに張り替える
 
 3. 表紙を書き換える。次の3つはテンプレートの説明のままなので、プロジェクトの説明に差し替える
 
