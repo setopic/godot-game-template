@@ -67,7 +67,9 @@ graphの検証の対象は、いまも`docs/`である。CCGSの`docs/`も同じ
 
 `graph.toml`の`docs_dir = "design"`は、入れない。`docs_dir`を変えると、`00-meta`とその雛形の読み込みと、共通のテスト2件が通らないからである。上流の修正（setopic/graph-doc-template#183）が届いてから入れる。
 
-CCGSの`docs/`にある文書は、フロントマターを持たないので、`check`が`G001`を出す（2026-10-22の時点で52件）。検証から外すパスを`graph.toml`に書けるキー（`exclude`）を、上流のgraph-doc-templateに足す。それが`make update`で届いたら、このリポジトリの`graph.toml`に、CCGSの`docs/`のパスを書く。困る点は、setopic/game-template#2に書いた。
+CCGSの`docs/`にある文書は、フロントマターを持たないので、そのままでは`check`が`G001`を出す（2026-10-22の時点で52件）。そのため、検証から外すパスを`graph.toml`に書けるキー（`exclude`）を上流のgraph-doc-templateに足し（1.52.0）、このリポジトリの`graph.toml`の`exclude`に、CCGSの`docs/`のフロントマターの無いパスを書く。困る点は、setopic/game-template#2に書いた。
+
+`exclude`の値は、リポジトリの根からの相対で書く。`docs_dir`を`design`にしたら、`exclude`も書き直す。
 
 ## 理由
 
@@ -86,7 +88,7 @@ CCGSの`docs/`を別のフォルダへ移すと、graphの検証からは外れ�
 
 CCGSの更新は、[UC-02](../30-usecases/uc-02-ccgs-upgrade.md)の手順で取り込む。上書きしてよいファイルと、手で合わせるファイルを、そこで分ける。
 
-`exclude`が届くまで、`check`はCCGSの`docs/`の文書で`G001`を出す。
+CCGSの更新で`docs/`にフロントマターの無い文書が増えたら、`graph.toml`の`exclude`に足す。
 
 ## 見直しの条件
 

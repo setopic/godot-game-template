@@ -12,6 +12,8 @@
 
 CCGS（Claude-Code-Game-Studios、MITライセンス）の1.2.0を取り込んだ（#1）。CCGSの`UPGRADING.md`のStrategy A2で、`.claude/`、`design/`、`src/`、`docs/`、`production/`、`studio-tests/`、`project.yaml`、`.worktreeinclude`、`UPGRADING.md`、`CHANGELOG.md`を写した。CCGSの`LICENSE`は`LICENSE-CCGS`として残した。`README.md`、`CONTRIBUTING.md`、`.gitignore`、ルートの`CLAUDE.md`、`.github/`の下のファイル、`SECURITY.md`は写していない。
 
+CCGSの`docs/`にあるフロントマターの無いMarkdownは、`graph.toml`の`exclude`でgraphの検証から外した。
+
 CCGSのルートの`CLAUDE.md`の内容は、`.claude/rules/ccgs-studio.md`へ移した。ルートの`CLAUDE.md`はgraphの共通ファイルのままである。`.gitattributes`の末尾に、CCGSの指定を5行足した。
 
 決めたことは、ADR-0002（Godotの版）、ADR-0003（取り込み方）、ADR-0004（`CLAUDE.md`の扱い）に書いた。CCGSの更新を取り込む手順は、UC-02に書いた。
