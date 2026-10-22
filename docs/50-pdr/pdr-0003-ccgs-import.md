@@ -1,6 +1,6 @@
 ---
-id: ADR-0003
-type: adr
+id: PDR-0003
+type: pdr
 title: graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む
 status: review
 tags: [template]
@@ -8,9 +8,9 @@ decides:
   - UC-02
 supersedes: []
 related:
-  - ADR-0002
-  - ADR-0004
-  - ADR-0006
+  - TDR-0002
+  - PDR-0004
+  - PDR-0006
 ---
 
 # graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む
@@ -52,7 +52,7 @@ CCGSは、remoteの`ccgs`から、選んだパスだけを`git checkout ccgs/mai
 | CCGSのもの | 扱い | 理由 |
 | --- | --- | --- |
 | `README.md`、`CONTRIBUTING.md` | graph側を残す | graphの共通ファイルである |
-| ルートの`CLAUDE.md` | graph側を残し、内容を`.claude/rules/ccgs-studio.md`へ移す | [ADR-0004](./adr-0004-claude-md-split.md)で決めた |
+| ルートの`CLAUDE.md` | graph側を残し、内容を`.claude/rules/ccgs-studio.md`へ移す | [PDR-0004](./pdr-0004-claude-md-split.md)で決めた |
 | `.gitignore` | graph側を残す | CCGSのGodot用の行を足すのは、setopic/game-template#3で行う |
 | `LICENSE` | `LICENSE-CCGS`として写す | MITライセンスの表示を残す |
 | `.gitattributes` | CCGSの指定5行を、graph側のファイルの末尾に手で足す | 両方にある。CCGSの行は、graph側の`* text=auto eol=lf`と結果が同じだが、更新のときに見比べられるよう行を揃える |
@@ -103,9 +103,9 @@ CCGSが、履歴を共通にして取り込める形（graph側に合わせた`m
 
 `related`: 依存はしないが、一緒に読むべきノード
 
-- [ADR-0002 Godotの版を4.7.2にする](./adr-0002-godot-version.md)
-- [ADR-0004 ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す](./adr-0004-claude-md-split.md)
-- [ADR-0006 ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない](./adr-0006-adr-location.md)
+- [PDR-0004 ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す](./pdr-0004-claude-md-split.md)
+- [PDR-0006 ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない](./pdr-0006-adr-location.md)
+- [TDR-0002 Godotの版を4.7.2にする](../51-tdr/tdr-0002-godot-version.md)
 
 `decides`: この決定が影響を与えるノード（ADR用）
 
@@ -113,8 +113,8 @@ CCGSが、履歴を共通にして取り込める形（graph側に合わせた`m
 
 このノードを参照しているノード
 
-- (related) [ADR-0002 Godotの版を4.7.2にする](./adr-0002-godot-version.md)
-- (related) [ADR-0004 ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す](./adr-0004-claude-md-split.md)
-- (related) [ADR-0006 ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない](./adr-0006-adr-location.md)
+- (related) [PDR-0004 ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す](./pdr-0004-claude-md-split.md)
+- (related) [PDR-0006 ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない](./pdr-0006-adr-location.md)
+- (related) [TDR-0002 Godotの版を4.7.2にする](../51-tdr/tdr-0002-godot-version.md)
 
 <!-- graph:auto:end -->

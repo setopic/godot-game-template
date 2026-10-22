@@ -57,7 +57,7 @@ related: []
 
 このノードを参照しているノード
 
-- (decides) [ADR-0001 設計文書をグラフとして管理する](../50-adr/adr-0001-graph-driven-docs.md)
+- (decides) [PDR-0001 設計文書をグラフとして管理する](../50-pdr/pdr-0001-graph-driven-docs.md)
 - (depends_on) [DOM-01 予約](../20-domain/dom-01-sample-booking.md)
 - (refines) [ARCH-02 ワーカーの実行モデル](./arch-02-sample-worker-execution-model.md)
 

@@ -230,7 +230,7 @@ fi
 # Printed BEFORE the session state: hook output past 10,000 characters is cut
 # to a preview, so a warning below a long checkpoint could be lost.
 #
-# game-template (ADR-0007): the import may live in a .claude/rules/ file instead
+# game-template (PDR-0007): the import may live in a .claude/rules/ file instead
 # of CLAUDE.md, where @ resolves relative to that file (@../../docs/...). Look in
 # CLAUDE.md first, then in .claude/rules/*.md, and accept any run of ../ prefixes.
 if [ -f project.yaml ]; then

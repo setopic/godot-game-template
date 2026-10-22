@@ -16,7 +16,7 @@
 # 目次の一覧はプロジェクトのノードで埋まっているため、常に自分側が正しい。
 README.md merge=ours
 index.md  merge=ours
-docs/50-adr/adr-0001-graph-driven-docs.md merge=ours
+docs/50-pdr/pdr-0001-graph-driven-docs.md merge=ours
 
 # PROJECT_CHANGELOG.mdは**そのリポジトリ自身の履歴**であって、上流のものではない。
 # 上流が同じ名前で自分の履歴を持っていると、取り込みのたびに上書きするか

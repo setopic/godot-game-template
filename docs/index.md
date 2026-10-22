@@ -33,7 +33,9 @@ tags: [index]
 | 20 | `20-domain/` | [IDX-DOM ドメイン](./20-domain/index.md) |
 | 30 | `30-usecases/` | [IDX-UC ユースケース](./30-usecases/index.md) |
 | 40 | `40-contracts/` | [IDX-CON 契約](./40-contracts/index.md) |
-| 横断 | `50-adr/` | [IDX-ADR 決定記録](./50-adr/index.md) |
+| 横断 | `50-pdr/` | [IDX-PDR 開発の進め方の決定](./50-pdr/index.md) |
+| 横断 | `51-tdr/` | [IDX-TDR ゲームの外の技術の決定](./51-tdr/index.md) |
+| 横断 | `52-adr/` | [IDX-ADR ゲームの中の構成の決定](./52-adr/index.md) |
 
 ## 使い方
 

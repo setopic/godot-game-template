@@ -1,6 +1,6 @@
 ---
-id: ADR-0001
-type: adr
+id: PDR-0001
+type: pdr
 title: 設計文書をグラフとして管理する
 status: stable
 tags: [process]

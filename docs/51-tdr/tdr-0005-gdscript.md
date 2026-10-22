@@ -1,6 +1,6 @@
 ---
-id: ADR-0005
-type: adr
+id: TDR-0005
+type: tdr
 title: 言語をGDScriptにする
 status: stable
 tags: [engine]
@@ -19,7 +19,7 @@ related: []
 
 Godotでは、GDScriptとC#のどちらでもゲームを書ける。CCGSの`/setup-engine`は、Godotを選ぶと、GDScript、C#、両方の3つから言語を選ばせる。選んだ言語で、`.claude/rules/ccgs-studio.md`の「Technology Stack」、`.claude/docs/technical-preferences.md`の命名の決まりと専門のエージェントの割り振り、`project.yaml`の`engine.language`が決まる。
 
-setopic/game-template#1の受け入れ条件は、`/setup-engine godot <版>`を実行し、言語をGDScriptにすることである。版は[ADR-0002](./adr-0002-godot-version.md)で4.7.2に決めてある。
+setopic/game-template#1の受け入れ条件は、`/setup-engine godot <版>`を実行し、言語をGDScriptにすることである。版は[TDR-0002](./tdr-0002-godot-version.md)で4.7.2に決めてある。
 
 ## 決定
 
@@ -31,7 +31,7 @@ game-templateの言語をGDScriptにする。`/setup-engine godot 4.7.2`のGDScr
 | `.claude/docs/technical-preferences.md` | エンジンと言語、GDScriptの命名の決まり、テストの道具（gdUnit4）、専門のエージェントの割り振り |
 | `project.yaml` | `engine`、`specialists`、`naming`、`commands`の4つの節 |
 
-`/setup-engine`は、ルートの`CLAUDE.md`の「Technology Stack」を書き換える前提で書かれている。[ADR-0004](./adr-0004-claude-md-split.md)のとおり、書き換える先は`.claude/rules/ccgs-studio.md`に読み替えた。スキルの本体は書き換えない。
+`/setup-engine`は、ルートの`CLAUDE.md`の「Technology Stack」を書き換える前提で書かれている。[PDR-0004](../50-pdr/pdr-0004-claude-md-split.md)のとおり、書き換える先は`.claude/rules/ccgs-studio.md`に読み替えた。スキルの本体は書き換えない。
 
 作品ごとに違う値は、決めずに`[TO BE CONFIGURED]`のまま残す。`engine.rendering`と`engine.physics`は、2Dか3Dかと、Webに出すかで決まる。`commands.build`は、作品の`export_presets.cfg`にある書き出しの設定の名前で決まる。`technical-preferences.md`の入力と対象の機種、性能の目安も、作品で決める。
 

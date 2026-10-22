@@ -19,7 +19,7 @@ related: []
 | 完了したときに得られる状態 | CCGSの新しい版のファイルが、game-templateに入っている。graph側のファイルと、この層で手を入れたファイルは残っている |
 | 影響 | 作業はブランチで行うので、mainは止まらない。作品へは、game-templateをマージした後に`make update`で届く |
 
-CCGSは、[ADR-0003](../50-adr/adr-0003-ccgs-import.md)のとおり、選んだパスだけを`git checkout`で写して取り込む（CCGSの`UPGRADING.md`のStrategy A2）。履歴が共通でないので、`git merge`は使わない。
+CCGSは、[PDR-0003](../50-pdr/pdr-0003-ccgs-import.md)のとおり、選んだパスだけを`git checkout`で写して取り込む（CCGSの`UPGRADING.md`のStrategy A2）。履歴が共通でないので、`git merge`は使わない。
 
 ## 事前条件
 
@@ -56,7 +56,7 @@ CCGSは、[ADR-0003](../50-adr/adr-0003-ccgs-import.md)のとおり、選んだ�
    git checkout HEAD -- .claude/docs/technical-preferences.md .claude/hooks/session-start.sh .claude/skills/setup-engine/references/4-claude-md-stack.md .claude/skills/setup-engine/references/8-verify.md
    ```
 
-   2行目は、CCGSの`LICENSE`を`LICENSE-CCGS`に写す。graph側の`LICENSE`は写さない。3行目は、1行目で上書きしたファイルのうち、この層で手を入れたものを戻す。`technical-preferences.md`には、`/setup-engine`の値を書いてある（[ADR-0005](../50-adr/adr-0005-gdscript.md)）。残りの3つは、エンジンの版の読み込みの行を`.claude/rules/`のファイルからも探すように直してある（[ADR-0007](../50-adr/adr-0007-engine-import-in-rules.md)）。
+   2行目は、CCGSの`LICENSE`を`LICENSE-CCGS`に写す。graph側の`LICENSE`は写さない。3行目は、1行目で上書きしたファイルのうち、この層で手を入れたものを戻す。`technical-preferences.md`には、`/setup-engine`の値を書いてある（[TDR-0005](../51-tdr/tdr-0005-gdscript.md)）。残りの3つは、エンジンの版の読み込みの行を`.claude/rules/`のファイルからも探すように直してある（[PDR-0007](../50-pdr/pdr-0007-engine-import-in-rules.md)）。
 
    CCGSの版に、上の一覧に無い新しいパスがあれば、`UPGRADING.md`の「Safe to Overwrite」で確かめてから足す。
 
@@ -64,19 +64,19 @@ CCGSは、[ADR-0003](../50-adr/adr-0003-ccgs-import.md)のとおり、選んだ�
 
    | このリポジトリのファイル | 比べるCCGSのファイル | 合わせ方 |
    | --- | --- | --- |
-   | `.claude/rules/ccgs-studio.md` | `CLAUDE.md` | CCGSの差を写す。`@`のパスは、このファイルからの相対（`@../docs/`、`@../../docs/`）に直す（[ADR-0004](../50-adr/adr-0004-claude-md-split.md)） |
+   | `.claude/rules/ccgs-studio.md` | `CLAUDE.md` | CCGSの差を写す。`@`のパスは、このファイルからの相対（`@../docs/`、`@../../docs/`）に直す（[PDR-0004](../50-pdr/pdr-0004-claude-md-split.md)） |
    | `.claude/settings.json` | `.claude/settings.json` | この層で手を入れていなければ、CCGSのもので上書きする。入れていれば、`UPGRADING.md`のMerge Carefullyの指示に従う |
    | `project.yaml` | `project.yaml` | CCGSの差を写す。`framework.version`を新しい版にする |
    | `.claude/docs/technical-preferences.md` | 同じパス | CCGSの差のうち、節や項目の増減を写す。`/setup-engine`で書いた値は残す |
-   | `.claude/hooks/session-start.sh` | 同じパス | CCGSの差を写す。`game-template (ADR-0007)`の注記の付いた箇所（読み込みの行を探す先と、警告のファイル名）は残す |
-   | `.claude/skills/setup-engine/references/4-claude-md-stack.md`、`8-verify.md` | 同じパス | CCGSの差を写す。`game-template (ADR-0007)`の注記の付いた節と、`.claude/rules/`のファイルの行の形（`@../../docs/`）の説明は残す |
+   | `.claude/hooks/session-start.sh` | 同じパス | CCGSの差を写す。`game-template (PDR-0007)`の注記の付いた箇所（読み込みの行を探す先と、警告のファイル名）は残す |
+   | `.claude/skills/setup-engine/references/4-claude-md-stack.md`、`8-verify.md` | 同じパス | CCGSの差を写す。`game-template (PDR-0007)`の注記の付いた節と、`.claude/rules/`のファイルの行の形（`@../../docs/`）の説明は残す |
    | `.gitattributes` | `.gitattributes` | CCGSで増えた行を、末尾のCCGSの節に足す |
    | `.gitignore` | `.gitignore` | CCGSで増えた行のうち、要るものを足す |
    | `docs/architecture/`、`docs/registry/`、`design/registry/` | 同じパス | 作品が書き足すファイルである。この層では手を入れていないので、CCGSのもので上書きしてよい |
 
-   `docs/architecture/`は、`/architecture-decision`がCCGSの書式でADRを書く場所で、graphの検証から外してある（[ADR-0006](../50-adr/adr-0006-adr-location.md)）。graphのADRは`docs/50-adr/`にあり、CCGSの更新では写さない。
+   `docs/architecture/`は、`/architecture-decision`がCCGSの書式でADRを書く場所で、graphの検証から外してある（[PDR-0006](../50-pdr/pdr-0006-adr-location.md)）。graphの決定の記録（PDR・TDR・ADR）は`docs/50-pdr/`・`docs/51-tdr/`・`docs/52-adr/`にあり、CCGSの更新では写さない。
 
-6. 写さないファイルが入っていないことを確かめる。CCGSの`README.md`、`CONTRIBUTING.md`、ルートの`CLAUDE.md`、`SECURITY.md`、`.github/`の下のファイルは入れない（[ADR-0003](../50-adr/adr-0003-ccgs-import.md)）。
+6. 写さないファイルが入っていないことを確かめる。CCGSの`README.md`、`CONTRIBUTING.md`、ルートの`CLAUDE.md`、`SECURITY.md`、`.github/`の下のファイルは入れない（[PDR-0003](../50-pdr/pdr-0003-ccgs-import.md)）。
 
    ```bash
    git status --short
@@ -106,10 +106,10 @@ CCGSは、[ADR-0003](../50-adr/adr-0003-ccgs-import.md)のとおり、選んだ�
 | 症状 | 原因 | 対処 |
 | --- | --- | --- |
 | `fatal: refusing to merge unrelated histories` | `git merge ccgs/main`を使った | mergeを取り消し、手順4の`git checkout`で写す |
-| `check`が`docs/`のCCGSの文書で`G001`を出す | CCGSの`docs/`の文書は、フロントマターを持たない | `graph.toml`の`exclude`に、そのパスが入っているかを確かめる（[ADR-0003](../50-adr/adr-0003-ccgs-import.md)） |
-| `/architecture-decision`のADRを`docs/50-adr/`に移したくなる | ADRの置き場が2か所あり、どちらに書くかで迷った | 作品のゲームの技術の決定は`docs/architecture/`に、テンプレートと開発の進め方の決定は`docs/50-adr/`に書く（[ADR-0006](../50-adr/adr-0006-adr-location.md)） |
+| `check`が`docs/`のCCGSの文書で`G001`を出す | CCGSの`docs/`の文書は、フロントマターを持たない | `graph.toml`の`exclude`に、そのパスが入っているかを確かめる（[PDR-0003](../50-pdr/pdr-0003-ccgs-import.md)） |
+| `/architecture-decision`のADRを`docs/50-pdr/`に移したくなる | ADRの置き場が2か所あり、どちらに書くかで迷った | 作品のゲームの技術の決定は`docs/architecture/`に、テンプレートと開発の進め方の決定は`docs/50-pdr/`に書く（[PDR-0006](../50-pdr/pdr-0006-adr-location.md)） |
 | セッションの初めに、CCGSの読み込んだ文書の中身が出てこない | `.claude/rules/ccgs-studio.md`の`@`のパスが、ルートからの相対になっている | `@../docs/`、`@../../docs/`の形に直す |
-| `project.yaml`の`engine.name`と読み込みの行が違っても、セッションの初めに`ENGINE REFERENCE MISMATCH`が出ない | 手順4の3行目で`session-start.sh`を戻し忘れ、CCGSのもの（ルートの`CLAUDE.md`しか探さない）になっている | 手順5の表のとおり、`game-template (ADR-0007)`の注記の付いた箇所を入れ直す |
+| `project.yaml`の`engine.name`と読み込みの行が違っても、セッションの初めに`ENGINE REFERENCE MISMATCH`が出ない | 手順4の3行目で`session-start.sh`を戻し忘れ、CCGSのもの（ルートの`CLAUDE.md`しか探さない）になっている | 手順5の表のとおり、`game-template (PDR-0007)`の注記の付いた箇所を入れ直す |
 | graph側の`.claude/skills/`（`grill`、`lean`、`yomiyasu`）が変わった | CCGSが同じ名前のスキルを配り始めた | `git checkout HEAD -- .claude/skills/<名前>`で戻し、どちらを残すかを決める |
 
 ## 完了の確認
@@ -135,10 +135,10 @@ CCGSは、[ADR-0003](../50-adr/adr-0003-ccgs-import.md)のとおり、選んだ�
 
 このノードを参照しているノード
 
-- (decides) [ADR-0003 graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む](../50-adr/adr-0003-ccgs-import.md)
-- (decides) [ADR-0004 ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す](../50-adr/adr-0004-claude-md-split.md)
-- (decides) [ADR-0005 言語をGDScriptにする](../50-adr/adr-0005-gdscript.md)
-- (decides) [ADR-0006 ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない](../50-adr/adr-0006-adr-location.md)
-- (decides) [ADR-0007 CCGSのsession-start.shとsetup-engineを、rulesのファイルから読み込みの行を探す形に直す](../50-adr/adr-0007-engine-import-in-rules.md)
+- (decides) [PDR-0003 graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む](../50-pdr/pdr-0003-ccgs-import.md)
+- (decides) [PDR-0004 ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す](../50-pdr/pdr-0004-claude-md-split.md)
+- (decides) [PDR-0006 ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない](../50-pdr/pdr-0006-adr-location.md)
+- (decides) [PDR-0007 CCGSのsession-start.shとsetup-engineを、rulesのファイルから読み込みの行を探す形に直す](../50-pdr/pdr-0007-engine-import-in-rules.md)
+- (decides) [TDR-0005 言語をGDScriptにする](../51-tdr/tdr-0005-gdscript.md)
 
 <!-- graph:auto:end -->
