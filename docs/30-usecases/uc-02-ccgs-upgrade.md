@@ -4,7 +4,8 @@ type: usecase
 title: CCGSの更新を取り込む
 status: review
 tags: [template]
-depends_on: []
+depends_on:
+  - PDR-0006
 related: []
 ---
 
@@ -16,10 +17,10 @@ related: []
 | --- | --- |
 | 実行者 | game-templateを保守する人 |
 | きっかけ | CCGS（Claude-Code-Game-Studios）が新しい版を出したとき。セッションの開始のときに、CCGSの`update-check.sh`が新しい版を知らせる |
-| 完了したときに得られる状態 | CCGSの新しい版のファイルが、game-templateに入っている。graph側のファイルと、この層で手を入れたファイルは残っている |
+| 完了したときに得られる状態 | CCGSの新しい版の変更が、game-templateに入っている。graph側のファイルと、この層でCCGSのファイルを直した箇所は残っている |
 | 影響 | 作業はブランチで行うので、mainは止まらない。作品へは、game-templateをマージした後に`make update`で届く |
 
-CCGSは、[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)のとおり、選んだパスだけを`git checkout`で写して取り込む（CCGSの`UPGRADING.md`のStrategy A2）。履歴が共通でないので、`git merge`は使わない。
+CCGSは、[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)のとおり丸ごと取り込み、更新は中身を読んで取り入れる。この層で直したCCGSのファイルの一覧は、手で持たない。いまの版のCCGSと手元を`git diff`で比べて見分ける。履歴が共通でないので、`git merge`は使わない。
 
 ## 事前条件
 
@@ -29,7 +30,7 @@ CCGSは、[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)のとお�
 
 ## 手順
 
-1. CCGSを取ってきて、新しい版の`UPGRADING.md`の、いまの版から新しい版までの節を読む。手で合わせるファイル（Merge Carefully）の指示は、手順5で使う。
+1. CCGSを取ってきて、新しい版の`UPGRADING.md`の、いまの版から新しい版までの節を読む。手で合わせるファイル（Merge Carefully）の指示は、手順4で使う。
 
    ```bash
    git fetch --tags ccgs main
@@ -42,41 +43,43 @@ CCGSは、[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)のとお�
    git switch -c chore/ccgs-<新しい版>
    ```
 
-3. CCGSで消えたファイルを調べて、こちらでも消す。`git checkout`は、写すだけで消さないからである。`<いまの版>`には、`v1.2.0`のようなCCGSのタグを入れる。
+3. CCGSで変わったファイルを、手元で直したかどうかで分ける。`<いまの版>`には、`1.2.0`のようなCCGSの版を入れる。CCGSのタグは`v1.2.0`の形である。
 
    ```bash
-   git diff --name-status --diff-filter=DR v<いまの版> ccgs/main
+   v=v<いまの版>
+   git diff --name-only --no-renames "$v" ccgs/main -- . ':!README.md' ':!CONTRIBUTING.md' ':!CLAUDE.md' ':!SECURITY.md' ':!LICENSE' ':!.github' |
+   while read -r f; do
+     if ! git diff --quiet "$v" HEAD -- "$f"; then
+       echo "手で合わせる: $f"
+     elif git cat-file -e "ccgs/main:$f" 2>/dev/null; then
+       git checkout ccgs/main -- "$f"
+     else
+       git rm -q -- "$f"
+     fi
+   done
    ```
 
-4. 上書きしてよいパスを写す。
+   1行目の`git diff`は、いまの版から新しい版までにCCGSで変わったファイルを挙げる。`--no-renames`を付けているので、名前が変わったファイルは、消えたファイルと増えたファイルとして出る。`.github/`などのパスを外す理由は、手順5にある。
+
+   ループは、挙がったファイルごとに、いまの版のCCGSと手元（`HEAD`）を比べる。差が無いファイルは、手元で直していない。新しい版にあれば`git checkout`で写し、新しい版で消えていれば`git rm`で消す。差があるファイルは、手元で直したか、graph側に同じパスのファイルがある。写さずに「手で合わせる」として名前を出す。
+
+4. 手順3で「手で合わせる」と出たファイルを、1つずつ合わせる。CCGSの差は`git diff v<いまの版> ccgs/main -- <ファイル>`で、手元で直した箇所は`git diff v<いまの版> HEAD -- <ファイル>`で見る。CCGSの差を手元のファイルに写し、手元で直した箇所は残す。直した理由は、直した箇所の注記（`game-template (PDR-0005)`など）と、`git log -- <ファイル>`で分かる。
+
+   CCGSの`UPGRADING.md`にMerge Carefullyの指示があるファイルは、その指示にも従う。`project.yaml`は、`framework.version`を新しい版にする。
+
+5. 手順3で外したパスのうち、CCGSで変わったものを合わせる。手順3で外すのは、graph側に同じパスのファイルがあり、CCGSのものを入れないファイルである（[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)が引き継いだ、写さなかったものの表）。
 
    ```bash
-   git checkout ccgs/main -- .claude/agents .claude/skills .claude/hooks .claude/scripts .claude/docs .claude/rules .claude/statusline.sh docs/engine-reference docs/WORKFLOW-GUIDE.md docs/COLLABORATIVE-DESIGN-PRINCIPLE.md docs/skill-flow-diagrams.md docs/migration-guide-v1.1.md docs/CLAUDE.md design/CLAUDE.md src/CLAUDE.md studio-tests/CLAUDE.md studio-tests production/.gdignore .worktreeinclude UPGRADING.md CHANGELOG.md
-   git show ccgs/main:LICENSE > LICENSE-CCGS
-   git checkout HEAD -- .claude/docs/technical-preferences.md .claude/hooks/session-start.sh .claude/skills/setup-engine/references/4-claude-md-stack.md .claude/skills/setup-engine/references/8-verify.md
+   git diff --name-only v<いまの版> ccgs/main -- README.md CONTRIBUTING.md CLAUDE.md SECURITY.md LICENSE .github
    ```
 
-   2行目は、CCGSの`LICENSE`を`LICENSE-CCGS`に写す。graph側の`LICENSE`は写さない。3行目は、1行目で上書きしたファイルのうち、この層で手を入れたものを戻す。`technical-preferences.md`には、`/setup-engine`の値を書いてある（[TDR-0002](../51-tdr/tdr-0002-gdscript.md)）。残りの3つは、エンジンの版の読み込みの行を`.claude/rules/`のファイルからも探すように直してある（[PDR-0005](../50-pdr/pdr-0005-engine-import-in-rules.md)）。
+   | CCGSのファイル | 合わせ方 |
+   | --- | --- |
+   | `CLAUDE.md` | CCGSの差を、`.claude/rules/ccgs-studio.md`に写す。`@`のパスは、このファイルからの相対（`@../docs/`、`@../../docs/`）に直す（[PDR-0003](../50-pdr/pdr-0003-claude-md-split.md)） |
+   | `LICENSE` | `git show ccgs/main:LICENSE > LICENSE-CCGS`で写す。graph側の`LICENSE`は変えない |
+   | `README.md`、`CONTRIBUTING.md`、`SECURITY.md`、`.github/`の下のファイル | 入れない |
 
-   CCGSの版に、上の一覧に無い新しいパスがあれば、`UPGRADING.md`の「Safe to Overwrite」で確かめてから足す。
-
-5. 手で合わせるファイルを、1つずつ合わせる。CCGSの側の差は、`git diff v<いまの版> ccgs/main -- <CCGSのパス>`で見る。
-
-   | このリポジトリのファイル | 比べるCCGSのファイル | 合わせ方 |
-   | --- | --- | --- |
-   | `.claude/rules/ccgs-studio.md` | `CLAUDE.md` | CCGSの差を写す。`@`のパスは、このファイルからの相対（`@../docs/`、`@../../docs/`）に直す（[PDR-0003](../50-pdr/pdr-0003-claude-md-split.md)） |
-   | `.claude/settings.json` | `.claude/settings.json` | この層で手を入れていなければ、CCGSのもので上書きする。入れていれば、`UPGRADING.md`のMerge Carefullyの指示に従う |
-   | `project.yaml` | `project.yaml` | CCGSの差を写す。`framework.version`を新しい版にする |
-   | `.claude/docs/technical-preferences.md` | 同じパス | CCGSの差のうち、節や項目の増減を写す。`/setup-engine`で書いた値は残す |
-   | `.claude/hooks/session-start.sh` | 同じパス | CCGSの差を写す。`game-template (PDR-0005)`の注記の付いた箇所（読み込みの行を探す先と、警告のファイル名）は残す |
-   | `.claude/skills/setup-engine/references/4-claude-md-stack.md`、`8-verify.md` | 同じパス | CCGSの差を写す。`game-template (PDR-0005)`の注記の付いた節と、`.claude/rules/`のファイルの行の形（`@../../docs/`）の説明は残す |
-   | `.gitattributes` | `.gitattributes` | CCGSで増えた行を、末尾のCCGSの節に足す |
-   | `.gitignore` | `.gitignore` | CCGSで増えた行のうち、要るものを足す |
-   | `docs/architecture/`、`docs/registry/`、`design/registry/` | 同じパス | 作品が書き足すファイルである。この層では手を入れていないので、CCGSのもので上書きしてよい |
-
-   `docs/architecture/`は、`/architecture-decision`がCCGSの書式でADRを書く場所で、graphの検証から外してある（[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)）。graphの決定の記録（PDR・TDR・ADR）は`docs/50-pdr/`・`docs/51-tdr/`・`docs/52-adr/`にあり、CCGSの更新では写さない。
-
-6. 写さないファイルが入っていないことを確かめる。CCGSの`README.md`、`CONTRIBUTING.md`、ルートの`CLAUDE.md`、`SECURITY.md`、`.github/`の下のファイルは入れない（[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)）。
+6. 写さないファイルが入っていないことを確かめる。
 
    ```bash
    git status --short
@@ -96,27 +99,28 @@ CCGSは、[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)のとお�
 | 制約 | 理由 |
 | --- | --- |
 | 1 → 3 | 手順3で使う`v<いまの版>`のタグは、手順1の`git fetch --tags`で取ってくる |
-| 3 → 4 | 手順4のあとでは、`CHANGELOG.md`がもう新しい版になっていて、いまの版が分からなくなる。手順3でいまの版を使い終えてから写す |
-| 4 → 5 | 手順4は`.claude/docs`、`.claude/hooks`、`.claude/skills`ごと写し、この層で手を入れたファイルをコミットした状態に戻す。手順5で合わせた変更を先に作ると、手順4で消える |
-| `.claude/hooks`と`.claude/scripts`は同じ手順で写す | フックが`.claude/scripts/`の補助を呼ぶ。片方だけ新しいと、フックが動かなくなる（CCGSの`UPGRADING.md`の1.2.0の節） |
+| 事前条件 → 3 | 手順3のあとでは、`CHANGELOG.md`がもう新しい版になっていて、いまの版が分からなくなる。いまの版は、手順3より前に確かめておく |
+| `.claude/hooks`と`.claude/scripts`は、同じPRでそろえる | フックが`.claude/scripts/`の補助を呼ぶ。片方だけ新しいと、フックが動かなくなる（CCGSの`UPGRADING.md`の1.2.0の節）。手順3で片方だけが「手で合わせる」に出たら、手順4で合わせ終えるまでPRにしない |
+| 手順4と5は、どちらからでもよい | 互いに結果を使わない |
 | 手順6と7は、どちらからでもよい | 互いに結果を使わない |
 
 ## つまずきやすい点
 
 | 症状 | 原因 | 対処 |
 | --- | --- | --- |
-| `fatal: refusing to merge unrelated histories` | `git merge ccgs/main`を使った | mergeを取り消し、手順4の`git checkout`で写す |
+| `fatal: refusing to merge unrelated histories` | `git merge ccgs/main`を使った | mergeを取り消し、手順3のループで写す |
+| `fatal: bad revision 'v<いまの版>'` | CCGSのタグを取ってきていない | 手順1の`git fetch --tags ccgs main`を回す |
 | `check`が`docs/`のCCGSの文書で`G001`を出す | CCGSの`docs/`の文書は、フロントマターを持たない | `graph.toml`の`exclude`に、そのパスが入っているかを確かめる（[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)） |
-| `/architecture-decision`のADRを`docs/50-pdr/`に移したくなる | ADRの置き場が2か所あり、どちらに書くかで迷った | 作品のゲームの技術の決定は`docs/architecture/`に、テンプレートと開発の進め方の決定は`docs/50-pdr/`に書く（[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)） |
 | セッションの初めに、CCGSの読み込んだ文書の中身が出てこない | `.claude/rules/ccgs-studio.md`の`@`のパスが、ルートからの相対になっている | `@../docs/`、`@../../docs/`の形に直す |
-| `project.yaml`の`engine.name`と読み込みの行が違っても、セッションの初めに`ENGINE REFERENCE MISMATCH`が出ない | 手順4の3行目で`session-start.sh`を戻し忘れ、CCGSのもの（ルートの`CLAUDE.md`しか探さない）になっている | 手順5の表のとおり、`game-template (PDR-0005)`の注記の付いた箇所を入れ直す |
-| graph側の`.claude/skills/`（`grill`、`lean`、`yomiyasu`）が変わった | CCGSが同じ名前のスキルを配り始めた | `git checkout HEAD -- .claude/skills/<名前>`で戻し、どちらを残すかを決める |
+| `project.yaml`の`engine.name`と読み込みの行が違っても、セッションの初めに`ENGINE REFERENCE MISMATCH`が出ない | `session-start.sh`の、`game-template (PDR-0005)`の注記の付いた箇所が、CCGSのもの（ルートの`CLAUDE.md`しか探さない）になっている | 手順4で、注記の付いた箇所を残して合わせ直す |
+| graph側の`.claude/skills/`（`grill`、`lean`、`yomiyasu`）が、手順3で「手で合わせる」に出る | CCGSが同じ名前のスキルを配り始めた | 手元のものを残したまま、どちらを残すかを決める |
 
 ## 完了の確認
 
 - [ ] `grep -m1 '^## \[' CHANGELOG.md`が、新しい版を出す
 - [ ] `project.yaml`の`framework.version`が、新しい版である
-- [ ] `git status --short`に、手順6で挙げた写さないファイルが無い
+- [ ] 手順3で「手で合わせる」と出たファイルを、すべて合わせた
+- [ ] `git status --short`に、手順5で入れないとしたファイルが無い
 - [ ] `claude -p`で`/start`を回し、最初の問いが返る
 
 ## 切り戻し
@@ -125,13 +129,17 @@ CCGSは、[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)のとお�
 
 ## 未確認
 
-この手順は、CCGSの1.2.0を最初に取り込んだときの手順から書いたもので、版を上げる取り込みはまだ試していない。手順3で消えたファイルを消すとき、作品の側に`make update`で消えたことが届くかは確かめていない。
+この手順は、版を上げる取り込みでまだ試していない。手順3のループは、Git Bashで動くことを前提にしている。手順3で消えたファイルを消すとき、作品の側に`make update`で消えたことが届くかは確かめていない。
 
 ---
 
 <!-- graph:auto:start -->
 
 ## 関連ドキュメント（自動生成 / 手で編集しない）
+
+`depends_on`: この文書が成立するために前提となるノード
+
+- [PDR-0006 CCGSを丸ごと取り込み、決定の記録を4つの種別に分ける](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)
 
 このノードを参照しているノード
 

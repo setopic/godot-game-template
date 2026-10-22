@@ -175,4 +175,8 @@ CCGSが、ADRの置き場や書式を設定で変えられるようにしたと�
 
 - [UC-02 CCGSの更新を取り込む](../30-usecases/uc-02-ccgs-upgrade.md)
 
+このノードを参照しているノード
+
+- (depends_on) [UC-02 CCGSの更新を取り込む](../30-usecases/uc-02-ccgs-upgrade.md)
+
 <!-- graph:auto:end -->
