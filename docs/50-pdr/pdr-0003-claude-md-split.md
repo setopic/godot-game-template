@@ -1,5 +1,5 @@
 ---
-id: PDR-0004
+id: PDR-0003
 type: pdr
 title: ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す
 status: stable
@@ -8,8 +8,8 @@ decides:
   - UC-02
 supersedes: []
 related:
-  - PDR-0003
-  - PDR-0007
+  - PDR-0002
+  - PDR-0005
 ---
 
 # ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す
@@ -52,7 +52,7 @@ rulesのファイルの中で`@`の読み込みが効くことは、2026-10-22�
 
 CCGSの更新でCCGSの`CLAUDE.md`が変わったら、`.claude/rules/ccgs-studio.md`へ手で写す（[UC-02](../30-usecases/uc-02-ccgs-upgrade.md)）。
 
-CCGSには、ルートの`CLAUDE.md`を直接読み書きするものがある。`/setup-engine`は、ルートの`CLAUDE.md`の「Technology Stack」の節と、`ENGINE-REFERENCE-IMPORT`の印の付いた`@`の行を書き換える。`.claude/hooks/session-start.sh`は、ルートの`CLAUDE.md`の`@docs/engine-reference/<engine>/VERSION.md`の行から、読み込んでいるエンジンを読み取る。この形では、どちらも目当ての節と行を見つけられない。作品で`/setup-engine`を回すときは、書き換える先を`.claude/rules/ccgs-studio.md`に読み替える。`session-start.sh`の照合は、行が見つからないので何も出さない。この2つは、[PDR-0007](./pdr-0007-engine-import-in-rules.md)で`.claude/rules/`のファイルからも行を探す形に直した。
+CCGSには、ルートの`CLAUDE.md`を直接読み書きするものがある。`/setup-engine`は、ルートの`CLAUDE.md`の「Technology Stack」の節と、`ENGINE-REFERENCE-IMPORT`の印の付いた`@`の行を書き換える。`.claude/hooks/session-start.sh`は、ルートの`CLAUDE.md`の`@docs/engine-reference/<engine>/VERSION.md`の行から、読み込んでいるエンジンを読み取る。この形では、どちらも目当ての節と行を見つけられない。作品で`/setup-engine`を回すときは、書き換える先を`.claude/rules/ccgs-studio.md`に読み替える。`session-start.sh`の照合は、行が見つからないので何も出さない。この2つは、[PDR-0005](./pdr-0005-engine-import-in-rules.md)で`.claude/rules/`のファイルからも行を探す形に直した。
 
 `docs/CLAUDE.md`は、CCGSのADRの書き方（`docs/architecture/`に、CCGSの雛形で置く）を案内している。graphで検証するADRは`docs/50-adr/`に置くので、ADRの置き場が2つになる。
 
@@ -68,8 +68,8 @@ Claude Codeが、rulesのファイルの中の`@`を読み込まなくなった�
 
 `related`: 依存はしないが、一緒に読むべきノード
 
-- [PDR-0003 graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む](./pdr-0003-ccgs-import.md)
-- [PDR-0007 CCGSのsession-start.shとsetup-engineを、rulesのファイルから読み込みの行を探す形に直す](./pdr-0007-engine-import-in-rules.md)
+- [PDR-0002 graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む](./pdr-0002-ccgs-import.md)
+- [PDR-0005 CCGSのsession-start.shとsetup-engineを、rulesのファイルから読み込みの行を探す形に直す](./pdr-0005-engine-import-in-rules.md)
 
 `decides`: この決定が影響を与えるノード（ADR用）
 
@@ -77,7 +77,7 @@ Claude Codeが、rulesのファイルの中の`@`を読み込まなくなった�
 
 このノードを参照しているノード
 
-- (related) [PDR-0003 graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む](./pdr-0003-ccgs-import.md)
-- (related) [PDR-0007 CCGSのsession-start.shとsetup-engineを、rulesのファイルから読み込みの行を探す形に直す](./pdr-0007-engine-import-in-rules.md)
+- (related) [PDR-0002 graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む](./pdr-0002-ccgs-import.md)
+- (related) [PDR-0005 CCGSのsession-start.shとsetup-engineを、rulesのファイルから読み込みの行を探す形に直す](./pdr-0005-engine-import-in-rules.md)
 
 <!-- graph:auto:end -->

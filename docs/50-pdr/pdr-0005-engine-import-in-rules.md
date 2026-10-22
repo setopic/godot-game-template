@@ -1,5 +1,5 @@
 ---
-id: PDR-0007
+id: PDR-0005
 type: pdr
 title: CCGSのsession-start.shとsetup-engineを、rulesのファイルから読み込みの行を探す形に直す
 status: stable
@@ -8,7 +8,7 @@ decides:
   - UC-02
 supersedes: []
 related:
-  - PDR-0004
+  - PDR-0003
 ---
 
 # CCGSのsession-start.shとsetup-engineを、rulesのファイルから読み込みの行を探す形に直す
@@ -18,7 +18,7 @@ related:
 
 ## 背景
 
-[PDR-0004](./pdr-0004-claude-md-split.md)で、CCGSのルートの`CLAUDE.md`の内容を`.claude/rules/ccgs-studio.md`へ移した。エンジンの版の読み込みの行（`ENGINE-REFERENCE-IMPORT`の印の付いた`@`の行）も、`@../../docs/engine-reference/godot/VERSION.md`の形でこのファイルにある。
+[PDR-0003](./pdr-0003-claude-md-split.md)で、CCGSのルートの`CLAUDE.md`の内容を`.claude/rules/ccgs-studio.md`へ移した。エンジンの版の読み込みの行（`ENGINE-REFERENCE-IMPORT`の印の付いた`@`の行）も、`@../../docs/engine-reference/godot/VERSION.md`の形でこのファイルにある。
 
 CCGSのうち2つが、この行がルートの`CLAUDE.md`にあることを前提にしていた（setopic/game-template#11）。
 
@@ -33,7 +33,7 @@ CCGSのうち2つが、この行がルートの`CLAUDE.md`にあることを前�
 - `.claude/skills/setup-engine/references/4-claude-md-stack.md`：書き換える先を、`ENGINE-REFERENCE-IMPORT`の印を持つファイル（ルートの`CLAUDE.md`、なければ`.claude/rules/*.md`）にする。rulesのファイルでは、行の`../../`を残して`<engine>`の部分だけを書き換える
 - `.claude/skills/setup-engine/references/8-verify.md`：確かめる先を、手順4で書いたファイルにする
 
-ルートの`CLAUDE.md`の末尾に`@`の行を足す案は、採らない。PDR-0004は置き換えない。
+ルートの`CLAUDE.md`の末尾に`@`の行を足す案は、採らない。PDR-0003は置き換えない。
 
 ## 理由
 
@@ -48,7 +48,7 @@ CCGSのうち2つが、この行がルートの`CLAUDE.md`にあることを前�
 | 案 | 却下理由 |
 | --- | --- |
 | 上流のCCGSに、読み込みの行をルートの`CLAUDE.md`の外にも置けるようにする変更を出す | ルートの`CLAUDE.md`を別のテンプレートと分け合う配置は、CCGSの想定の外である。出しても、このリポジトリは取り込まれるまで直らない |
-| ルートの`CLAUDE.md`の末尾に、`ENGINE-REFERENCE-IMPORT`の印と`@docs/engine-reference/godot/VERSION.md`の行を足す | 「Technology Stack」の節の書き換えが直らない。graphが末尾を直したときに競合する（PDR-0004） |
+| ルートの`CLAUDE.md`の末尾に、`ENGINE-REFERENCE-IMPORT`の印と`@docs/engine-reference/godot/VERSION.md`の行を足す | 「Technology Stack」の節の書き換えが直らない。graphが末尾を直したときに競合する（PDR-0003） |
 
 ## 影響
 
@@ -56,7 +56,7 @@ CCGSのうち2つが、この行がルートの`CLAUDE.md`にあることを前�
 
 ## 見直しの条件
 
-CCGSが、ルートの`CLAUDE.md`の外にある読み込みの行を探すように変わったとき。PDR-0004を見直して、CCGSの内容をルートの`CLAUDE.md`に戻したとき。
+CCGSが、ルートの`CLAUDE.md`の外にある読み込みの行を探すように変わったとき。PDR-0003を見直して、CCGSの内容をルートの`CLAUDE.md`に戻したとき。
 
 ---
 
@@ -66,7 +66,7 @@ CCGSが、ルートの`CLAUDE.md`の外にある読み込みの行を探すよ�
 
 `related`: 依存はしないが、一緒に読むべきノード
 
-- [PDR-0004 ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す](./pdr-0004-claude-md-split.md)
+- [PDR-0003 ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す](./pdr-0003-claude-md-split.md)
 
 `decides`: この決定が影響を与えるノード（ADR用）
 
@@ -74,6 +74,6 @@ CCGSが、ルートの`CLAUDE.md`の外にある読み込みの行を探すよ�
 
 このノードを参照しているノード
 
-- (related) [PDR-0004 ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す](./pdr-0004-claude-md-split.md)
+- (related) [PDR-0003 ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す](./pdr-0003-claude-md-split.md)
 
 <!-- graph:auto:end -->

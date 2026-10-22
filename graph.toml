@@ -1,7 +1,7 @@
 # CCGS（Claude-Code-Game-Studios）から取り込んだ、フロントマターの無いMarkdownを
 # グラフに含めない（PDR-0003）。CCGSのスキルやフックがこれらのパスを決め打ちで
 # 読むので、docs/から動かせない。docs_dirを変えたら、ここも書き直す。
-# docs/architecture/は、/architecture-decisionがCCGSの書式でADRを書く場所である（PDR-0006）。
+# docs/architecture/は、/architecture-decisionがCCGSの書式でADRを書く場所である（PDR-0004）。
 exclude = [
   "docs/architecture/",
   "docs/engine-reference/",
@@ -18,7 +18,7 @@ exclude = [
 # NODE_TYPES・REQUIRED_SECTIONS・REQUIRED_SECTIONS_REFINED・TERM_TYPESを同じ内容で書き写した。
 # 上流（graph-doc-template）が既定の種別を変えても、ここには届かない。上流の変更履歴を見て、手で合わせる。
 # 50番台は決定の記録である。PDRは50、TDRは51、ADRは52に置く。53はゲームデザインの決定（DDR）に空けてある。
-# 番号は、PDR・TDR・ADRで1つの列を使う。
+# 番号は種別ごとに0001から振る。
 
 [node_types.architecture]
 prefix = "ARCH"

@@ -1,5 +1,5 @@
 ---
-id: TDR-0002
+id: TDR-0001
 type: tdr
 title: Godotの版を4.7.2にする
 status: stable
@@ -7,7 +7,7 @@ tags: [engine]
 decides: []
 supersedes: []
 related:
-  - PDR-0003
+  - PDR-0002
 ---
 
 # Godotの版を4.7.2にする
@@ -64,10 +64,10 @@ GdUnit4が4.7.2で動かないと、setopic/game-template#5で分かったとき
 
 `related`: 依存はしないが、一緒に読むべきノード
 
-- [PDR-0003 graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む](../50-pdr/pdr-0003-ccgs-import.md)
+- [PDR-0002 graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む](../50-pdr/pdr-0002-ccgs-import.md)
 
 このノードを参照しているノード
 
-- (related) [PDR-0003 graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む](../50-pdr/pdr-0003-ccgs-import.md)
+- (related) [PDR-0002 graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む](../50-pdr/pdr-0002-ccgs-import.md)
 
 <!-- graph:auto:end -->

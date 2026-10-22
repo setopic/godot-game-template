@@ -129,14 +129,14 @@ graph LR
   end
   subgraph pdr["開発の進め方の決定"]
     PDR-0001["PDR-0001<br/>設計文書をグラフとして管理する"]
-    PDR-0003["PDR-0003<br/>graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む"]
-    PDR-0004["PDR-0004<br/>ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す"]
-    PDR-0006["PDR-0006<br/>ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない"]
-    PDR-0007["PDR-0007<br/>CCGSのsession-start.shとsetup-engineを、rulesのファイルから読み込みの行を探す形に直す"]
+    PDR-0002["PDR-0002<br/>graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む"]
+    PDR-0003["PDR-0003<br/>ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す"]
+    PDR-0004["PDR-0004<br/>ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない"]
+    PDR-0005["PDR-0005<br/>CCGSのsession-start.shとsetup-engineを、rulesのファイルから読み込みの行を探す形に直す"]
   end
   subgraph tdr["ゲームの外の技術の決定"]
-    TDR-0002["TDR-0002<br/>Godotの版を4.7.2にする"]
-    TDR-0005["TDR-0005<br/>言語をGDScriptにする"]
+    TDR-0001["TDR-0001<br/>Godotの版を4.7.2にする"]
+    TDR-0002["TDR-0002<br/>言語をGDScriptにする"]
   end
   ARCH-02 -->|refines| ARCH-01
   CON-01 -->|depends_on| UC-01
@@ -151,15 +151,15 @@ graph LR
   META-07 -.-|related| META-08
   PDR-0001 -.->|decides| META-01
   PDR-0001 -.->|decides| ARCH-01
-  PDR-0003 -.-|related| TDR-0002
-  PDR-0003 -.-|related| PDR-0004
-  PDR-0003 -.-|related| PDR-0006
+  PDR-0002 -.-|related| TDR-0001
+  PDR-0002 -.-|related| PDR-0003
+  PDR-0002 -.-|related| PDR-0004
+  PDR-0002 -.->|decides| UC-02
+  PDR-0003 -.-|related| PDR-0005
   PDR-0003 -.->|decides| UC-02
-  PDR-0004 -.-|related| PDR-0007
   PDR-0004 -.->|decides| UC-02
-  PDR-0006 -.->|decides| UC-02
-  PDR-0007 -.->|decides| UC-02
-  TDR-0005 -.->|decides| UC-02
+  PDR-0005 -.->|decides| UC-02
+  TDR-0002 -.->|decides| UC-02
   UC-01 -->|depends_on| DOM-01
   classDef draft stroke-dasharray: 4\,3;
   classDef deprecated opacity:0.5;

@@ -30,7 +30,7 @@ preference. The answer sets `engine.language` (`"C++"` or `"Blueprint"`).
 
 ### Which file holds the Technology Stack
 
-game-template (PDR-0007): the Technology Stack section and the
+game-template (PDR-0005): the Technology Stack section and the
 `ENGINE-REFERENCE-IMPORT` line may live in a file under `.claude/rules/` instead
 of the root `CLAUDE.md`. Find the file that holds the `ENGINE-REFERENCE-IMPORT`
 marker: the root `CLAUDE.md` first, then `.claude/rules/*.md`. In game-template

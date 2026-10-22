@@ -10,11 +10,23 @@
 
 ### 変更
 
-決定の記録を、PDR・TDR・ADRの3つの種別に分けた（#16）。`graph.toml`に`[node_types]`を足し、`pdr`（開発の進め方の決定、`docs/50-pdr/`）、`tdr`（ゲームの外の技術の決定、`docs/51-tdr/`）、`adr`（ゲームの中の構成の決定、`docs/52-adr/`）を置いた。フォルダの50番台は、決定の記録に使う。3つとも層は90で、層のルールの対象外にし、確定したら書き換えない記録として扱う。必須の節は、既定の`adr`と同じにした。番号は3つの種別で1つの列を使い、次は0008である。ゲームデザインの決定（DDR）は`docs/53-ddr/`に置くが、雛形とGDDとのつなぎを含めて別のPRで足す。
+決定の記録を、PDR・TDR・ADRの3つの種別に分けた（#16）。`graph.toml`に`[node_types]`を足し、`pdr`（開発の進め方の決定、`docs/50-pdr/`）、`tdr`（ゲームの外の技術の決定、`docs/51-tdr/`）、`adr`（ゲームの中の構成の決定、`docs/52-adr/`）を置いた。フォルダの50番台は、決定の記録に使う。3つとも層は90で、層のルールの対象外にし、確定したら書き換えない記録として扱う。必須の節は、既定の`adr`と同じにした。番号は種別ごとに0001から振る。ゲームデザインの決定（DDR）は`docs/53-ddr/`に置くが、雛形とGDDとのつなぎを含めて別のPRで足す。
 
 種別を1つでも書くと、書いたものが種別の全体になる。そのため、`architecture`・`domain`・`usecase`・`contract`は、`tools/graph/schema.py`の既定の種別を同じ内容で書き写した。上流が既定の種別を変えても、`graph.toml`には届かない。上流の変更履歴を見て、手で合わせる。
 
-これまでの決定の記録は、`rename`で振り直した。ADR-0001・ADR-0003・ADR-0004・ADR-0006・ADR-0007はPDRに、ADR-0002・ADR-0005はTDRにした。番号は変えていない。目次は、`docs/50-adr/index.md`（IDX-ADR）をIDX-PDRとして`docs/50-pdr/`へ移し、`docs/51-tdr/`（IDX-TDR）と`docs/52-adr/`（IDX-ADR）の目次を作った。`docs/52-adr/`には、まだノードが無い。`docs/50-adr/`は無くなった。
+これまでの決定の記録は、`rename`で振り直した。これまでのコミット・PRの題・変更履歴にある旧idは、次の表で読み替える。
+
+| 旧id | 新id |
+| --- | --- |
+| ADR-0001 | PDR-0001 |
+| ADR-0003 | PDR-0002 |
+| ADR-0004 | PDR-0003 |
+| ADR-0006 | PDR-0004 |
+| ADR-0007 | PDR-0005 |
+| ADR-0002 | TDR-0001 |
+| ADR-0005 | TDR-0002 |
+
+目次は、`docs/50-adr/index.md`（IDX-ADR）をIDX-PDRとして`docs/50-pdr/`へ移し、`docs/51-tdr/`（IDX-TDR）と`docs/52-adr/`（IDX-ADR）の目次を作った。`docs/52-adr/`には、まだノードが無い。`docs/50-adr/`は無くなった。
 
 確定したDRのidの振り直しは、本文の中身を変えないので、書式の修正と同じ扱いにした。直したのは、フロントマターのid・type・エッジと、本文のidとリンクだけである。
 
@@ -22,20 +34,20 @@
 
 ### 取り込む側の作業
 
-`make update`で、`graph.toml`の`[node_types]`と、振り直したPDR-0001〜PDR-0007・TDR-0002・TDR-0005が届く。`graph.toml`を自分で書き換えていて競合したら、`[node_types]`の表はこの層のものに合わせ、自分で足した`exclude`の行は残す。
+`make update`で、`graph.toml`の`[node_types]`と、振り直したPDR-0001〜PDR-0005・TDR-0001・TDR-0002が届く。`graph.toml`を自分で書き換えていて競合したら、`[node_types]`の表はこの層のものに合わせ、自分で足した`exclude`の行は残す。
 
 `.gitattributes`の`merge=ours`の行が、`docs/50-pdr/pdr-0001-graph-driven-docs.md`に変わる。派生で`.gitattributes`を書き換えていて競合したら、この行を新しいパスにする。
 
-取り込んだあと、`docs/50-adr/`に自分のADR（ADR-0008から）が残っていれば、`check`が`G003`を出す。1つずつ、PDR・TDR・ADRのどれに当たるかを決め、`rename`で振り直す。
+取り込んだあと、`docs/50-adr/`に自分のADR（ADR-0008から）が残っていれば、`check`が`G003`を出す。1つずつ、PDR・TDR・ADRのどれに当たるかを決め、`rename`でその種別の次の番号に振り直す。
 
 ```bash
-python -m tools.graph rename --from ADR-0008 --to PDR-0008
+python -m tools.graph rename --from ADR-0008 --to PDR-0006
 ```
 
-ADRのままにするものは、idを変えずに`--slug`にいまのファイル名の後半を渡すと、`docs/52-adr/`へ移る。
+ADRのままにするものも、ADR-0001から振り直す。振り直すと`docs/52-adr/`へ移る。
 
 ```bash
-python -m tools.graph rename --from ADR-0009 --slug some-slug
+python -m tools.graph rename --from ADR-0009 --to ADR-0001
 ```
 
 振り直したら`make all`を回し、`docs/50-adr/`が空なら消す。本文の地の文にある`docs/50-adr/`は、手で直す。確定したDRは、idとリンクのほかは変えない。
