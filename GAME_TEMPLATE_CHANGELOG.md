@@ -6,6 +6,16 @@
 
 現在の版は、`tools/graph/layers/game-template.toml`の`version`に書く。版の付け方と見出しの書き方は、[PROJECT_TEMPLATE_CHANGELOG.md](PROJECT_TEMPLATE_CHANGELOG.md)の「版の付け方」に合わせる。
 
+## 0.5.0（2026-10-23）
+
+### 追加
+
+`make ci`を足した。GitHub Actionsが動かないときに、`graph-check.yml`と同じ検査を手元で回す。`make ci PR=<番号>`とPRの番号を渡すと、PRのときにしか走らない`refs`と`names`も、ghでPRの題・本文・ブランチ・コミットを読んで回す。ターゲットはプロジェクト側の`graph.mk`に置き、中身は`scripts/local_ci.py`に書いた。`Makefile`はテンプレートと共通なので書き換えていない。META-05の「6. コミットとマージ」に、Actionsが動かないときはこれを回して通ればマージしてよいことを書いた。
+
+### 取り込む側の作業
+
+`graph.mk`を自分で置いていて競合したら、両方の行を残す。`graph.mk`は`-include`で読まれるので、`.DEFAULT_GOAL := help`の行も残す。残さないと、引数なしの`make`が`ci`を回す。META-05（`docs/00-meta/dev-flow.md`）は`merge=ours`なので届かない。使うなら、追加した段落を手で写す。
+
 ## 0.4.0（2026-10-22）
 
 ### 変更
