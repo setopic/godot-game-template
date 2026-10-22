@@ -19,6 +19,12 @@ headings; when authoring a section, read only that section's guidance below.
 - **Last Verified**: when this doc was last confirmed accurate against the
   current design.
 - **Implements Pillar**: which game pillar this system supports.
+- **Related DDRs**: the IDs of the design decision records (`docs/53-ddr/`)
+  behind this system's rules, comma-separated, or `None`. game-template
+  (PDR-0006): the GDD holds the current specification only; why a rule is so
+  and what was rejected live in the DDR, whose `対応するGDD` line names this
+  GDD. Nothing checks this line mechanically, as the GDD is outside the graph.
+  See `.claude/docs/design-decision-records.md`.
 
 ---
 

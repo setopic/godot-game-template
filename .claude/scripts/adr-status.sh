@@ -58,6 +58,10 @@
 #                 and in the front matter's depends_on, as adr-NNNN or tdr-NNNN,
 #                 comma-separated; `none` when they name none (or the section
 #                 says なし); UNFILLED while the row is the template's bracket
+#                 A DDR-N there (a game design decision, docs/53-ddr/,
+#                 game-template PDR-0006) is not read: it is no TDR or ADR, so
+#                 an ADR naming only DDRs reads `none`. adr-dep-graph.sh lists
+#                 the DDRs under DDR_DEPS
 #   superseded_by the TDR or ADR whose front matter `supersedes` names this one
 #                 (read from every file in the two folders)
 #   missing       the template's `##` sections this ADR lacks, comma-separated

@@ -33,6 +33,7 @@ Checked against the SKILL.md by `/skill-test spec` — no fixture needed.
 - [ ] Has a next-step handoff at the end (`/architecture-decision`, `/architecture-review`)
 - [ ] Documents that the impact report is shown before any change is made
 - [ ] Documents gate TD-CHANGE-IMPACT: runs in full, skipped in lean/solo
+- [ ] Documents Phase 3b: a change that alters or adds a design decision is written as a DDR (`docs/53-ddr/`) after a "May I" ask; skipped by name at `minimal`
 
 ---
 
@@ -231,7 +232,8 @@ Fixture defaults.
 
 **Expected behavior (minimal):**
 1. The diff and Change Summary run as usual
-2. At the ADR step: "No ADR cascade at minimal workflow — design change recorded;
+2. Phase 3b says "No DDR check at minimal workflow." in one line
+3. At the ADR step: "No ADR cascade at minimal workflow — design change recorded;
    no architecture impact analysis." and the skill stops
 
 **Expected behavior (standard):**
@@ -247,6 +249,37 @@ Fixture defaults.
 - [ ] Standard: the prose-only reference in ADR-0006 is caught by the basename grep
 - [ ] Standard: the Foundation ADRs are found from the `**層**` rows (`Grep pattern="\*\*層\*\*" glob="docs/{51-tdr/tdr,52-adr/adr}-*.md"`), not guessed from titles
 - [ ] Variant — ADR-0007 has no `**層**` row: it is treated as critical (when in doubt, critical) and joins the in-scope set, so N = 4
+
+### Case 7: The change reverses a recorded design decision (DDR)
+
+**Fixture:**
+- `project.yaml`: `modes.workflow: full`, `modes.review_mode: lean`
+- `design/gdd/save.md`'s `> **Related DDRs**:` line is `DDR-0002`;
+  `docs/53-ddr/ddr-0002-checkpoint-save.md` decides checkpoint saves
+- The uncommitted edit to `save.md` replaces checkpoint saves with save-anywhere
+- `docs/52-adr/adr-0004-*.md` has `DDR-0002` in its front matter `depends_on`
+  and does not name `save.md`
+
+**Input:** `/propagate-design-change design/gdd/save.md`
+
+**Expected behavior:**
+1. Phase 3b reads DDR-0002's 決定 with `md-section.sh extract` and classifies the
+   change as "alters a recorded decision"
+2. Asks "May I write 1 DDRs for this change to `docs/53-ddr/`?"; on yes, the new
+   DDR-0003 has `supersedes: [DDR-0002]`, DDR-0002 becomes `deprecated`, and the
+   GDD's `Related DDRs` line reads `DDR-0003`
+3. Phase 4 finds ADR-0004 through its `depends_on` on DDR-0002, though it never
+   names `save.md`, and it is in the affected set M
+4. The Phase 9 report lists DDR-0003 as written
+5. Variant — the edit moves a value inside a documented Tuning Knob range: Phase
+   3b says no DDR is needed in one line, and asks nothing
+
+**Assertions:**
+- [ ] The DDR is written only after its own "May I" ask, with `python -m tools.graph new --type ddr`
+- [ ] The old DDR is superseded, not edited
+- [ ] An ADR built on the superseded DDR joins M even without naming the GDD
+
+---
 
 ---
 

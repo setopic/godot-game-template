@@ -45,9 +45,15 @@ Bash: bash .claude/scripts/adr-dep-graph.sh
 
 It collects every `前提` edge, finds the cycles and the order, and emits
 `ADRS:` / `EDGES:` / `NO_DEPS_SECTION:` / `UNFILLED_DEPS:` / `CYCLE:` /
-`BLOCKED_BY_CYCLE:` / `ORDER:`. A model tracing A→B→C→A across
+`BLOCKED_BY_CYCLE:` / `ORDER:`, and `DDR_DEPS:` when an ADR names a DDR. A model tracing A→B→C→A across
 a dozen ADRs eventually misses an edge; the algorithm cannot. It reports
 observations, not a verdict — you apply the meaning below.
+
+**`DDR_DEPS` is not an edge.** game-template (PDR-0006): a DDR (`docs/53-ddr/`)
+is a game design decision an ADR builds on, a prerequisite from outside the ADR
+graph. It takes no place in `ORDER` and no part in a cycle. Report each pair as
+"ADR-A builds on design decision DDR-N"; a DDR's own status and cycles are
+`python -m tools.graph check`'s.
 
 **`NO_DEPS_SECTION` and `UNFILLED_DEPS` are load-bearing**: they make "no cycles
 because the graph is clean" distinguishable from "no cycles because half the ADRs

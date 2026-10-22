@@ -38,6 +38,7 @@ Checked against the SKILL.md by `/skill-test spec` — no fixture needed.
 - [ ] Documents gate behavior: engine specialist validation, then TD-ADR in full mode; TD-ADR skipped in lean/solo with a named note
 - [ ] Documents that authoring always produces `Proposed` and only acceptance mode sets `Accepted` — retrofit's `Accepted` answer is routed through it
 - [ ] Mentions the engine version stamp from `docs/engine-reference/` (エンジンとの互換 table)
+- [ ] Documents the line with a DDR: a decision the player can tell apart goes to `docs/53-ddr/` (`.claude/docs/design-decision-records.md`), not to a TDR or ADR
 
 ---
 
@@ -303,6 +304,30 @@ on it"
 - [ ] The unclear variant asks before Step 3 and writes nothing until the user answers
 
 ---
+
+### Case 8: Record kind — a design decision is a DDR, not an ADR
+
+**Fixture:**
+- As Case 7; `docs/53-ddr/` holds only `index.md`
+
+**Input:** `/architecture-decision enemy-retreat`, and the user says: "enemies
+flee when their health is low, and the enemy AI is a behaviour tree"
+
+**Expected behavior:**
+1. Step 2 sees that the player can tell the difference for the first half (how
+   enemies act): that is a game design decision, a DDR in `docs/53-ddr/`, and
+   the skill says so instead of writing it as an ADR
+2. It points to `.claude/docs/design-decision-records.md` for the DDR, to be
+   written first; the behaviour tree is the ADR, written by this skill after it
+3. The ADR's front matter `depends_on` and its `**前提**` row name the DDR
+   (`DDR-0001`); the DDR names no ADR
+4. Variant — the user says only "enemies flee when their health is low": no ADR
+   is written; the skill tells the user it is a DDR and stops before Step 3
+
+**Assertions:**
+- [ ] A decision the player can tell apart is never written to `docs/51-tdr/` or `docs/52-adr/`
+- [ ] The split is DDR first, ADR second, with the ADR's `depends_on` naming the DDR
+- [ ] When it is unclear whether the player can tell the difference, the skill asks and does not guess
 
 ## Protocol Compliance
 

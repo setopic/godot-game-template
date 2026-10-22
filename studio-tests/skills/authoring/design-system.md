@@ -40,6 +40,7 @@ Checked against the SKILL.md by `/skill-test spec` — no fixture needed.
 - [ ] Contains "May I write" / "May I create" collaborative protocol language (skeleton and per-section approval)
 - [ ] Has a next-step handoff at the end
 - [ ] Documents skeleton-first approach (file created with headers before content, after approval)
+- [ ] Documents 5b-bis: design decisions noted in §4 are written as DDRs in `docs/53-ddr/` after a "May I write" ask, and the GDD's `Related DDRs` line lists them
 - [ ] Documents CD-GDD-ALIGN gate: runs in full mode only; skipped in lean and solo with a named note
 - [ ] Documents retrofit mode for existing GDD files
 
@@ -308,6 +309,39 @@ Fixture defaults.
 - [ ] The dependency GDD's sections are found despite their `N.` heading numbers — all four of Dependencies, Formulas, Edge Cases and Tuning Knobs are read
 - [ ] `combat.md` is read by section, not whole
 - [ ] The commented `gold_carry_limit` example is not presented as a locked value
+
+### Case 9: Design decisions become DDRs at 5b-bis
+
+**Fixture:**
+- As Case 1; `docs/53-ddr/` holds only `index.md`
+- In Section C the user picks "checkpoint saves" over "save anywhere" and
+  "autosave only"
+
+**Input:** `/design-system save`
+
+**Expected behavior:**
+1. The skeleton carries the `> **Related DDRs**: [DDR-NNNN, ... | None]` header line
+2. At the Section C Decision step the pick is noted as a design decision; the
+   GDD's Core Rules state only the checkpoint rule, not the rejected options
+3. At 5b-bis the skill lists the decision with its rejected options and asks
+   "May I write these 1 design decisions as DDRs in `docs/53-ddr/`?"
+4. On yes: `python -m tools.graph new --type ddr --id DDR-0001 ...` creates
+   `docs/53-ddr/ddr-0001-[slug].md`; its `## 背景` names `design/gdd/save.md` on
+   the `対応するGDD` line; the GDD's `Related DDRs` line becomes `DDR-0001`;
+   `sync` and `check` are run
+5. The §5c summary lists "DDRs written: DDR-0001"
+6. Variant — no section involved a choice between alternatives: 5b-bis says "no
+   design decisions to record as DDRs" in one line and the line stays `None`
+7. Variant — the user declines the DDR ask: the §5c summary says "DDRs not
+   written: [the decision]"
+
+**Assertions:**
+- [ ] The DDR is created with `python -m tools.graph new --type ddr`, never by placing a file by hand
+- [ ] The DDR and the GDD point at each other: the DDR's `対応するGDD` line and the GDD's `Related DDRs` line
+- [ ] Rejected options go into the DDR's 却下した案, not into the GDD
+- [ ] 5b-bis never passes silently: it names the DDRs written, says there were none, or names the decisions left unwritten
+
+---
 
 ---
 

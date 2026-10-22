@@ -13,12 +13,12 @@ exclude = [
   "docs/skill-flow-diagrams.md",
 ]
 
-# ノード種別（#16）。決定の記録を、PDR・TDR・ADRの3つの種別に分ける。
+# ノード種別（#16）。決定の記録を、PDR・TDR・ADR・DDRの4つの種別に分ける。
 # 種別を1つでも書くと、書いたものが種別の全体になる（META-02の「プロジェクトごとの種別」）。
 # そのため、architecture・domain・usecase・contractは、tools/graph/schema.pyの既定の
 # NODE_TYPES・REQUIRED_SECTIONS・REQUIRED_SECTIONS_REFINED・TERM_TYPESを同じ内容で書き写した。
 # 上流（graph-doc-template）が既定の種別を変えても、ここには届かない。上流の変更履歴を見て、手で合わせる。
-# 50番台は決定の記録である。PDRは50、TDRは51、ADRは52に置く。53はゲームデザインの決定（DDR）に空けてある。
+# 50番台は決定の記録である。PDRは50、TDRは51、ADRは52、DDRは53に置く。
 # 番号は種別ごとに0001から振る。
 
 [node_types.architecture]
@@ -82,3 +82,16 @@ exempt_layer = true
 immutable = true
 label = "ゲームの中の構成の決定"
 required_sections = ["日付", "最終確認日", "決めた人", "要約", "エンジンとの互換", "前提のADR", "背景", "決定", "検討した案", "影響", "リスク", "対応するGDDの要件", "性能への影響", "移行の手順", "確かめ方", "関連"]
+
+# ゲームデザインの決定。プレイヤーができること、見るもの、感じることが変わるもの（PDR-0006）。
+# ADRとの境は「プレイヤーから違いが分かるか」で決める。節はPDRと同じ6節にする。
+# DDRの本文に対応するGDD（design/gdd/）のパスを書き、GDDにも関するDDRを書く。
+# GDDはgraphの外にあるので、GDDからDDRへの参照は機械では確かめない。
+[node_types.ddr]
+prefix = "DDR"
+dir = "53-ddr"
+layer = 90
+exempt_layer = true
+immutable = true
+label = "ゲームデザインの決定"
+required_sections = ["背景", "決定", "理由", "却下した案", "影響", "見直しの条件"]

@@ -48,6 +48,10 @@ Context  ->  Questions  ->  Options  ->  Decision  ->  Draft  ->  Approval  ->  
    then use `AskUserQuestion` to capture the decision.
 
 4. **Decision**: User picks an approach or provides custom direction.
+   When the pick is between real alternatives and changes what the player can
+   do, see or feel, it is a design decision (game-template, PDR-0006): note the
+   decision, the options rejected and why, for the DDR step in §5 (5b-bis).
+   Write only the resulting rule into the GDD, not the rejected options.
 
 5. **Draft**: Write the section content in conversation text for review. Flag any
    provisional assumptions about undesigned dependencies.

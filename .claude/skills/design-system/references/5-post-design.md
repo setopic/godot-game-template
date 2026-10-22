@@ -11,6 +11,7 @@
 - 5a: Self-Check
 - 5a-bis: Creative Director Pillar Review
 - 5b: Update Entity Registry
+- 5b-bis: Record Design Decisions as DDRs
 - 5c: Offer Design Review
 - 5d: Update Systems Index
 - 5e: Update Session State
@@ -134,6 +135,28 @@ other entries to the user rather than fixing them unasked. If the script is
 missing or prints nothing, say the registry check did not run, then re-read the
 entries you wrote against the rules in the file's header.
 
+### 5b-bis: Record Design Decisions as DDRs
+
+game-template (PDR-0006). Each design decision noted in §4 (a choice between
+real alternatives that changes what the player can do, see or feel) is
+recorded as a DDR in `docs/53-ddr/`. Read `.claude/docs/design-decision-records.md`
+for what counts and the steps.
+
+- **None noted** — say so in one line (*"no design decisions to record as DDRs"*)
+  and leave the GDD's `Related DDRs` line as `None`. Do not skip this step silently.
+- **Some noted** — list them, one line each with the options rejected, and ask
+  "May I write these [N] design decisions as DDRs in `docs/53-ddr/`?" For each
+  approved one, create it with `python -m tools.graph new --type ddr ...`, fill
+  the six sections, write this GDD's path on its `対応するGDD` line, and add its
+  ID to this GDD's `Related DDRs` line. Then run `python -m tools.graph sync`
+  and `python -m tools.graph check`.
+- **Declined** — record "DDRs not written: [decisions]" in the §5c summary, so
+  the gap is visible.
+
+A decision that also fixes how the system is built (an ADR) is the DDR here
+and the ADR later, through `/architecture-decision`; the ADR's `depends_on`
+names the DDR.
+
 ### 5c: Offer Design Review
 
 Present a completion summary:
@@ -142,6 +165,7 @@ Present a completion summary:
 > - Sections written: [list]
 > - Provisional assumptions: [list any assumptions about undesigned dependencies]
 > - Cross-system conflicts found: [list or "none"]
+> - DDRs written: [IDs, "none", or "not written: [decisions]"]
 
 > **To validate this GDD, open a fresh Claude Code session and run:**
 > `/design-review design/gdd/[system-name].md`

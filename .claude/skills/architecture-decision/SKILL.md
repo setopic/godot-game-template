@@ -78,6 +78,16 @@ kind has its own folder and its own numbers, from 0001:
 | TDR (Technology Decision Record) | `TDR-NNNN` | `docs/51-tdr/tdr-NNNN-[slug].md` | What the game uses from outside its own code: the engine and its version, the language, libraries, target platforms, build and export. Which physics engine to use is a TDR |
 | ADR (Architecture Decision Record) | `ADR-NNNN` | `docs/52-adr/adr-NNNN-[slug].md` | How the inside of the game is built, where only the people building it see a difference and the player sees none: the event system, the save data format, how scenes are split |
 
+**A design decision is neither: it is a DDR.** If the player can tell the
+difference (what the player can do, see or feel changes: whether saving uses
+checkpoints, how an enemy moves), it is a game design decision, recorded as a
+DDR in `docs/53-ddr/`, not by this skill. Tell the user so, and write it by
+`.claude/docs/design-decision-records.md` instead. When the topic has both
+sides ("enemies flee at low health" and "enemy AI is a behaviour tree"), it is
+a DDR and an ADR: write the DDR first, then run this skill for the ADR, whose
+front matter `depends_on` and `**前提**` row name the DDR (`DDR-NNNN`). When it
+is unclear whether the player can tell the difference, ask; do not guess.
+
 Choose the kind before Step 3, from the title and what the user has said:
 
 1. **Ask one question: does this decide what to use from outside the game's

@@ -63,7 +63,9 @@ the `**前提**` row of `## 前提のADR` and the front matter's `depends_on`),
 `NO_DEPS_SECTION` (ADRs with no 前提), `UNFILLED_DEPS` (a 前提 row
 still the template's placeholder), a `CYCLE:` line per ADR on a dependency cycle
 with its edges into that cycle, `BLOCKED_BY_CYCLE` (ADRs on no cycle that depend
-on one) and `ORDER` (the rest, dependencies first).
+on one) and `ORDER` (the rest, dependencies first). `DDR_DEPS` (one
+`adr-A -> ddr-N` per game design decision an ADR builds on, game-template
+PDR-0006) is not an edge: it never makes or breaks a cycle here.
 - **Any `CYCLE:` lines → FAIL**: "Circular ADR dependency: [the nodes on the
   `CYCLE:` lines]. Neither can reach Accepted while the cycle exists. Remove one
   前提 edge (in the `**前提**` row and `depends_on`) shown on a `CYCLE:` line to break the cycle." Name the
