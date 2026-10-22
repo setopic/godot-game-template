@@ -18,6 +18,9 @@ tags: [index]
 
 <!-- graph:children:start -->
 - [ADR-0001 設計文書をグラフとして管理する](./adr-0001-graph-driven-docs.md)
+- [ADR-0002 Godotの版を4.7.2にする](./adr-0002-godot-version.md)
+- [ADR-0003 graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む](./adr-0003-ccgs-import.md)
+- [ADR-0004 ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す](./adr-0004-claude-md-split.md)
 <!-- graph:children:end -->
 
 ## 追加するとき

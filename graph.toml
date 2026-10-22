@@ -1,0 +1,11 @@
+# CCGS（Claude-Code-Game-Studios）から取り込んだ、フロントマターの無いMarkdownを
+# グラフに含めない（ADR-0003）。CCGSのスキルやフックがこれらのパスを決め打ちで
+# 読むので、docs/から動かせない。docs_dirを変えたら、ここも書き直す。
+exclude = [
+  "docs/engine-reference/",
+  "docs/CLAUDE.md",
+  "docs/COLLABORATIVE-DESIGN-PRINCIPLE.md",
+  "docs/WORKFLOW-GUIDE.md",
+  "docs/migration-guide-v1.1.md",
+  "docs/skill-flow-diagrams.md",
+]
