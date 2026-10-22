@@ -9,13 +9,15 @@
 ask again.** Section 4 sets it as part of the same CLAUDE.md write, anchored to
 the `ENGINE-REFERENCE-IMPORT` marker. This step only confirms the result.
 
-Read `CLAUDE.md` and confirm the line under the marker reads:
+Read the file Section 4 wrote (the root `CLAUDE.md`, or the `.claude/rules/`
+file that holds the marker) and confirm the line under the marker reads:
 
 ```markdown
 @docs/engine-reference/<engine>/VERSION.md
 ```
 
-with `<engine>` the engine just configured. If it still points at a different
+with `<engine>` the engine just configured. In a `.claude/rules/` file the line
+starts with `@../../docs/` instead of `@docs/`. If it still points at a different
 engine, Section 4 did not complete — go back and finish it rather than patching
 the line here.
 

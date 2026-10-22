@@ -132,6 +132,7 @@ graph LR
     ADR-0004["ADR-0004<br/>ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す"]
     ADR-0005["ADR-0005<br/>言語をGDScriptにする"]
     ADR-0006["ADR-0006<br/>ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない"]
+    ADR-0007["ADR-0007<br/>CCGSのsession-start.shとsetup-engineを、rulesのファイルから読み込みの行を探す形に直す"]
   end
   ADR-0001 -.->|decides| META-01
   ADR-0001 -.->|decides| ARCH-01
@@ -139,9 +140,11 @@ graph LR
   ADR-0003 -.-|related| ADR-0004
   ADR-0003 -.-|related| ADR-0006
   ADR-0003 -.->|decides| UC-02
+  ADR-0004 -.-|related| ADR-0007
   ADR-0004 -.->|decides| UC-02
   ADR-0005 -.->|decides| UC-02
   ADR-0006 -.->|decides| UC-02
+  ADR-0007 -.->|decides| UC-02
   ARCH-02 -->|refines| ARCH-01
   CON-01 -->|depends_on| UC-01
   CON-01 -->|depends_on| DOM-01

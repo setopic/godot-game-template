@@ -53,10 +53,10 @@ CCGSは、[ADR-0003](../50-adr/adr-0003-ccgs-import.md)のとおり、選んだ�
    ```bash
    git checkout ccgs/main -- .claude/agents .claude/skills .claude/hooks .claude/scripts .claude/docs .claude/rules .claude/statusline.sh docs/engine-reference docs/WORKFLOW-GUIDE.md docs/COLLABORATIVE-DESIGN-PRINCIPLE.md docs/skill-flow-diagrams.md docs/migration-guide-v1.1.md docs/CLAUDE.md design/CLAUDE.md src/CLAUDE.md studio-tests/CLAUDE.md studio-tests production/.gdignore .worktreeinclude UPGRADING.md CHANGELOG.md
    git show ccgs/main:LICENSE > LICENSE-CCGS
-   git checkout HEAD -- .claude/docs/technical-preferences.md
+   git checkout HEAD -- .claude/docs/technical-preferences.md .claude/hooks/session-start.sh .claude/skills/setup-engine/references/4-claude-md-stack.md .claude/skills/setup-engine/references/8-verify.md
    ```
 
-   2行目は、CCGSの`LICENSE`を`LICENSE-CCGS`に写す。graph側の`LICENSE`は写さない。3行目は、1行目で上書きした`technical-preferences.md`を、この層で書いたものに戻す。このファイルには、`/setup-engine`の値を書いてある（[ADR-0005](../50-adr/adr-0005-gdscript.md)）。
+   2行目は、CCGSの`LICENSE`を`LICENSE-CCGS`に写す。graph側の`LICENSE`は写さない。3行目は、1行目で上書きしたファイルのうち、この層で手を入れたものを戻す。`technical-preferences.md`には、`/setup-engine`の値を書いてある（[ADR-0005](../50-adr/adr-0005-gdscript.md)）。残りの3つは、エンジンの版の読み込みの行を`.claude/rules/`のファイルからも探すように直してある（[ADR-0007](../50-adr/adr-0007-engine-import-in-rules.md)）。
 
    CCGSの版に、上の一覧に無い新しいパスがあれば、`UPGRADING.md`の「Safe to Overwrite」で確かめてから足す。
 
@@ -68,6 +68,8 @@ CCGSは、[ADR-0003](../50-adr/adr-0003-ccgs-import.md)のとおり、選んだ�
    | `.claude/settings.json` | `.claude/settings.json` | この層で手を入れていなければ、CCGSのもので上書きする。入れていれば、`UPGRADING.md`のMerge Carefullyの指示に従う |
    | `project.yaml` | `project.yaml` | CCGSの差を写す。`framework.version`を新しい版にする |
    | `.claude/docs/technical-preferences.md` | 同じパス | CCGSの差のうち、節や項目の増減を写す。`/setup-engine`で書いた値は残す |
+   | `.claude/hooks/session-start.sh` | 同じパス | CCGSの差を写す。`game-template (ADR-0007)`の注記の付いた箇所（読み込みの行を探す先と、警告のファイル名）は残す |
+   | `.claude/skills/setup-engine/references/4-claude-md-stack.md`、`8-verify.md` | 同じパス | CCGSの差を写す。`game-template (ADR-0007)`の注記の付いた節と、`.claude/rules/`のファイルの行の形（`@../../docs/`）の説明は残す |
    | `.gitattributes` | `.gitattributes` | CCGSで増えた行を、末尾のCCGSの節に足す |
    | `.gitignore` | `.gitignore` | CCGSで増えた行のうち、要るものを足す |
    | `docs/architecture/`、`docs/registry/`、`design/registry/` | 同じパス | 作品が書き足すファイルである。この層では手を入れていないので、CCGSのもので上書きしてよい |
@@ -95,7 +97,7 @@ CCGSは、[ADR-0003](../50-adr/adr-0003-ccgs-import.md)のとおり、選んだ�
 | --- | --- |
 | 1 → 3 | 手順3で使う`v<いまの版>`のタグは、手順1の`git fetch --tags`で取ってくる |
 | 3 → 4 | 手順4のあとでは、`CHANGELOG.md`がもう新しい版になっていて、いまの版が分からなくなる。手順3でいまの版を使い終えてから写す |
-| 4 → 5 | 手順4は`.claude/docs`ごと写し、`technical-preferences.md`をコミットした状態に戻す。手順5で合わせた変更を先に作ると、手順4で消える |
+| 4 → 5 | 手順4は`.claude/docs`、`.claude/hooks`、`.claude/skills`ごと写し、この層で手を入れたファイルをコミットした状態に戻す。手順5で合わせた変更を先に作ると、手順4で消える |
 | `.claude/hooks`と`.claude/scripts`は同じ手順で写す | フックが`.claude/scripts/`の補助を呼ぶ。片方だけ新しいと、フックが動かなくなる（CCGSの`UPGRADING.md`の1.2.0の節） |
 | 手順6と7は、どちらからでもよい | 互いに結果を使わない |
 
@@ -107,6 +109,7 @@ CCGSは、[ADR-0003](../50-adr/adr-0003-ccgs-import.md)のとおり、選んだ�
 | `check`が`docs/`のCCGSの文書で`G001`を出す | CCGSの`docs/`の文書は、フロントマターを持たない | `graph.toml`の`exclude`に、そのパスが入っているかを確かめる（[ADR-0003](../50-adr/adr-0003-ccgs-import.md)） |
 | `/architecture-decision`のADRを`docs/50-adr/`に移したくなる | ADRの置き場が2か所あり、どちらに書くかで迷った | 作品のゲームの技術の決定は`docs/architecture/`に、テンプレートと開発の進め方の決定は`docs/50-adr/`に書く（[ADR-0006](../50-adr/adr-0006-adr-location.md)） |
 | セッションの初めに、CCGSの読み込んだ文書の中身が出てこない | `.claude/rules/ccgs-studio.md`の`@`のパスが、ルートからの相対になっている | `@../docs/`、`@../../docs/`の形に直す |
+| `project.yaml`の`engine.name`と読み込みの行が違っても、セッションの初めに`ENGINE REFERENCE MISMATCH`が出ない | 手順4の3行目で`session-start.sh`を戻し忘れ、CCGSのもの（ルートの`CLAUDE.md`しか探さない）になっている | 手順5の表のとおり、`game-template (ADR-0007)`の注記の付いた箇所を入れ直す |
 | graph側の`.claude/skills/`（`grill`、`lean`、`yomiyasu`）が変わった | CCGSが同じ名前のスキルを配り始めた | `git checkout HEAD -- .claude/skills/<名前>`で戻し、どちらを残すかを決める |
 
 ## 完了の確認
@@ -136,5 +139,6 @@ CCGSは、[ADR-0003](../50-adr/adr-0003-ccgs-import.md)のとおり、選んだ�
 - (decides) [ADR-0004 ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す](../50-adr/adr-0004-claude-md-split.md)
 - (decides) [ADR-0005 言語をGDScriptにする](../50-adr/adr-0005-gdscript.md)
 - (decides) [ADR-0006 ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない](../50-adr/adr-0006-adr-location.md)
+- (decides) [ADR-0007 CCGSのsession-start.shとsetup-engineを、rulesのファイルから読み込みの行を探す形に直す](../50-adr/adr-0007-engine-import-in-rules.md)
 
 <!-- graph:auto:end -->

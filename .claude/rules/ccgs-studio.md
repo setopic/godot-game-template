@@ -4,7 +4,9 @@ CCGS（Claude-Code-Game-Studios）のルートのCLAUDE.mdを、ここへ移し�
 pathsを持たないので、セッションの初めに毎回読まれる。
 
 元の文から変えたのは、@の読み込みのパスだけである。rulesのファイルの中の@は、
-このファイルからの相対で解かれるので、../と../../を足した。
+このファイルからの相対で解かれるので、../と../../を足した。ENGINE-REFERENCE-IMPORTの
+注記の中のパスも、同じ形に直した。/setup-engineとsession-start.shは、この行を
+このファイルから探す（ADR-0007）。
 CCGSの更新を取り込むときは、CCGSのCLAUDE.mdとの差を見て、手で合わせる。
 -->
 
@@ -31,7 +33,7 @@ Each agent owns a specific domain, enforcing separation of concerns and quality.
 ## Engine Version Reference
 
 <!-- ENGINE-REFERENCE-IMPORT: the line below is engine-specific. /setup-engine
-     rewrites it to @docs/engine-reference/<engine>/VERSION.md for the chosen
+     rewrites it to @../../docs/engine-reference/<engine>/VERSION.md for the chosen
      engine, so a Unity or Unreal project stops loading the Godot reference every
      session. It defaults to Godot (the template's example engine); skills that
      need the pinned version read docs/engine-reference/<engine>/VERSION.md on

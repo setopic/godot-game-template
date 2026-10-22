@@ -25,6 +25,7 @@ tags: [index]
 - [ADR-0004 ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す](./adr-0004-claude-md-split.md)
 - [ADR-0005 言語をGDScriptにする](./adr-0005-gdscript.md)
 - [ADR-0006 ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない](./adr-0006-adr-location.md)
+- [ADR-0007 CCGSのsession-start.shとsetup-engineを、rulesのファイルから読み込みの行を探す形に直す](./adr-0007-engine-import-in-rules.md)
 <!-- graph:children:end -->
 
 ## 追加するとき
