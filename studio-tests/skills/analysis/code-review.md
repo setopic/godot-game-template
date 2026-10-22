@@ -60,8 +60,8 @@ Fixture defaults.
   - Dependencies injected; no singletons
   - All tuning values loaded from `assets/data/`
   - Depends on interfaces, not concrete classes
-- Header comment: `# Implements ADR-0004 (docs/architecture/adr-0004-health.md)`
-- `docs/architecture/adr-0004-health.md` has `## Decision` and `## Consequences` sections, and the code follows the chosen approach
+- Header comment: `# Implements ADR-0004 (docs/52-adr/adr-0004-health.md)`
+- `docs/52-adr/adr-0004-health.md` has `## Decision` and `## Consequences` sections, and the code follows the chosen approach
 - The specialist reports no issues; there is nothing to suggest
 
 **Input:** `/code-review src/gameplay/health_component.gd`
@@ -121,7 +121,7 @@ Fixture defaults.
 
 **Fixture:**
 - `project.yaml`: `engine.name: godot`, `specialists.code: godot-gdscript-specialist`
-- `src/core/save_system.gd` header: `# Implements ADR-0010 (docs/architecture/adr-0010-save-format.md)`
+- `src/core/save_system.gd` header: `# Implements ADR-0010 (docs/52-adr/adr-0010-save-format.md)`
 - `adr-0010-save-format.md` `## Decision`: save data goes through `SaveService` as JSON; direct `FileAccess` writes from gameplay code are explicitly rejected
 - `save_system.gd` writes save data with `FileAccess.open(..., FileAccess.WRITE)` directly at line 58
 - Code otherwise meets all six standards checks
@@ -134,7 +134,7 @@ Fixture defaults.
 3. ADR Compliance reads VIOLATION, listing ADR-0010, the result and the deviation with its severity
 4. The violation appears under Required Changes
 5. Verdict is CHANGES REQUIRED
-6. Next steps: fix the implementation to comply with `docs/architecture/adr-0010-save-format.md`, or — if the design has legitimately changed — run `/architecture-decision` to revise the existing ADR, not create a competing one
+6. Next steps: fix the implementation to comply with `docs/52-adr/adr-0010-save-format.md`, or — if the design has legitimately changed — run `/architecture-decision` to revise the existing ADR, not create a competing one
 
 **Assertions:**
 - [ ] The deviation is classified ARCHITECTURAL VIOLATION (BLOCKING), not ADR DRIFT or MINOR DEVIATION
@@ -220,7 +220,7 @@ Fixture defaults.
 - `project.yaml`: `engine.name: godot`, `specialists.code: godot-gdscript-specialist`
 - `src/gameplay/stamina.gd` meets all six Phase 4 checks and raises no
   architecture, SOLID or game-specific concern; the specialist reports it clean
-- Its header reads `# Implements ADR-0008 (docs/architecture/adr-0008-stamina.md)`,
+- Its header reads `# Implements ADR-0008 (docs/52-adr/adr-0008-stamina.md)`,
   and no such file exists
 
 **Input:** `/code-review src/gameplay/stamina.gd`

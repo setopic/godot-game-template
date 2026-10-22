@@ -64,7 +64,7 @@ Read the relevant agent definition from `.claude/agents/` if a specific role is 
 - For QA: scan `tests/` for existing test coverage (`/test-setup` creates it)
 - For production: scan `production/` for current sprint and milestone
 - **No role or area given**: a general orientation — list the top level of `design/`,
-  `docs/architecture/`, `production/` and the code root, read
+  `docs/architecture/`, `docs/51-tdr/`, `docs/52-adr/`, `production/` and the code root, read
   `production/session-state/active.md` if it exists, and say that a role would
   focus the next pass (e.g. `/onboard programmer`)
 

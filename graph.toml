@@ -1,7 +1,8 @@
 # CCGS（Claude-Code-Game-Studios）から取り込んだ、フロントマターの無いMarkdownを
 # グラフに含めない（PDR-0006）。CCGSのスキルやフックがこれらのパスを決め打ちで
 # 読むので、docs/から動かせない。docs_dirを変えたら、ここも書き直す。
-# docs/architecture/は、/architecture-decisionがCCGSの書式でADRを書く場所である（PDR-0006）。
+# docs/architecture/には、CCGSのスキルが書くADR以外の文書（architecture.md、control-manifest.md、
+# tr-registry.yamlなど）を置く。TDRはdocs/51-tdr/に、ADRはdocs/52-adr/に置く（PDR-0006）。
 exclude = [
   "docs/architecture/",
   "docs/engine-reference/",

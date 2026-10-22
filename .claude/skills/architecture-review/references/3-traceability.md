@@ -16,7 +16,7 @@ For each technical requirement extracted in Phase 2, search the ADRs:
 1. Use the ADRs **already loaded in Phase 1b** — do not re-read them. Extract each
    ADR's "GDD Requirements Addressed" section from what is already in context.
    (If Phase 1b ran in a mode that did not load every ADR, `Grep pattern="## GDD
-   Requirements Addressed" glob="docs/architecture/adr-*.md" output_mode="content"
+   Requirements Addressed" glob="docs/{51-tdr/tdr,52-adr/adr}-*.md" output_mode="content"
    -A 15` fills the gap without a full re-read.)
 2. Check if it explicitly references the requirement or its GDD
 3. Check if the ADR's decision text implicitly covers the requirement

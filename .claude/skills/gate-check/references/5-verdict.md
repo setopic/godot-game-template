@@ -18,7 +18,7 @@
 
 ### Required Artifacts: [X/Y present]
 - [x] design/gdd/game-concept.md (design/game-brief.md at `minimal`) — exists, 2.4KB
-- [ ] docs/architecture/ — MISSING (no ADRs found)
+- [ ] docs/52-adr/ — MISSING (no ADRs found)
 - [x] production/sprints/ — exists, 1 sprint plan
 
 ### Quality Checks: [X/Y passing]

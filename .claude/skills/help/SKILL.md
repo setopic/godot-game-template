@@ -85,7 +85,8 @@ Otherwise, check in this order:
 2. **If neither is set**, infer phase from artifacts (most-advanced match wins):
    - code root has 10+ source files → `production`
    - `production/epics/**/story-*.md` exists → `pre-production`
-   - `docs/architecture/adr-*.md` exists → `technical-setup`
+   - `docs/52-adr/adr-*.md` exists → `technical-setup` (TDRs in `docs/51-tdr/`
+     do not count: the template ships TDRs for the engine it pins)
    - `design/gdd/systems-index.md` exists → `systems-design`
    - `design/gdd/game-concept.md` (or `design/game-brief.md`) exists → `concept`
    - Nothing → `concept` (fresh project)

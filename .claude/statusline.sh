@@ -138,9 +138,11 @@ if [ -z "$stage" ]; then
     src_count=$(find "$cwd/$code_root" -type f \( -name "*.gd" -o -name "*.cs" -o -name "*.cpp" -o -name "*.h" -o -name "*.py" -o -name "*.rs" -o -name "*.lua" -o -name "*.tscn" -o -name "*.tres" \) 2>/dev/null | head -n 10 | wc -l | tr -d ' ')
   fi
 
-  # Check for ADRs (signals Pre-Production phase)
+  # Check for ADRs (signals Pre-Production phase). game-template (PDR-0006):
+  # ADRs sit in docs/52-adr/. TDRs (docs/51-tdr/) are not counted: the
+  # template ships TDRs for the engine it pins.
   has_adrs=false
-  if ls "$cwd/docs/architecture/"adr-*.md 2>/dev/null | head -1 | grep -q .; then
+  if ls "$cwd/docs/52-adr/"adr-*.md 2>/dev/null | head -1 | grep -q .; then
     has_adrs=true
   fi
 

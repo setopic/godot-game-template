@@ -8,8 +8,8 @@
 #   - Register a stance when it constrains how OTHER systems must be built.
 #     An internal implementation detail that affects only one ADR does not need
 #     to be registered.
-#   - Never delete entries — set status: "superseded_by: ADR-NNNN" instead,
-#     quoted: unquoted, the second colon makes the file invalid YAML.
+#   - Never delete entries — set status: "superseded_by: ADR-NNNN" (or
+#     "superseded_by: TDR-NNNN") instead, quoted: unquoted, the second colon makes the file invalid YAML.
 #   - When a stance changes: update the entry, set revised: to today's date,
 #     add a comment with the old value, and run /architecture-review to check
 #     what ADRs are now invalidated.
@@ -61,13 +61,13 @@ state_ownership: []
 #   - state: player_health
 #     status: active           # active | "superseded_by: ADR-NNNN"
 #     owner_system: health-system
-#     adr: docs/architecture/adr-0001-health-system.md
+#     adr: docs/52-adr/adr-0001-health-system.md
 #     interface: "HealthComponent.current_health (read-only float, range 0–max_health)"
 #     write_access: health-system-only   # only owner can write; others read
 #     referenced_by:
-#       - docs/architecture/adr-0001-health-system.md
-#       - docs/architecture/adr-0003-combat-system.md   # reads to apply damage
-#       - docs/architecture/adr-0007-ui-system.md       # reads to display HUD
+#       - docs/52-adr/adr-0001-health-system.md
+#       - docs/52-adr/adr-0003-combat-system.md   # reads to apply damage
+#       - docs/52-adr/adr-0007-ui-system.md       # reads to display HUD
 #     added: 2026-03-26
 #     revised: ""
 
@@ -94,11 +94,11 @@ interfaces: []
 #       - health-system        # receives damage_dealt signal, applies to health
 #       - ui-system            # receives damage_dealt signal, shows damage number
 #       - audio-system         # receives damage_dealt signal, plays SFX
-#     adr: docs/architecture/adr-0003-combat-system.md
+#     adr: docs/52-adr/adr-0003-combat-system.md
 #     signal_signature: "damage_dealt(amount: float, target: Node, is_crit: bool)"
 #     referenced_by:
-#       - docs/architecture/adr-0003-combat-system.md
-#       - docs/architecture/adr-0001-health-system.md
+#       - docs/52-adr/adr-0003-combat-system.md
+#       - docs/52-adr/adr-0001-health-system.md
 #     added: 2026-03-26
 #     revised: ""
 
@@ -118,17 +118,17 @@ performance_budgets: []
 #   - target_fps: 60
 #     total_frame_budget_ms: 16.6
 #     platform: PC             # PC | Console | Mobile | All
-#     adr: docs/architecture/adr-0000-performance-targets.md
+#     adr: docs/52-adr/adr-0000-performance-targets.md
 #     added: 2026-03-26
 #     revised: ""
 #
 #   - system: combat
 #     status: active
 #     budget_ms: 2.0
-#     adr: docs/architecture/adr-0003-combat-system.md
+#     adr: docs/52-adr/adr-0003-combat-system.md
 #     notes: "Includes physics queries, hitbox evaluation, and damage calculation"
 #     referenced_by:
-#       - docs/architecture/adr-0003-combat-system.md
+#       - docs/52-adr/adr-0003-combat-system.md
 #     added: 2026-03-26
 #     revised: ""
 
@@ -150,11 +150,11 @@ api_decisions: []
 #     status: active
 #     api: PhysicsServer3D.space_get_direct_state()
 #     not: RayCast3D node     # explicitly banned for this purpose
-#     adr: docs/architecture/adr-0002-physics-architecture.md
+#     adr: docs/52-adr/adr-0002-physics-architecture.md
 #     reason: "Direct server calls avoid per-frame node overhead; 3× faster in profiling"
 #     referenced_by:
-#       - docs/architecture/adr-0002-physics-architecture.md
-#       - docs/architecture/adr-0003-combat-system.md
+#       - docs/52-adr/adr-0002-physics-architecture.md
+#       - docs/52-adr/adr-0003-combat-system.md
 #     added: 2026-03-26
 #     revised: ""
 
@@ -178,7 +178,7 @@ forbidden_patterns: []
 #       Use dependency injection or signals instead."
 #     why: "Tight coupling to Autoloads makes systems untestable in isolation and
 #       creates hidden dependencies that break when Autoload load order changes."
-#     adr: docs/architecture/adr-0001-health-system.md
+#     adr: docs/52-adr/adr-0001-health-system.md
 #     added: 2026-03-26
 #
 #   - pattern: direct_cross_system_state_write
@@ -187,5 +187,5 @@ forbidden_patterns: []
 #       Use signals or method calls on the owner instead."
 #     why: "Direct state writes create race conditions and break the state
 #       ownership model. The owning system must be the sole writer."
-#     adr: docs/architecture/adr-0000-architecture-principles.md
+#     adr: docs/52-adr/adr-0000-architecture-principles.md
 #     added: 2026-03-26

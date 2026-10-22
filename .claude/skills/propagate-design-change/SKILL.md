@@ -99,7 +99,7 @@ missing sections.
 - **`minimal`:** report "No ADR check at minimal workflow — design change recorded;
   no architecture impact analysis." Stop.
 
-Establish the denominator first: their count is **N**. N is 0: "No ADRs found in `docs/architecture/` — nothing to
+Establish the denominator first: their count is **N**. N is 0: "No ADRs found in `docs/51-tdr/` or `docs/52-adr/` — nothing to
 check." Stop.
 
 **Which ones reference this GDD.** Without reading whole ADRs:
@@ -219,7 +219,7 @@ For each ADR marked Needs Review or Likely Superseded, one at a time, ask: "ADR-
 replace only the body of its `## Status` section:
 
 ```
-bash .claude/scripts/md-section.sh replace docs/architecture/[adr-file].md "Status" <<'EOF'
+bash .claude/scripts/md-section.sh replace docs/[51-tdr|52-adr]/[adr-file].md "Status" <<'EOF'
 Superseded — replacement pending (see docs/architecture/change-impact-[date]-[system-slug].md)
 EOF
 ```

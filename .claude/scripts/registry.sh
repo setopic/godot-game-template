@@ -36,7 +36,10 @@
 #                   the next ID: the highest one seen plus one, so a deleted or
 #                   deprecated ID is never handed out again. KIND and SCOPE:
 #                   tr SLUG   TR-SLUG-NNN, from the TR registry
-#                   adr       ADR-NNNN, from docs/architecture/adr-NNNN-*.md
+#                   adr       ADR-NNNN, from docs/52-adr/adr-NNNN-*.md
+#                   tdr       TDR-NNNN, from docs/51-tdr/tdr-NNNN-*.md
+#                             (game-template, PDR-0006: each kind is
+#                             numbered in its own folder)
 #                   bug       BUG-NNNN, from production/qa/bugs/BUG-*.md
 #                   asset     ASSET-NNN, from design/assets/asset-manifest.md
 #                             and the spec files in design/assets/specs/
@@ -204,7 +207,7 @@ case "$CMD" in
         [ $NARG -eq 2 ] || usage "next-id $KIND takes one slug"
         is_slug "${POS[2]}" || usage "not a slug: ${POS[2]}"
         RG_ARG="${POS[2]}" ;;
-      adr|bug|asset|td|sprint|season)
+      adr|tdr|bug|asset|td|sprint|season)
         [ $NARG -eq 1 ] || usage "next-id $KIND takes no scope" ;;
       *) usage "unknown ID kind: $KIND" ;;
     esac
@@ -266,11 +269,12 @@ files() {
 }
 
 if [ "$CMD" = next-id ] && [ "$KIND" != tr ]; then
-  # Padding per kind is what the skills that number them write: ADR and BUG
-  # four digits, the rest three (season none). Starting numbers are 1.
+  # Padding per kind is what the skills that number them write: ADR, TDR and
+  # BUG four digits, the rest three (season none). Starting numbers are 1.
   # (pat) with its opening paren: bash 3.2 misparses a bare pat) inside $( ).
   NLIST=$(case "$KIND" in
-    (adr) files docs/architecture 'adr-*.md' ;;
+    (adr) files docs/52-adr 'adr-*.md' ;;
+    (tdr) files docs/51-tdr 'tdr-*.md' ;;
     (bug) files production/qa/bugs 'bug-*.md' -i ;;
     (asset) [ -f design/assets/asset-manifest.md ] && echo design/assets/asset-manifest.md
             files design/assets/specs '*.md' ;;
@@ -286,6 +290,7 @@ if [ "$CMD" = next-id ] && [ "$KIND" != tr ]; then
   set +f; IFS=$OLDIFS
   case "$KIND" in
     adr) next_seen adr - 'ADR-%04d' names '^adr-[0-9]+' "$@" ;;
+    tdr) next_seen tdr - 'TDR-%04d' names '^tdr-[0-9]+' "$@" ;;
     bug) next_seen bug - 'BUG-%04d' names '^[Bb][Uu][Gg]-[0-9]+' "$@" ;;
     asset) next_seen asset - 'ASSET-%03d' text 'ASSET-[0-9]+' "$@" ;;
     td) next_seen td - 'TD-%03d' text 'TD-[0-9]+' "$@" ;;
@@ -346,7 +351,7 @@ RG_CMD="$CMD" RG_REG="$RG_REG" RG_SYS="$RG_SYS" RG_ARG="$RG_ARG" RG_NAMES="$RG_N
     # The status values each registry documents in its header.
     ALLOWED["entities"] = "active|deprecated"
     ALLOWED["tr"] = "active|deprecated|\"superseded-by: TR-<system>-NNN\""
-    ALLOWED["architecture"] = "active|\"superseded_by: ADR-NNNN\""
+    ALLOWED["architecture"] = "active|\"superseded_by: ADR-NNNN\"|\"superseded_by: TDR-NNNN\""
     # A TR-ID: TR-, a slug of lowercase words joined by hyphens, -, digits.
     TRID = "TR-[a-z0-9]+(-[a-z0-9]+)*-[0-9]+"
     SQ = sprintf("%c", 39)
@@ -628,7 +633,7 @@ RG_CMD="$CMD" RG_REG="$RG_REG" RG_SYS="$RG_SYS" RG_ARG="$RG_ARG" RG_NAMES="$RG_N
   function status_ok(reg, v,    n, a, i, it) {
     if (v == "active") return 1
     if (reg == "entities") return v == "deprecated"
-    if (reg == "architecture") return v ~ /^superseded_by: ADR-[0-9]+$/
+    if (reg == "architecture") return v ~ /^superseded_by: [AT]DR-[0-9]+$/
     if (v == "deprecated") return 1
     if (substr(v, 1, 15) != "superseded-by: ") return 0
     n = split(substr(v, 16), a, ",")

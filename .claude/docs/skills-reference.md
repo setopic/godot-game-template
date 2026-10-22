@@ -144,7 +144,7 @@ Claude Code ships its own skills, and one name collides with CCGS's.
 
 | You type | You get | Use it for |
 |---------|---------|-----------|
-| `/code-review` | **CCGS's** — project skills take the bare name | Architectural review against this project's coding standards, SOLID, testability and the control manifest. Knows about ADRs, stories and `docs/architecture/`. |
+| `/code-review` | **CCGS's** — project skills take the bare name | Architectural review against this project's coding standards, SOLID, testability and the control manifest. Knows about ADRs, stories, `docs/architecture/`, `docs/51-tdr/` and `docs/52-adr/`. |
 | `/review` | **Claude Code's bundled** review — the alias of its `/code-review`, which CCGS's skill shadows | Reviewing a pull request or a plain diff for correctness bugs, with no knowledge of CCGS's design documents or gates. |
 
 Both are useful; they answer different questions. Reach for the CCGS one during

@@ -252,11 +252,14 @@ fi
 
 # --- Check 3: Core systems without architecture docs ---
 if [ "$DOC_CHECKS" = true ] && [ -n "$CODE_ROOT" ] && { [ -d "$CODE_ROOT/core" ] || [ -d "$CODE_ROOT/engine" ]; }; then
-  if [ ! -d "docs/architecture" ]; then
-    echo "⚠️  GAP: Core engine/systems exist but no docs/architecture/ directory"
-    echo "    Suggested action: Create docs/architecture/ and run /architecture-decision"
+  # game-template (PDR-0006): ADRs sit in docs/52-adr/ as adr-NNNN-*.md.
+  # TDRs (docs/51-tdr/) record technology from outside the game, not how its
+  # core systems are built, so they are not counted here.
+  if [ ! -d "docs/52-adr" ]; then
+    echo "⚠️  GAP: Core engine/systems exist but no docs/52-adr/ directory"
+    echo "    Suggested action: Create docs/52-adr/ and run /architecture-decision"
   else
-    ADR_COUNT=$(find docs/architecture -type f -name "*.md" 2>/dev/null | wc -l)
+    ADR_COUNT=$(find docs/52-adr -maxdepth 1 -type f -name "adr-*.md" 2>/dev/null | wc -l)
     ADR_COUNT=$(echo "$ADR_COUNT" | tr -d ' ')
 
     if [ "$ADR_COUNT" -lt 3 ]; then

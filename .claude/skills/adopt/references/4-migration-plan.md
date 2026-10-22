@@ -24,7 +24,7 @@ and the exact replacement text. Offer to fix this immediately before writing the
 
 **Special case — ADRs missing Status field:**
 For each affected ADR, the fix is:
-`/architecture-decision retrofit docs/architecture/adr-[NNNN]-[slug].md`
+`/architecture-decision retrofit docs/52-adr/adr-[NNNN]-[slug].md` (a TDR: `docs/51-tdr/tdr-[NNNN]-[slug].md`)
 List each ADR as a separate checkable item.
 
 **Special case — GDDs missing sections:**

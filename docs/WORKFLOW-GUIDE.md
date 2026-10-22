@@ -556,7 +556,7 @@ ADRs go through a lifecycle: Proposed > Accepted > Superseded/Deprecated.
 project:
 
 ```
-/architecture-decision retrofit docs/architecture/adr-005.md
+/architecture-decision retrofit docs/52-adr/adr-005.md
 ```
 
 This detects which template sections are missing and adds only those, never
@@ -1465,7 +1465,7 @@ Individual skills also support retrofit mode:
 
 ```
 /design-system retrofit design/gdd/combat-system.md
-/architecture-decision retrofit docs/architecture/adr-005.md
+/architecture-decision retrofit docs/52-adr/adr-005.md
 ```
 
 These detect which sections are present vs. missing and fill only the gaps.

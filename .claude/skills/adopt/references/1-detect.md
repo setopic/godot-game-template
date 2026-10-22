@@ -15,7 +15,7 @@ Then read silently before presenting anything else.
 - `design/gdd/game-concept.md` (or, at the minimal tier, `design/game-brief.md`) — concept exists?
 - `design/gdd/systems-index.md` — systems index exists?
 - Count GDD files: `design/gdd/*.md` (excluding game-concept.md and systems-index.md)
-- Count ADR files: `docs/architecture/adr-*.md`
+- Count ADR files: `docs/51-tdr/tdr-*.md` and `docs/52-adr/adr-*.md`
 - Count story files: `production/epics/**/*.md` (excluding EPIC.md)
 - `project.yaml` (`engine.name`) / `.claude/docs/technical-preferences.md` — engine configured?
 - `docs/engine-reference/` — engine reference docs present?
@@ -53,7 +53,8 @@ If the project appears fresh (no artifacts at all), use `AskUserQuestion`:
    `## MVP`.
 3. Show what was found, grouped by type, each with the place every skill reads
    it from: GDD → `design/gdd/[name].md`; ADR →
-   `docs/architecture/adr-NNNN-[name].md`; story →
+   `docs/52-adr/adr-NNNN-[name].md` (or a TDR → `docs/51-tdr/tdr-NNNN-[name].md`,
+   for technology from outside the game's code); story →
    `production/epics/[epic]/story-NNN-[name].md`; concept →
    `design/gdd/game-concept.md`; brief → `design/game-brief.md`. If nothing
    matched, say so, name the folders and headings searched, and offer `/start`.

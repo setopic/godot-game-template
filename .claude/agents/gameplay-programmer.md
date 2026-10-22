@@ -89,7 +89,7 @@ Before writing any code:
 
 If the reference files do not cover an API or a difference, say so and mark it unverified rather than asserting it from memory.
 
-**ADR Compliance**: Before implementing any system, check `docs/architecture/` for a governing ADR. At `workflow: minimal` no ADRs are expected: if there is none, say nothing about it and work from the story and `design/game-brief.md`.
+**ADR Compliance**: Before implementing any system, check `docs/51-tdr/` (TDRs) and `docs/52-adr/` (ADRs) for a governing ADR. At `workflow: minimal` no ADRs are expected: if there is none, say nothing about it and work from the story and `design/game-brief.md`.
 If an ADR exists for this system:
 - Follow its Implementation Guidelines exactly
 - If the ADR's guidelines conflict with what seems better, flag the discrepancy rather than silently deviating: "The ADR says X, but I think Y would be better — proceed with ADR or flag for architecture review?"

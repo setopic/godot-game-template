@@ -60,7 +60,7 @@ Fixture defaults.
 - `project.yaml` sets `modes.workflow: full`, `engine.name: Godot`, `engine.version: 4.6`
 - `design/gdd/systems-index.md` plus two system GDDs (`combat.md`, `inventory.md`),
   each with a `## Summary` and technical requirements in its Detailed Rules
-- `docs/architecture/adr-0001-*.md` … `adr-0003-*.md`, each with `## Status: Accepted`,
+- `docs/52-adr/adr-0001-*.md` … `adr-0003-*.md`, each with `## Status: Accepted`,
   `## GDD Requirements Addressed`, `## Engine Compatibility` and `## ADR Dependencies`,
   whose `**Depends On**` row is filled in — `None` for `adr-0001`, `ADR-0001` for
   `adr-0002` and `adr-0003` — so `adr-dep-graph.sh` finds real edges and lists no
@@ -156,7 +156,7 @@ Fixture defaults.
 
 **Case 4b — ADRs present but none has a scannable section:**
 - As Case 1 (`modes.workflow: full` — at the default `minimal` tier, a `project.yaml` with no `modes` block,
-  the skill does not apply), except the three `docs/architecture/adr-*.md` files
+  the skill does not apply), except the three `docs/52-adr/adr-*.md` files
   carry none of the six headings the Phase 1b scan looks for: `## Status`,
   `## Decision`, `## GDD Requirements Addressed`, `## Engine Compatibility`,
   `## ADR Dependencies`, `## Performance Implications`

@@ -194,7 +194,7 @@ which you picked.
 - Find the domain-matching ADRs without reading every ADR to learn the field you
   filter on — grep the Domain field first, then read only the matches:
   ```
-  Grep pattern="\*\*Domain\*\*" glob="docs/architecture/adr-*.md" output_mode="content"
+  Grep pattern="\*\*Domain\*\*" glob="docs/{51-tdr/tdr,52-adr/adr}-*.md" output_mode="content"
   ```
   Read only the ADRs whose Domain matches this system's category (its `## Decision`
   and `## Engine Compatibility` sections); skip the rest.

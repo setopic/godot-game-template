@@ -4,7 +4,7 @@
 
 `/reverse-document <type> <path>` works backwards from existing implementation to
 a document. `type` is `design` (a GDD, written to `design/gdd/[system-name].md`),
-`architecture` (an ADR, written to `docs/architecture/[decision-name].md`) or
+`architecture` (an ADR, written to `docs/52-adr/adr-NNNN-[decision-name].md`, or a TDR to `docs/51-tdr/`) or
 `concept` (a concept doc from a prototype). It reads the code, runs a
 sufficiency check (stopping when there is too little implementation to infer
 from), presents its findings with the questions code cannot answer, drafts the
@@ -147,7 +147,7 @@ Fixture defaults.
 
 **Assertions:**
 - [ ] Both files are analyzed, and the combat_system → damage_resolver dependency is documented
-- [ ] Output is an ADR at `docs/architecture/`, not `design/gdd/` or a `-brief.md`
+- [ ] Output is an ADR at `docs/52-adr/` (or a TDR at `docs/51-tdr/`), not `design/gdd/` or a `-brief.md`
 - [ ] The `minimal` tier does not change the architecture output
 - [ ] Verdict is COMPLETE
 

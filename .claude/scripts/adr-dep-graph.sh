@@ -14,9 +14,11 @@
 # cycles because the graph is clean" distinguishable from "no cycles because
 # half the ADRs have no dependency section, or never filled it in".
 #
-# Usage: bash .claude/scripts/adr-dep-graph.sh [adr-dir]
-#   adr-dir defaults to docs/architecture (relative to repo root). An explicit
-#   dir (used by the test suite) is taken as-is.
+# Usage: bash .claude/scripts/adr-dep-graph.sh [adr-dir ...]
+#   adr-dir defaults to docs/51-tdr and docs/52-adr (relative to repo root):
+#   game-template (PDR-0006) keeps TDRs (tdr-NNNN-*.md) and ADRs
+#   (adr-NNNN-*.md) in a folder per kind. Explicit dirs (used by the test
+#   suite) are taken as-is, and each is read for both kinds.
 #
 # Output:
 #   ADRS: <n>
@@ -46,29 +48,33 @@
 #
 # CORRECTNESS NOTES (mirrors review-scope.sh):
 #   - `while IFS= read -r` everywhere: an ADR path with a space must not split.
-#   - IDs are normalised to lowercase `adr-NNNN` so a `Depends On: ADR-0003`
-#     reference matches the file `adr-0003-*.md`.
-#   - The Depends On row is read as adr-status.sh reads it: every ADR-N on the
-#     row is an edge, and the value cell decides placeholder versus none.
+#   - IDs are normalised to lowercase `adr-NNNN` or `tdr-NNNN` so a
+#     `Depends On: ADR-0003` reference matches the file `adr-0003-*.md`, and
+#     `TDR-0001` the file `tdr-0001-*.md`. The two kinds are numbered apart,
+#     so adr-0001 and tdr-0001 are two nodes (game-template, PDR-0006).
+#   - The Depends On row is read as adr-status.sh reads it: every ADR-N and
+#     TDR-N on the row is an edge, and the value cell decides placeholder
+#     versus none.
 
 set -u
 
-# Default to the repo's ADR dir; an explicit arg (absolute or CWD-relative, used
-# by the suite) is taken as-is without cd-ing to the repo root.
-if [ -n "${1:-}" ]; then
-    ADR_DIR="$1"
-else
+# Default to the repo's TDR and ADR dirs; explicit args (absolute or
+# CWD-relative, used by the suite) are taken as-is without cd-ing to the repo root.
+if [ $# -eq 0 ]; then
     cd "$(dirname "$0")/../.." || { echo "adr-dep-graph: cannot reach repo root" >&2; exit 1; }
-    ADR_DIR="docs/architecture"
+    set -- docs/51-tdr docs/52-adr
 fi
+ADR_DIR="$*"
 
-# Normalise any adr reference (filename or "ADR-0003") to `adr-0003`.
+# Normalise any reference (filename, "ADR-0003" or "TDR-0001") to `adr-0003`
+# or `tdr-0001`.
 adr_id() {
-    printf '%s' "$1" | grep -oiE 'adr-[0-9]+' | head -1 | tr 'A-Z' 'a-z'
+    printf '%s' "$1" | grep -oiE '[at]dr-[0-9]+' | head -1 | tr 'A-Z' 'a-z'
 }
 
-adr_files=$(find "$ADR_DIR" -maxdepth 1 -name 'adr-*.md' -type f 2>/dev/null \
-            | sed 's|\\|/|g' | sort)
+adr_files=$(for d in "$@"; do
+                find "$d" -maxdepth 1 -type f \( -name 'adr-*.md' -o -name 'tdr-*.md' \) 2>/dev/null
+            done | sed 's|\\|/|g' | sort)
 
 if [ -z "$adr_files" ]; then
     echo "ADRS: 0"
@@ -109,7 +115,7 @@ while IFS= read -r f; do
     cell=${deps##*"$SOH"}
     deps_row=${deps%"$SOH"*}
 
-    to_ids=$(printf '%s' "$deps_row" | grep -oiE 'adr-[0-9]+' | tr 'A-Z' 'a-z' | sort -u)
+    to_ids=$(printf '%s' "$deps_row" | grep -oiE '[at]dr-[0-9]+' | tr 'A-Z' 'a-z' | sort -u)
     if [ -z "$to_ids" ]; then
         # Section present but Depends On names no ADR: "None" (or empty) is a
         # real leaf; the template's [bracketed] text was never filled in.

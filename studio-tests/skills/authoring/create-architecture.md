@@ -85,7 +85,7 @@ Fixture defaults.
 - `docs/engine-reference/godot/` has `VERSION.md`, `breaking-changes.md`, `deprecated-apis.md`, `current-best-practices.md` and `modules/`
 - `design/gdd/game-concept.md` and `design/gdd/systems-index.md` exist with real content
 - `design/gdd/combat.md` and `design/gdd/inventory.md` follow the GDD template
-- `docs/architecture/adr-0001-event-bus.md` exists (`Status: Accepted`)
+- `docs/52-adr/adr-0001-event-bus.md` exists (`Status: Accepted`)
 - No `docs/architecture/architecture.md`
 - TD-ARCHITECTURE returns APPROVE; LP-FEASIBILITY returns FEASIBLE
 
@@ -220,7 +220,7 @@ Fixture defaults.
 ### Case 5: ADR Audit — Proposed ADRs and uncovered requirements
 
 **Fixture:**
-- Same as Case 1, plus `docs/architecture/adr-0002-save-format.md` with `Status: Proposed`
+- Same as Case 1, plus `docs/52-adr/adr-0002-save-format.md` with `Status: Proposed`
 - Also `design/gdd/crafting.md`, written before the GDD template, with none of the scanned section headings
 - Baseline requirement `TR-combat-002` (combo state machine) is not covered by any ADR's GDD Requirements Addressed section or decision text
 

@@ -5,7 +5,8 @@
 
 **If the argument starts with `accept` followed by an ADR id**
 
-(e.g., `/architecture-decision accept ADR-0005`):
+(e.g., `/architecture-decision accept ADR-0005` or `accept TDR-0002`; a TDR is
+accepted the same way as an ADR):
 
 Enter **acceptance mode**. This is the *only* path in the framework that moves an
 ADR from `Proposed` to `Accepted`. Authoring always produces `Proposed`
@@ -15,7 +16,9 @@ all require `Accepted` — so without this mode an ADR would enter a state it
 never leaves.
 
 1. **Resolve the id to a file, then read it.** Glob
-   `docs/architecture/adr-NNNN-*.md` for the given number. If **no** file matches,
+   `docs/52-adr/adr-NNNN-*.md` for an `ADR-` id, or `docs/51-tdr/tdr-NNNN-*.md`
+   for a `TDR-` id (game-template, PDR-0006: each kind is numbered in its own
+   folder, so the prefix picks the folder). If **no** file matches,
    or **more than one** does, stop and say which — do not pick one. If the file
    has no `## Status` section, stop and say so; a missing Status is exactly what
    retrofit mode is for.

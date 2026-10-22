@@ -132,7 +132,7 @@ Fixture defaults.
 - `project.yaml` sets `modes.rigor: standard` and has no `project.stage`
 - No `production/stage.txt`
 - `design/gdd/game-concept.md` and `design/gdd/systems-index.md` exist
-- No `docs/architecture/adr-*.md`, no `production/epics/**/story-*.md`, code root empty
+- No `docs/52-adr/adr-*.md`, no `production/epics/**/story-*.md`, code root empty
 
 **Input:** `/help`
 

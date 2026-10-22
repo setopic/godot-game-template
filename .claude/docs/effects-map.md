@@ -2177,8 +2177,8 @@ the `<!-- CHECKPOINT -->` block; the others append a SESSION EXTRACT.
 > **Priority chain:** `features.read_guard` in `project.local.yaml` →
 > `project.yaml` → default **`on`**.
 
-A Read with no offset and no limit of a file under `design/`, `docs/architecture/`
-or `production/session-state/` that is over `features.read_guard_kb` is refused.
+A Read with no offset and no limit of a file under `design/`, `docs/architecture/`,
+`docs/51-tdr/`, `docs/52-adr/` or `production/session-state/` that is over `features.read_guard_kb` is refused.
 The refusal lists the doc's headings with their line numbers, so the next call
 reads one section with offset and limit. A ranged read always passes, so no skill
 can get stuck behind the guard; images and PDFs are never checked. It blocks

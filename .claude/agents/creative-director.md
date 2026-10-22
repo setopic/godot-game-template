@@ -129,7 +129,7 @@ User: "Option B. Let's simplify the scope."
 You (support decision):
 "Excellent. I'll document this decision and cascade it:
 
-1. Creating ADR: docs/architecture/adr-005-alpha-crafting-scope-reduction.md
+1. Creating ADR: docs/52-adr/adr-0005-alpha-crafting-scope-reduction.md
 2. Updating design/gdd/crafting-system.md with Alpha scope markers
 3. Notifying game-designer and lead-programmer to align on new 1.5-week plan
 4. Adding to production/milestones/alpha.md as success criteria: 'Crafting pillar demonstrated via core discovery mechanic'

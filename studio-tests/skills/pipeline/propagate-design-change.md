@@ -73,7 +73,7 @@ Fixture defaults.
 - `project.yaml`: `modes.workflow: full`, `modes.review_mode: lean`
 - `design/gdd/combat.md` has an uncommitted edit to a damage formula in its
   Formulas section
-- `docs/architecture/` has 4 ADRs; ADR-0003 and ADR-0005 list `combat.md` in
+- `docs/52-adr/` has 4 ADRs; ADR-0003 and ADR-0005 list `combat.md` in
   `## GDD Requirements Addressed`; ADR-0003's decision assumed the old formula,
   ADR-0005's decision does not depend on it
 - `docs/architecture/requirements-traceability.md` exists
@@ -245,7 +245,7 @@ Fixture defaults.
 - [ ] Minimal: no ADR is globbed or read, no gate is spawned or noted, and no write ask is made
 - [ ] Standard: ADR-0007 is not counted or read, and neither it nor ADR-0001 is described as verified unaffected
 - [ ] Standard: the prose-only reference in ADR-0006 is caught by the basename grep
-- [ ] Standard: the Foundation ADRs are found from the `**Layer**` rows (`Grep pattern="\*\*Layer\*\*" glob="docs/architecture/adr-*.md"`), not guessed from titles
+- [ ] Standard: the Foundation ADRs are found from the `**Layer**` rows (`Grep pattern="\*\*Layer\*\*" glob="docs/{51-tdr/tdr,52-adr/adr}-*.md"`), not guessed from titles
 - [ ] Variant — ADR-0007 has no `**Layer**` row: it is treated as critical (when in doubt, critical) and joins the in-scope set, so N = 4
 
 ---

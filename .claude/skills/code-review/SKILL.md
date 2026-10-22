@@ -82,7 +82,7 @@ Search for ADR references in, in priority order:
 2. Header comments at the top of the implementation files
 3. Commit messages referencing these files (`git log --oneline -- [file]`)
 
-Look for patterns like `ADR-NNNN` or `docs/architecture/adr-` (either case).
+Look for patterns like `ADR-NNNN`, `TDR-NNNN`, `docs/52-adr/adr-` or `docs/51-tdr/tdr-` (either case).
 
 If no ADR references found, note: "No ADR references found — ADR compliance check skipped. For full ADR compliance review, provide the story path: `/code-review [files] [story-path]`."
 
@@ -274,5 +274,5 @@ Use `AskUserQuestion`:
     - `[B] Stop here`
 
 If an ARCHITECTURAL VIOLATION is found:
-- If the violation contradicts an **existing ADR**: fix the implementation to comply with `docs/architecture/[adr-file].md`. If the design has legitimately changed, run `/architecture-decision` to formally *revise* the existing ADR — do not create a competing one.
+- If the violation contradicts an **existing ADR**: fix the implementation to comply with `docs/[51-tdr|52-adr]/[adr-file].md`. If the design has legitimately changed, run `/architecture-decision` to formally *revise* the existing ADR — do not create a competing one.
 - If **no ADR exists** for the pattern that was violated: run `/architecture-decision` to document the correct approach before fixing the code.
