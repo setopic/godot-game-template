@@ -26,11 +26,11 @@ fixes in the conversation.
 **Verdicts**, one per story. The first that matches wins, in this order:
 
 1. **BLOCKED**: a finding the reader can clear. A referenced ADR is missing,
-   `Proposed`, `Deprecated` or `Superseded`; a dependency story is missing or
+   Proposed, Deprecated or Superseded (`status: draft`, `review` or `deprecated`); a dependency story is missing or
    `Draft`; or a criterion holds an UNRESOLVED design question with no owner.
 2. **NEEDS WORK**: a blocking checklist item fails. The story can be fixed now.
 3. **NOT ASSESSED**: the story could not be evaluated. The file is unreadable,
-   a referenced ADR has no readable `## Status`, or the design document it names
+   a referenced ADR has no readable front matter `status:`, or the design document it names
    cannot be found. Name what could not be read. It is never READY: a story
    nobody could check has not been shown ready. It ranks below the two failures,
    because a known blocker is more useful than an unknown.
@@ -79,7 +79,8 @@ Say "Checking [N] story files." before going on.
    `production/sprint-status.yaml`: report "no sprint plan found". Read each story file too: the testability, scope and
    asset items below need its words.
 2. **ADRs.** One call gives every ADR's status and layer:
-   `bash .claude/scripts/adr-status.sh`. A `no_status` or `UNFILLED` status is a
+   `bash .claude/scripts/adr-status.sh`. The status is the front matter's
+   `status:` (game-template, PDR-0006). A `-` (`no_status`) or `OTHER` status is a
    malformed ADR: never treat an absent status as a failed one (route:
    `/architecture-decision retrofit [file]`). An ADR a story cites with no row is missing.
 3. **Control manifest.** Only its `Manifest Version` line in
@@ -132,10 +133,11 @@ lowers READY by itself.
 
 - [ ] **ADR status**, at every tier: each ADR the story cites, by the Phase 2
   table.
-  - `Accepted`: pass.
-  - `Proposed`: BLOCKED. Fix: `BLOCKED: ADR-NNNN is Proposed — accept it with
+  - `stable` (Accepted): pass.
+  - `draft` or `review` (Proposed): BLOCKED. Fix: `BLOCKED: ADR-NNNN is Proposed — accept it with
     /architecture-decision accept ADR-NNNN once decided`.
-  - `Deprecated` or `Superseded`: BLOCKED. Fix: `BLOCKED: ADR-NNNN is [status] —
+  - `deprecated` (Deprecated, or Superseded when `superseded_by` names the
+    successor): BLOCKED. Fix: `BLOCKED: ADR-NNNN is [Deprecated|Superseded] —
     point the story at [successor] (edit its ADR field;
     /create-stories never rewrites an existing story)`.
   - No such ADR file: BLOCKED.

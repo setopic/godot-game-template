@@ -19,13 +19,19 @@
 #   game-template (PDR-0006) keeps TDRs (tdr-NNNN-*.md) and ADRs
 #   (adr-NNNN-*.md) in a folder per kind. Explicit dirs (used by the test
 #   suite) are taken as-is, and each is read for both kinds.
+#   The dependencies are the `**前提**` row of `## 前提のADR` and the front
+#   matter's depends_on (game-template, PDR-0006: the Japanese sections of
+#   docs/00-meta/templates/adr.md). A `## 前提のADR` that says only なし is a
+#   leaf.
 #
 # Output:
-#   ADRS: <n>
-#   EDGES:                        one "adr-A -> adr-B" per Depends-On reference
+#   TDRS: <n>                     the tdr-NNNN files read
+#   ADRS: <n>                     the adr-NNNN files read
+#   EDGES:                        one "adr-A -> adr-B" per 前提 reference
 #     (or "  (none)")
-#   NO_DEPS_SECTION: adr-X, ...   ADRs with no `## ADR Dependencies` / no Depends On
-#   UNFILLED_DEPS: adr-X, ...     ADRs whose Depends On row is still the
+#   NO_DEPS_SECTION: adr-X, ...   ADRs with no `## 前提のADR` / no 前提 row,
+#                                 and no TDR or ADR in depends_on
+#   UNFILLED_DEPS: adr-X, ...     ADRs whose 前提 row is still the
 #                                 template's [bracketed] placeholder: what they
 #                                 depend on is unknown, not none
 #   CYCLE: adr-A -> adr-B         one line per ADR on a dependency cycle (an ADR
@@ -41,7 +47,7 @@
 #                                 dependencies are all listed before them, and so
 #                                 on, by id within each step. An ADR in
 #                                 NO_DEPS_SECTION or UNFILLED_DEPS is placed as
-#                                 if it depended on nothing; a Depends On target
+#                                 if it depended on nothing; a 前提 target
 #                                 with no file of its own is listed too
 #   CYCLE and BLOCKED_BY_CYCLE are absent when there are none; ORDER is
 #   "(none)" when every ADR is on or behind a cycle.
@@ -49,10 +55,10 @@
 # CORRECTNESS NOTES (mirrors review-scope.sh):
 #   - `while IFS= read -r` everywhere: an ADR path with a space must not split.
 #   - IDs are normalised to lowercase `adr-NNNN` or `tdr-NNNN` so a
-#     `Depends On: ADR-0003` reference matches the file `adr-0003-*.md`, and
+#     `前提: ADR-0003` reference matches the file `adr-0003-*.md`, and
 #     `TDR-0001` the file `tdr-0001-*.md`. The two kinds are numbered apart,
 #     so adr-0001 and tdr-0001 are two nodes (game-template, PDR-0006).
-#   - The Depends On row is read as adr-status.sh reads it: every ADR-N and
+#   - The 前提 row is read as adr-status.sh reads it: every ADR-N and
 #     TDR-N on the row is an edge, and the value cell decides placeholder
 #     versus none.
 
@@ -77,6 +83,7 @@ adr_files=$(for d in "$@"; do
             done | sed 's|\\|/|g' | sort)
 
 if [ -z "$adr_files" ]; then
+    echo "TDRS: 0"
     echo "ADRS: 0"
     echo "EDGES:"
     echo "  (none — no ADRs in $ADR_DIR)"
@@ -84,20 +91,28 @@ if [ -z "$adr_files" ]; then
 fi
 
 SOH=$(printf '\001')
-n=0; edges=""; nodes=""; no_deps=""; unfilled=""
+n=0; nt=0; edges=""; nodes=""; no_deps=""; unfilled=""
 while IFS= read -r f; do
     [ -n "$f" ] || continue
-    n=$((n + 1))
     from=$(adr_id "$f")
+    case "$from" in tdr-*) nt=$((nt + 1)) ;; *) n=$((n + 1)) ;; esac
     [ -n "$from" ] && nodes="$nodes$from"$'\n'
 
-    # Slice the `## ADR Dependencies` section and print its `**Depends On**`
-    # rows, then, after a \001, the first row's value cell (the whole row when
-    # it is not a table row).
+    # Slice the `## 前提のADR` section and print its `**前提**` rows and the
+    # front matter's depends_on, then, after a \001, the first row's value
+    # cell (the whole row when it is not a table row; なし for a section that
+    # says only that).
     deps=$(awk '
         { sub(/\r$/, "") }
-        /^## /{ insec = ($0 ~ /## ADR Dependencies/) ? 1 : 0 }
-        insec && /\*\*Depends On\*\*/ {
+        NR == 1 && $0 == "---" { infm = 1; next }
+        infm {
+            if ($0 == "---") { infm = 0; next }
+            if ($0 ~ /^[A-Za-z_]+:/) { key = $0; sub(/:.*/, "", key) }
+            if (key == "depends_on") fmd = fmd " " $0
+            next
+        }
+        /^## /{ insec = ($0 ~ /^## 前提のADR[ \t]*$/) ? 1 : 0 }
+        insec && /\*\*前提\*\*/ {
             print
             if (!got) {
                 got = 1; k = split($0, c, "|"); cell = (k >= 3) ? c[3] : ""
@@ -105,7 +120,13 @@ while IFS= read -r f; do
                 if (cell == "") cell = $0
             }
         }
-        END { if (got) printf "\001%s\n", cell }
+        insec && !got && $0 == "なし" { got = 1; cell = "なし" }
+        END {
+            hasfm = (fmd ~ /[AaTt][Dd][Rr]-[0-9]/)
+            if (hasfm) print fmd
+            if (got) printf "\001%s\n", cell
+            else if (hasfm) printf "\001\n"
+        }
     ' "$f")
 
     if [ -z "$deps" ]; then
@@ -117,7 +138,7 @@ while IFS= read -r f; do
 
     to_ids=$(printf '%s' "$deps_row" | grep -oiE '[at]dr-[0-9]+' | tr 'A-Z' 'a-z' | sort -u)
     if [ -z "$to_ids" ]; then
-        # Section present but Depends On names no ADR: "None" (or empty) is a
+        # Section present but 前提 names no ADR: "なし" (or empty) is a
         # real leaf; the template's [bracketed] text was never filled in.
         case "$cell" in '['*) unfilled="$unfilled $from" ;; esac
         continue
@@ -133,6 +154,7 @@ done <<EOF
 $adr_files
 EOF
 
+echo "TDRS: $nt"
 echo "ADRS: $n"
 
 echo "EDGES:"

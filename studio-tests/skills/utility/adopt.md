@@ -65,8 +65,8 @@ Fixture defaults.
   `engine.version`, `engine.language`, `engine.rendering`, `engine.physics`
 - `design/gdd/` contains 3 GDD files; each has all 8 required sections with content
   and a valid `> **Status**:` field
-- `docs/52-adr/adr-0001.md` exists with `## Status`, `## ADR Dependencies`,
-  `## Engine Compatibility`, `## GDD Requirements Addressed` and `## Performance Implications`
+- `docs/52-adr/adr-0001.md` exists with front matter `status:`, `## 前提のADR`,
+  `## エンジンとの互換`, `## 対応するGDDの要件` and `## 性能への影響`
 - `docs/architecture/tr-registry.yaml` and `docs/architecture/control-manifest.md` exist
 - `docs/engine-reference/[engine]/VERSION.md` exists
 
@@ -108,7 +108,7 @@ Fixture defaults.
 - `design/gdd/` contains 2 GDD files:
   - `combat.md` — missing `## Acceptance Criteria` and `## Formulas` sections
   - `movement.md` — all 8 sections present
-- One ADR (`adr-0001.md`) is missing `## Status` section
+- One ADR (`adr-0001.md`) is missing its front matter `status:`
 - `docs/architecture/tr-registry.yaml` does not exist
 
 **Input:** `/adopt`
@@ -117,20 +117,20 @@ Fixture defaults.
 1. Skill scans all artifacts
 2. Phase 2 audit finds:
    - `combat.md`: 2 missing sections (Acceptance Criteria, Formulas)
-   - `adr-0001.md`: missing `## Status` — BLOCKING impact
+   - `adr-0001.md`: missing front matter `status:` — BLOCKING impact
    - `tr-registry.yaml`: missing — HIGH impact
 3. Phase 3 classifies:
-   - BLOCKING: `adr-0001.md` missing `## Status` (story-readiness silently passes)
+   - BLOCKING: `adr-0001.md` missing front matter `status:` (story-readiness silently passes)
    - HIGH: `tr-registry.yaml` missing; `combat.md` missing Acceptance Criteria (can't generate stories)
    - MEDIUM: `combat.md` missing Formulas
 4. Phase 4 builds ordered migration plan:
-   - Step 1 (BLOCKING): Add `## Status` to `adr-0001.md` — command: `/architecture-decision retrofit`
+   - Step 1 (BLOCKING): Add front matter `status:` to `adr-0001.md` — command: `/architecture-decision retrofit`
    - Step 2 (HIGH): Run `/architecture-review` to bootstrap tr-registry.yaml
    - Step 3 (HIGH): Add Acceptance Criteria to `combat.md` — command: `/design-system retrofit`
    - Step 4 (MEDIUM): Add Formulas to `combat.md`
 5. Gap Preview shows BLOCKING items as bullets (actual file names), HIGH/MEDIUM as counts
 6. `AskUserQuestion` asks to write the plan; writes after approval
-7. Phase 7 offers to fix the highest-priority gap (ADR Status) immediately
+7. Phase 7 offers to fix the highest-priority gap (an ADR missing its front matter `status:`) immediately
 
 **Assertions:**
 - [ ] BLOCKING gaps are listed as explicit file-name bullets in the Gap Preview
@@ -147,7 +147,7 @@ Fixture defaults.
 **Fixture:**
 - `project.yaml` sets `modes.rigor: full` and configures engine, naming and performance
 - 4 GDD files: 2 fully compliant, 2 with gaps (one missing Tuning Knobs, one missing Formulas)
-- ADRs: 3 files — 2 compliant, 1 missing `## ADR Dependencies`
+- ADRs: 3 files — 2 compliant, 1 missing `## 前提のADR`
 - Stories: 5 files — 3 have TR-ID references, 2 do not
 - Infrastructure: all critical files present
 
@@ -159,7 +159,7 @@ Fixture defaults.
    `ADRs audited: 3 (2 fully compliant, 1 with gaps)` and `Stories audited: 5`
 3. Gap classification:
    - No BLOCKING gaps
-   - HIGH: 1 ADR missing `## ADR Dependencies`
+   - HIGH: 1 ADR missing `## 前提のADR`
    - MEDIUM: 2 GDDs with missing sections (Tuning Knobs, Formulas); 2 stories missing TR-IDs
 4. Gap Preview has no BLOCKING bullets and shows HIGH / MEDIUM as counts
 5. Migration plan lists the HIGH gap first, then MEDIUM gaps with GDD gaps before story gaps

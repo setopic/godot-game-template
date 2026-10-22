@@ -257,7 +257,7 @@ if [ "$DOC_CHECKS" = true ] && [ -n "$CODE_ROOT" ] && { [ -d "$CODE_ROOT/core" ]
   # core systems are built, so they are not counted here.
   if [ ! -d "docs/52-adr" ]; then
     echo "⚠️  GAP: Core engine/systems exist but no docs/52-adr/ directory"
-    echo "    Suggested action: Create docs/52-adr/ and run /architecture-decision"
+    echo "    Suggested action: run /architecture-decision (it creates the ADR with python -m tools.graph new)"
   else
     ADR_COUNT=$(find docs/52-adr -maxdepth 1 -type f -name "adr-*.md" 2>/dev/null | wc -l)
     ADR_COUNT=$(echo "$ADR_COUNT" | tr -d ' ')

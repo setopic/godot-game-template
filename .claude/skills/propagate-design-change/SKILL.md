@@ -3,7 +3,7 @@ name: propagate-design-change
 description: "Finds architecture decisions (ADRs) made stale by a changed GDD and walks through resolving each. Use when the user changed a number or rule in a GDD and asks which ADRs or architecture decisions are now out of date."
 argument-hint: "[path/to/changed-gdd.md] [--review full|lean|solo]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Edit, Agent, AskUserQuestion, Bash(bash "*/.claude/skills/propagate-design-change/../../hooks/yaml-helper.sh" resolve_config *), Bash(git diff *), Bash(git log *), Bash(bash .claude/scripts/adr-status.sh*), Bash(bash .claude/scripts/md-section.sh *)
+allowed-tools: Read, Glob, Grep, Write, Edit, Agent, AskUserQuestion, Bash(bash "*/.claude/skills/propagate-design-change/../../hooks/yaml-helper.sh" resolve_config *), Bash(git diff *), Bash(git log *), Bash(bash .claude/scripts/adr-status.sh*), Bash(bash .claude/scripts/md-section.sh *), Bash(python -m tools.graph *)
 model: sonnet
 ---
 
@@ -104,8 +104,8 @@ check." Stop.
 
 **Which ones reference this GDD.** Without reading whole ADRs:
 
-1. each ADR's GDD Requirements Addressed section
-   (`bash .claude/scripts/md-section.sh extract <adr> "GDD Requirements Addressed"`),
+1. each ADR's 対応するGDDの要件 section
+   (`bash .claude/scripts/md-section.sh extract <adr> "対応するGDDの要件"`),
    for rows naming the changed GDD;
 2. a search of the ADRs for the changed GDD's file name, which catches an ADR that
    cites it in prose without a table row.
@@ -115,7 +115,7 @@ The union of the two is the affected set **M**.
 | Result | Meaning | Action |
 |---|---|---|
 | **M ≥ 1** | Normal. | Go on. The N − M others are out of scope for this check: never describe them as verified unaffected. |
-| **M = 0**, and every in-scope ADR lacks GDD Requirements Addressed (`missing` column) | Traceability cannot be computed. | "[N] ADRs found, none has a 'GDD Requirements Addressed' section — traceability cannot be computed (a pre-production gate blocker). Run `/architecture-decision retrofit [adr]`." Stop. |
+| **M = 0**, and every in-scope ADR lacks 対応するGDDの要件 (`missing` column) | Traceability cannot be computed. | "[N] ADRs found, none has a '対応するGDDの要件' section — traceability cannot be computed (a pre-production gate blocker). Run `/architecture-decision retrofit [adr]`." Stop. |
 | **M = 0**, the sections exist | No ADR references this GDD. | "No ADR references [gdd] — no architecture impact." Stop. |
 
 Read `docs/architecture/requirements-traceability.md` when it exists.
@@ -125,7 +125,7 @@ table, [Y] in prose only)."
 
 ## Phase 5: Impact analysis
 
-For each ADR in **M**, read its Context, Decision and Consequences sections with
+For each ADR in **M**, read its 背景, 決定 and 影響 sections with
 `md-section.sh extract`: whether a decision still holds needs its reasoning, never
 only its table row. Then, for each requirement it lists from the changed GDD:
 
@@ -146,7 +146,7 @@ Classify each ADR:
 Status: [Still Valid | Needs Review | Likely Superseded]
 
 What the ADR assumed about this GDD:
-  "[quote from its GDD Requirements Addressed or Context]"
+  "[quote from its 対応するGDDの要件 or Context]"
 
 What the GDD now says:
   "[quote from the current GDD]"
@@ -215,19 +215,22 @@ For each ADR marked Needs Review or Likely Superseded, one at a time, ask: "ADR-
 - Keep it as it is (the change does not affect this decision)
 - Skip it for now (revisit later)
 
-**Mark Superseded.** Ask "May I set the Status of [ADR file] to Superseded?" On yes,
-replace only the body of its `## Status` section:
+**Mark Superseded.** Ask "May I set the status of [ADR file] to deprecated (Superseded)?"
+On yes, change only the front matter's `status:` line to `status: deprecated`
+(game-template, PDR-0006: there is no `## Status` section, and Superseded is
+`deprecated` with the successor's `supersedes` naming this ADR):
 
 ```
-bash .claude/scripts/md-section.sh replace docs/[51-tdr|52-adr]/[adr-file].md "Status" <<'EOF'
-Superseded — replacement pending (see docs/architecture/change-impact-[date]-[system-slug].md)
-EOF
+Edit docs/[51-tdr|52-adr]/[adr-file].md: "status: [current]" → "status: deprecated"
 ```
 
-This is the one form this skill writes. `adr-status.sh` reads it as Superseded, so
+Record in the change impact document (Phase 9) that the replacement is pending.
+This is the one form this skill writes. `adr-status.sh` reads it as `deprecated`
+(its `superseded_by` column stays `-` until the replacement exists), so
 `/dev-story` and `/create-stories` block the stories that still point at it. The
-new ADR, once written, records which one it replaces. Change nothing else in the
-ADR: its content stays.
+new ADR, once written, names this one in its front matter's `supersedes`, which
+fills `superseded_by`. Change nothing else in the ADR: its content stays. Run
+`python -m tools.graph check` after the edit.
 
 ## Phase 8: The traceability index
 

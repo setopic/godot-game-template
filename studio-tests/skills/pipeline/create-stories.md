@@ -81,7 +81,7 @@ Fixture defaults.
   governing ADRs listed
 - The epic's GDD exists with exactly one acceptance criterion per requirement (one
   is a damage formula)
-- All governing ADR files exist with `## Status` Accepted
+- All governing ADR files exist with front matter `status: stable` (Accepted)
 - `docs/architecture/control-manifest.md` exists
 - `docs/architecture/tr-registry.yaml` has TR-IDs for all 3 requirements
 - `production/epics/index.md` has a row for the epic with `Not yet created`
@@ -144,8 +144,8 @@ Fixture defaults.
   `modes.story_granularity: fine`
 - EPIC.md exists with 2 requirements, one acceptance criterion each; both
   governing ADR files exist
-- Requirement 1 is governed by an ADR with `## Status` Accepted
-- Requirement 2 is governed by ADR-0007 with `## Status` Proposed
+- Requirement 1 is governed by an ADR with front matter `status: stable` (Accepted)
+- Requirement 2 is governed by ADR-0007 with front matter `status: draft` (Proposed)
 
 **Input:** `/create-stories [epic-slug]`
 
@@ -158,9 +158,9 @@ Fixture defaults.
 5. The blocked story is flagged in the story list before the single "May I write" ask
 
 **Assertions:**
-- [ ] The ADR status is taken from the ADR's `## Status` section, not assumed
+- [ ] The ADR status is taken from the ADR's front matter `status:`, not assumed
 - [ ] Story 2 has `Status: Blocked` and the note names ADR-0007 and `/architecture-decision accept` — never a bare `/architecture-decision`, which starts a new ADR
-- [ ] Variant — ADR-0007's `## Status` reads `Superseded by ADR-0009`: story 2 is still `Status: Blocked`, and its note names ADR-0009 as the ADR to point it at
+- [ ] Variant — ADR-0007's front matter `status: deprecated` (Superseded: ADR-0009 names it in its `supersedes`): story 2 is still `Status: Blocked`, and its note names ADR-0009 as the ADR to point it at
 - [ ] Story 1 has `Status: Ready` — the blocked ADR does not affect it
 - [ ] The blocked story is flagged before write approval, not discovered after writing
 - [ ] Both story files are written (blocked stories are still written — just flagged)

@@ -5,7 +5,7 @@
 `/story-done` closes the loop between design and implementation. Run at the
 end of implementing a story, it reads the story file, re-reads the current
 requirement text from `docs/architecture/tr-registry.yaml` (never the story's
-quoted copy) and the governing ADR's `## Decision` / `## Consequences`, verifies
+quoted copy) and the governing ADR's `## 決定` / `## 影響`, verifies
 each acceptance criterion (automatically, by batched `AskUserQuestion`, or as
 `DEFERRED — requires playtest session`), builds a criterion-to-test
 traceability table, checks test evidence, and checks GDD/ADR/manifest/scope
@@ -75,7 +75,7 @@ Fixture defaults.
 **Expected behavior:**
 1. Skill reads the story and extracts its fields
 2. Skill greps `tr-registry.yaml` for `TR-light-001` and uses that current text
-3. Skill maps the ADR's headings and reads only `## Decision` and `## Consequences`
+3. Skill maps the ADR's headings and reads only `## 決定` and `## 影響`
 4. Skill verifies each criterion and builds the traceability table: AC-1..AC-3
    each map to their test function, all COVERED
 5. Test evidence found — reported as "Test file present at `<path>`" (existence,
@@ -90,7 +90,7 @@ Fixture defaults.
 
 **Assertions:**
 - [ ] Requirement text comes from `tr-registry.yaml`, not the story's stale quote — the wording difference produces no deviation
-- [ ] Skill reads only the ADR's `## Decision` and `## Consequences` spans, not the whole file
+- [ ] Skill reads only the ADR's `## 決定` and `## 影響` spans, not the whole file
 - [ ] Each criterion is listed with its status (`auto-verified` / `confirmed` / `FAILS` / `DEFERRED`) and appears in a Criterion | Test | Status traceability table
 - [ ] Test evidence is reported as present, without claiming the tests pass
 - [ ] In `lean` mode the skill asks whether `/code-review` was run, and records the answer in the Completion Notes `Code Review:` line

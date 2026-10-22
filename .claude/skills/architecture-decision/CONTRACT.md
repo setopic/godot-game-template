@@ -35,17 +35,18 @@ nothing is indistinguishable from a check that passed.
 ### Files Written
 | File | Guaranteed Fields / Sections | Notes |
 |------|------------------------------|-------|
-| `docs/51-tdr/tdr-NNNN-[slug].md` (a TDR) or `docs/52-adr/adr-NNNN-[slug].md` (an ADR) | `## Status`, `## Date`, `## Engine Compatibility` (table with engine, domain, knowledge risk, post-cutoff APIs, verification required), `## ADR Dependencies` (table with depends-on, enables, blocks, ordering note), `## Context` (problem statement, constraints, requirements), `## Decision` (+ architecture diagram + key interfaces), `## Alternatives Considered`, `## Consequences` (positive, negative), `## Risks`, `## GDD Requirements Addressed` (table), `## Performance Implications`, `## Migration Plan`, `## Validation Criteria`, `## Related` | created after user approves ("May I write this ADR to docs/52-adr/adr-NNNN-[slug].md?", or the TDR path) |
+| `docs/51-tdr/tdr-NNNN-[slug].md` (a TDR) or `docs/52-adr/adr-NNNN-[slug].md` (an ADR) | front matter `status: draft`, then the 16 sections of `docs/00-meta/templates/adr.md`: `## 日付`, `## 最終確認日`, `## 決めた人`, `## 要約`, `## エンジンとの互換` (table with engine, domain, layer, knowledge risk, post-cutoff APIs, verification required), `## 前提のADR` (table with 前提, 可能にするもの, 止めているもの, 順序の注意), `## 背景` (problem statement, current state, constraints, requirements), `## 決定` (+ architecture diagram + key interfaces + `### 実装の指針`), `## 検討した案`, `## 影響` (positive, negative, neutral), `## リスク`, `## 対応するGDDの要件` (table), `## 性能への影響`, `## 移行の手順`, `## 確かめ方`, `## 関連` | created with `python -m tools.graph new` after user approves ("May I write this ADR to docs/52-adr/adr-NNNN-[slug].md?", or the TDR path) |
 | `docs/registry/architecture.yaml` | New stance entries (state ownership, interface contracts, performance budgets, forbidden patterns) derived from the ADR; existing entries marked `status: superseded_by` if overridden | appended after separate user approval ("May I update docs/registry/architecture.yaml with these N new stances?") |
 
 ### Output Guarantees
 - The kind (TDR or ADR) is chosen before Step 3, and asked of the user when it is unclear; a decision that is both is written as two records, the ADR depending on the TDR
 - The number is the next sequential integer after the highest existing filename of the chosen kind: `tdr-NNNN-*` in `docs/51-tdr/`, or `adr-NNNN-*` in `docs/52-adr/`. The two kinds are numbered apart
-- `## Status` is always present. Authoring writes `Proposed`; retrofit writes the status the user gives, except that an `Accepted` answer is written as `Proposed` and handed to acceptance mode. Only acceptance mode writes `Accepted`, after its dependency check and the user's confirmation
-- `## Engine Compatibility` is always populated using verified data from the engine reference docs — never from training data alone when the domain carries MEDIUM or HIGH risk
-- `## GDD Requirements Addressed` is always present (if no GDD motivated the decision, it documents which GDDs the decision will constrain or enable)
-- `## ADR Dependencies` is always present (fields set to "None" if no ordering constraints exist)
-- Engine specialist validation (Step 5.5) runs before the file is written if an engine specialist is configured; blocking issues found by the specialist cause the Decision section to be revised before saving
+- The front matter's `status:` is always present (game-template, PDR-0006: there is no `## Status` section; Proposed is `draft` or `review`, Accepted is `stable`, Deprecated and Superseded are `deprecated`). Authoring writes `draft`; retrofit writes the status the user gives, except that an `Accepted` answer is written as `draft` and handed to acceptance mode. Only acceptance mode writes `stable`, after its dependency check and the user's confirmation
+- `## エンジンとの互換` is always populated using verified data from the engine reference docs — never from training data alone when the domain carries MEDIUM or HIGH risk
+- `## 対応するGDDの要件` is always present (if no GDD motivated the decision, it documents which GDDs the decision will constrain or enable)
+- `## 前提のADR` is always present (fields set to 「なし」 if no ordering constraints exist), and every TDR or ADR on its `**前提**` row is in the front matter's `depends_on` too
+- `python -m tools.graph check` passes after the write
+- Engine specialist validation (Step 5.5) runs before the file is written if an engine specialist is configured; blocking issues found by the specialist cause the 決定 section to be revised before saving
 
 ## Immutability Rules
 - READS but does NOT modify: all existing TDR and ADR files in `docs/51-tdr/` and `docs/52-adr/` (including in retrofit mode — existing sections are never touched), all GDD files in `design/gdd/`, `docs/engine-reference/**`, `project.yaml`, `.claude/docs/technical-preferences.md` (legacy fallback)
@@ -53,12 +54,12 @@ nothing is indistinguishable from a check that passed.
 - In retrofit mode: appends only the missing sections — never modifies any section that is already present in the target ADR file
 
 ## Hard Constraints (Never Violate)
-- Never sets `Status: Accepted` without explicit user confirmation — the default on creation is always `Status: Proposed`
-- **Acceptance route: `/architecture-decision accept ADR-NNNN`** (or `TDR-NNNN`) — the only path that sets `Accepted`. It refuses when a dependency is still Proposed, and prompts for confirmation regardless of `modes.automation`. Retrofit mode's `Accepted` answer, for a decision already in force, is written as `Proposed` and handed to this route. Without this route acceptance would be enforced by ten skills, owned per the authority below, and reachable by nobody.
+- Never sets `status: stable` (Accepted) without explicit user confirmation — the default on creation is always `status: draft` (Proposed)
+- **Acceptance route: `/architecture-decision accept ADR-NNNN`** (or `TDR-NNNN`) — the only path that sets `stable` (Accepted). It refuses when a dependency is still Proposed (`draft` or `review`), and prompts for confirmation regardless of `modes.automation`. Retrofit mode's `Accepted` answer, for a decision already in force, is written as `draft` and handed to this route. Without this route acceptance would be enforced by ten skills, owned per the authority below, and reachable by nobody.
 - **Acceptance authority: the user, or `technical-director` on the user's explicit confirmation — no other agent, and not this skill on its own.** Recorded here because every consumer enforces the consequences of acceptance, and without this line nothing would say who can produce it. This narrows *who* may set the field; it does not relax the confirmation rule above.
 - Never assigns a number that is already in use for the chosen kind — always scan that kind's folder (`docs/51-tdr/` or `docs/52-adr/`) first and use the next sequential number
 - Never proceeds past the architectural stance conflict check (Step 3a) if a conflict exists — surface the conflict and require resolution or explicit exception acknowledgment before drafting
-- Never references APIs listed in `docs/engine-reference/[engine]/deprecated-apis.md` in the Decision or Key Interfaces sections
+- Never references APIs listed in `docs/engine-reference/[engine]/deprecated-apis.md` in the 決定 section or its 主なインタフェース
 - Never writes the ADR file without asking: "May I write this ADR to docs/52-adr/adr-NNNN-[slug].md?" (or the TDR path in `docs/51-tdr/`)
 - Never writes to `docs/registry/architecture.yaml` without a separate ask: "May I update docs/registry/architecture.yaml with these N new stances?"
 - In retrofit mode: never modifies any existing section — only appends absent sections
@@ -67,30 +68,30 @@ nothing is indistinguishable from a check that passed.
 **Next skills:** `/create-epics`, `/create-stories`, `/dev-story`, `/architecture-review`
 
 ### `/create-epics` reads ADRs expecting:
-- `## Status` field — value must be `Accepted` for epics to reference it
-- `## GDD Requirements Addressed` table — used to link epics to GDD traceability
-- `## Engine Compatibility` section — checked during the Technical Setup → Pre-Production gate
+- front matter `status:` — value must be `stable` (Accepted) for epics to reference it
+- `## 対応するGDDの要件` table — used to link epics to GDD traceability
+- `## エンジンとの互換` section — checked during the Technical Setup → Pre-Production gate
 
 ### `/create-stories` reads ADRs expecting:
-- `### Implementation Guidelines` (under `## Decision`) — the concrete "must / must never" patterns programmer agents follow; the ADR template carries this subsection
-- `## ADR Dependencies` table — stories referencing a `Depends On` ADR that is still `Proposed` are automatically set `Status: Blocked`
+- `### 実装の指針` (under `## 決定`) — the concrete "must / must never" patterns programmer agents follow; the ADR template carries this subsection
+- `## 前提のADR` table — stories referencing a `前提` ADR that is still Proposed (`draft` or `review`) are automatically set `Status: Blocked`
 
 ### `/dev-story` reads ADRs expecting:
-- `## Decision` (full text, verbatim — not summarized)
-- `### Implementation Guidelines` (under `## Decision`, verbatim)
-- `## Engine Compatibility` (post-cutoff API risks, verification required)
-- `## ADR Dependencies` (to detect if this ADR's dependencies are unresolved)
+- `## 決定` (full text, verbatim — not summarized)
+- `### 実装の指針` (under `## 決定`, verbatim)
+- `## エンジンとの互換` (post-cutoff API risks, verification required)
+- `## 前提のADR` (to detect if this ADR's dependencies are unresolved)
 
 ### `/architecture-review` reads ADRs expecting:
 - All required sections present (it flags gaps)
-- `## Status` is set (required for coverage matrix)
-- `## Engine Compatibility` is stamped with the correct engine version
+- front matter `status:` is set (required for coverage matrix)
+- `## エンジンとの互換` is stamped with the correct engine version
 
 ## Known Fragile Points
 - If the number scan misses a file (e.g., a file in a subdirectory, or with a non-standard naming pattern), a duplicate number can be assigned — TDR files must follow the `tdr-NNNN-[slug].md` naming convention at the top level of `docs/51-tdr/`, and ADR files `adr-NNNN-[slug].md` at the top level of `docs/52-adr/`
 - If the kind is chosen wrong, the record sits in the wrong folder with the wrong prefix. Moving it later changes its id, and every story and ADR that names the old id must be updated
 - Acceptance mode moves a story from `Blocked` to `Ready` only when the story file, under `production/epics/`, contains a Blocked Status line in any of the forms `/create-stories` writes (`> **Status**: Blocked`, `**Status:** Blocked`, `Status: Blocked`) and this ADR's id. A story blocked pending this ADR that never names its id is not found, and stays `Blocked` until it is updated by hand
-- The `## GDD Requirements Addressed` table is populated based on what the user tells the skill during the collaborative session; if the user does not know which GDDs motivated the decision, this table may be incomplete — `/create-epics` and `/gate-check` both rely on this linkage for traceability
+- The `## 対応するGDDの要件` table is populated based on what the user tells the skill during the collaborative session; if the user does not know which GDDs motivated the decision, this table may be incomplete — `/create-epics` and `/gate-check` both rely on this linkage for traceability
 - Engine specialist validation (Step 5.5) is skipped only when **both** sources are unset — `engine.name` absent or empty in `project.yaml` **and** `.claude/docs/technical-preferences.md` still reading `[TO BE CONFIGURED]`. A project configured solely via `project.yaml` **does** get specialist validation. When both are unset, post-cutoff engine API risks are not caught before the ADR is written
 - `docs/registry/architecture.yaml` is append-only by design; if a stance entry becomes permanently invalid (not superseded by another ADR), it must be manually removed — there is no cleanup mechanism
-- In retrofit mode, if the existing ADR has sections present but empty (e.g., a `## Status` heading with no value), the skill treats the section as present and does not fill it — an empty Status is effectively invisible to downstream skills like `/story-readiness`
+- In retrofit mode, if the existing ADR has sections present but empty (e.g., a `## 日付` heading with no value), the skill treats the section as present and does not fill it — an empty section is effectively invisible to downstream skills like `/story-readiness`

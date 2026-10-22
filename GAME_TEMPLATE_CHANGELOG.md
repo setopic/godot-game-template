@@ -6,6 +6,55 @@
 
 現在の版は、`tools/graph/layers/game-template.toml`の`version`に書く。版の付け方と見出しの書き方は、[PROJECT_TEMPLATE_CHANGELOG.md](PROJECT_TEMPLATE_CHANGELOG.md)の「版の付け方」に合わせる。
 
+## 0.7.0（2026-10-23）
+
+### 変更
+
+TDRとADRの本文の節を、CCGSのADRの雛形の`##`の節を1対1で日本語にしたものに変えた（PDR-0006、#16）。節は、日付・最終確認日・決めた人・要約・エンジンとの互換・前提のADR・背景・決定・検討した案・影響・リスク・対応するGDDの要件・性能への影響・移行の手順・確かめ方・関連の16個である。`###`の見出しと、表の行の名前（`**層**`、`**前提**`など）も日本語にした。`graph.toml`の`tdr`と`adr`の`required_sections`は、この16節にした。英語の名前との対応は、`.claude/docs/templates/architecture-decision-record.md`に表で書いた。
+
+状態は本文の`## Status`に書かず、フロントマターの`status`だけに持つ。CCGSのProposedは`draft`か`review`、Acceptedは`stable`、DeprecatedとSupersededは`deprecated`である。Supersededの後継は、後継の側の`supersedes`で指す。前提にするTDRとADRは、「前提のADR」の節の「前提」の行に加えて、フロントマターの`depends_on`にも書く。
+
+`docs/00-meta/templates/`に、`tdr.md`と`adr.md`（16節）と`pdr.md`（これまでの6節）の雛形を足した。`adr.md`は、上流の既定の雛形を差し替えている。`pdr.md`が無いと、`new --type pdr`が雛形が無いと言って止まっていた。`/architecture-decision`は、`python -m tools.graph new --type tdr|adr`で記録を作ってから、本文を埋める。`/reverse-document`の`architecture`も同じ道で作る。`detect-gaps.sh`の「`docs/52-adr/`を作る」という案内も、`/architecture-decision`を回す案内に直した。
+
+CCGSのスクリプトとスキルは、フロントマターの`status`と日本語の節を読み書きするように直した。`adr-status.sh`の状態の列は、`status`の値（`draft`・`review`・`stable`・`deprecated`）を出す。件数の行は、`tdrs`と`adrs`に分けた。行の頭は、TDRなら`TDR`、ADRなら`ADR`になる。`superseded_by`の列には、`supersedes`でその記録を指している記録を出す。日付の節が「なし」なら、`-`を出す。`adr-dep-graph.sh`は、件数を`TDRS`と`ADRS`に分け、「前提」の行と`depends_on`から依存を読む。「前提のADR」の節が「なし」だけなら、依存の無い記録として扱う。`/architecture-decision`の`accept`と`/propagate-design-change`は、`## Status`の行ではなく、フロントマターの`status`を書き換える。`retrofit`は、日本語の節と`status`を足す。
+
+これに合わせて、`.claude/`の下のスキル・エージェント・文書がADRの英語の節と`## Status`を読んでいた箇所を直した。`studio-tests/`のテストの前提と期待も直した。CCGSの英語のファイルの中の説明文は、英語のままにしてある。
+
+TDR-0001とTDR-0002は、これまでの6節（背景・決定・理由・却下した案・影響・見直しの条件）から、新しい16節に組み替えた。確定した記録を書き換えない決まりの例外で、setomさんが決めた。中身の文は変えていない。idと決定もそのままである。
+
+| これまでの節 | 組み替えた先 |
+| --- | --- |
+| 本文の先頭の「日付」の行 | 日付の節 |
+| 本文の先頭の「状態」の行 | 消した。状態はフロントマターの`status`にある |
+| 背景 | 背景 |
+| 決定 | 決定 |
+| 理由 | 決定の節の`### 理由` |
+| 却下した案 | 検討した案 |
+| 影響 | 影響 |
+| 見直しの条件 | 確かめ方の節の`### 見直しの条件` |
+
+書くことの無い節（最終確認日・決めた人・要約・エンジンとの互換・前提のADR・リスク・対応するGDDの要件・性能への影響・移行の手順・関連）は「なし」にした。
+
+`docs/registry/architecture.yaml`と`registry.sh`の`status`は、登録した方針の状態（`active`か`superseded_by`）で、記録の状態ではない。そのため変えていない。
+
+この版で直したCCGSのファイルは、UC-02の手順3で、CCGSの更新のときに「手で合わせる」に出る。
+
+### 取り込む側の作業
+
+0.6.0で書いた「次の版が出るまで、`/architecture-decision`を使わない」は解けた。この版から使える。
+
+`docs/51-tdr/`か`docs/52-adr/`に、CCGSの書式（英語の節と`## Status`）で自分が書いた記録があれば、`check`が`G014`で落ちる。1つずつ、日本語の節と`status`に移す。
+
+1. フロントマターが無ければ、`docs/00-meta/templates/adr.md`のフロントマターを写し、`id`・`type`・`title`を埋める
+2. `## Status`の値を、上の対応で`status`に移し、`## Status`の節を消す。Supersededなら、後継の記録の`supersedes`にこの記録のidを書く
+3. 英語の節の名前を、`.claude/docs/templates/architecture-decision-record.md`の表で日本語に変える。`###`の見出しと表の行の名前も変える。節の中の文は変えない
+4. 「前提のADR」の「前提」の行にあるTDRとADRを、`depends_on`にも書く
+5. 足りない節を「なし」で足し、`python -m tools.graph sync`と`check`を回す
+
+`/architecture-decision retrofit <パス>`でも、足りない節と`status`を足せる。
+
+`docs/00-meta/templates/adr.md`を自分で直していて競合したら、この層のもの（16節）に合わせる。`.claude/`の下のCCGSのファイルを自分で直していて競合したら、ADRの節と状態の読み方はこの層のものに合わせ、自分で足した行は残す。
+
 ## 0.6.0（2026-10-23）
 
 ### 変更

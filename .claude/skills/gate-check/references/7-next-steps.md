@@ -95,7 +95,7 @@ Based on the verdict, suggest specific next steps:
 - **Missing ADRs?** → `/architecture-decision` for individual decisions
 - **No master architecture doc?** → `/create-architecture` for the full blueprint
 - **ADRs missing engine compatibility sections?** → Re-run `/architecture-decision`
-  or manually add Engine Compatibility sections to existing ADRs
+  or manually add エンジンとの互換 sections to existing ADRs
 - **Missing control manifest?** → `/create-control-manifest` (requires Accepted ADRs)
 - **Missing epics?** → `/create-epics layer: foundation` then `/create-epics layer: core` (requires control manifest)
 - **Missing stories for an epic?** → `/create-stories [epic-slug]` (run after each epic is created)

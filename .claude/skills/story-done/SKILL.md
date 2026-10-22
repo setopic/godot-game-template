@@ -99,7 +99,7 @@ By the tier. Read every document by section, never whole.
   then the same for `"Detailed Design"`; exit 3: try `"Detailed Rules"`, the design
   standard's name for the same section);
   each ADR's status with `bash .claude/scripts/adr-status.sh <ADR ids>`, then its
-  Decision and Consequences sections.
+  決定 and 影響 sections.
 - **`standard`:** the same GDD sections; the ADR sections only for a critical ADR
   (`adr-status.sh`'s layer column reads Foundation, or has no layer).
 - **`minimal`:** none. The story's criteria are the spec.
@@ -193,7 +193,7 @@ Run, by tier (`minimal` skips 1 and 3):
    `/story-readiness` to check". No manifest: skip. A `Manifest-Note:` line in the
    story is carried into the deviations as written.
 3. **ADR constraints** (`full`; `standard` for a critical ADR): search for the
-   patterns the ADR's Decision or the manifest forbids.
+   patterns the ADR's 決定 or the manifest forbids.
 4. **Hardcoded values** in the changed files.
 5. **Scope:** the files the story lists under `## Files` against the code and test
    files changed (`git status --porcelain`). A changed file the list does not name

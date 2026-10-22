@@ -13,7 +13,7 @@ implementation and produces a READY / NEEDS WORK / BLOCKED / NOT ASSESSED verdic
 | `production/epics/[epic-slug]/story-NNN-[slug].md` | All header fields (`Status:`, `Layer:`, `Type:`, `Manifest Version:`), `## Context` (GDD path, TR-ID, ADR reference, Engine Notes, Control Manifest Rules), `## Acceptance Criteria`, `## Test Evidence`, `## Dependencies`, `## Out of Scope` | Yes |
 | `docs/architecture/control-manifest.md` | `Manifest Version:` date in header, layer rules | Yes (if exists) |
 | `docs/architecture/tr-registry.yaml` | `id`, `status` fields per TR entry | Yes (if exists) |
-| `docs/51-tdr/tdr-NNNN-[slug].md` or `docs/52-adr/adr-NNNN-[slug].md` (all ADRs referenced in stories) | `## Status`, the `**Layer**` row (read through `adr-status.sh`) | Yes |
+| `docs/51-tdr/tdr-NNNN-[slug].md` or `docs/52-adr/adr-NNNN-[slug].md` (all ADRs referenced in stories) | front matter `status:`, the `**層**` row (read through `adr-status.sh`) | Yes |
 | `production/sprint-status.yaml` | `file:` entries (for `sprint` scope, read through `story-facts.sh --sprint`) | Yes (if exists) |
 
 > **Tier.** The manifest, TR registry and ADR rows are
@@ -21,7 +21,7 @@ implementation and produces a READY / NEEDS WORK / BLOCKED / NOT ASSESSED verdic
 > (`/dev-story` follows `/create-stories` directly); run anyway, it checks
 > acceptance criteria and scope only and treats Architecture Completeness as N/A
 > except the referenced-ADR rule: an ADR the story references that is missing,
-> `Proposed`, `Deprecated` or `Superseded` BLOCKS at every tier (SKILL.md, the tier note above Design
+> Proposed, Deprecated or Superseded (`status: draft`, `review` or `deprecated`) BLOCKS at every tier (SKILL.md, the tier note above Design
 > Completeness).
 
 ### Preconditions
@@ -48,7 +48,7 @@ None. This skill is strictly read-only and produces no file modifications under 
 ## Hard Constraints (Never Violate)
 - Never write or edit a file under any circumstances
 - Never draft corrections directly into files — offer drafts in conversation only
-- Never mark a story READY if its governing ADR has `Status: Proposed`, `Deprecated` or `Superseded`, at any tier
+- Never mark a story READY if its governing ADR has `status: draft`, `review` or `deprecated` (Proposed, Deprecated or Superseded), at any tier
 - Never mark a story READY if a dependency story file is missing or has `Status: Draft`
 - Never re-read ADR statuses per story — one `adr-status.sh` call serves the run
 - Never penalize a story for missing `Manifest Version:` if `control-manifest.md` does not exist
@@ -64,7 +64,7 @@ It will rely on this skill's verdict as follows:
   - `Type:` field is set to a valid story type
   - `## Acceptance Criteria` contains specific, testable checkbox items, at least the minimum for the story's type at the project's `story_granularity` (coarse 3/2/1, balanced 2/2/1, fine 1)
   - `## Test Evidence` specifies a concrete evidence path
-  - The governing ADR exists and has `Status: Accepted`
+  - The governing ADR exists and has `status: stable` (Accepted)
   - `Manifest Version:` matches the current control manifest
   - `TR-ID` in `## Context` is present and resolves in `docs/architecture/tr-registry.yaml` (when the registry exists)
   - `## Dependencies` section is present (may say "None")

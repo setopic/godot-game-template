@@ -10,7 +10,7 @@ Bridges planning and code by loading the full context for a single story (story 
 |------|---------------------------|-----------|
 | `production/epics/**/*.md` (the story file) | `Status: Ready`, `TR-ID`, `Governing ADR`, `Manifest Version`, `## Acceptance Criteria`, `## Test Evidence`, `## Dependencies`, `## Out of Scope` | **Partially mutable.** This skill sets `Status:` to `In Progress` and updates `Last Updated:` before any agent runs (Phase 3), and at the end replaces `## Files` with the files changed — at `minimal` the story file is the only record of progress, since `sprint-status.yaml` is absent. On an ADR version mismatch answered "Re-read the changed ADR" it sets `ADR Version` to the ADR's current version and refreshes `**ADR Decision Summary**` and `## Implementation Notes`; on a manifest mismatch answered "Update" or "Use the old rules" it sets `Manifest Version:` (and on the latter adds `Manifest-Note:`). Everything else in the story file is read-only to this skill |
 | `docs/architecture/tr-registry.yaml` | Entry matching the story's TR-ID with current `requirement` text | Yes |
-| `docs/51-tdr/tdr-NNNN-[slug].md` or `docs/52-adr/adr-NNNN-[slug].md` (referenced ADR) | `## Status`, `## Last Verified` (else `## Date`) — from `adr-status.sh`; `## Decision` (with its `### Implementation Guidelines`), `## Engine Compatibility`, `## ADR Dependencies` — read only on a version mismatch answered "Re-read the changed ADR" | Yes — the ADR is never edited; a mismatch updates the story's stamp, not the ADR |
+| `docs/51-tdr/tdr-NNNN-[slug].md` or `docs/52-adr/adr-NNNN-[slug].md` (referenced ADR) | front matter `status:`, `## 最終確認日` (else `## 日付`) — from `adr-status.sh`; `## 決定` (with its `### 実装の指針`), `## エンジンとの互換`, `## 前提のADR` — read only on a version mismatch answered "Re-read the changed ADR" | Yes — the ADR is never edited; a mismatch updates the story's stamp, not the ADR |
 | `docs/architecture/control-manifest.md` | `Manifest Version:` header, layer rules (required patterns, forbidden patterns, performance guardrails) | Yes |
 | `project.yaml` | `engine.name`, `engine.version`, `naming.*`, `performance.*` — the primary source for each of these fields | Yes |
 | `.claude/docs/technical-preferences.md` | Legacy fallback for any field above that is absent or empty in `project.yaml`; **sole** source for forbidden patterns and allowed libraries (deliberately never migrated), plus the `Engine Specialists` section | Yes — required only for fields absent from `project.yaml`, and always for forbidden patterns |
@@ -20,12 +20,12 @@ Bridges planning and code by loading the full context for a single story (story 
 > **Tier.** SKILL.md Phase 2 decides by `workflow`: the TR registry is required at
 > `full`, optional at `standard` and not expected at `minimal`; a missing control
 > manifest warns at `full`/`standard` and is not expected at `minimal`; an ADR
-> blocks when the story references one that is missing, `Proposed`, `Deprecated`
-> or `Superseded`.
+> blocks when the story references one that is missing, Proposed, Deprecated
+> or Superseded (`status: draft`, `review` or `deprecated`).
 
 ### Preconditions
 - The target story must have `Status: Ready` (validated by `/story-readiness` at `standard`/`full`; at `minimal`, `/create-stories` writes stories `Ready` and `/story-readiness` is not on the path)
-- The ADR referenced in the story must have `Status: Accepted` — if `Status: Proposed`, do not implement; surface this as a blocker and direct user to `/architecture-decision accept [ADR-id]`; `Deprecated` or `Superseded` also blocks, naming the successor. A story whose ADR field reads `N/A` references none, at every tier
+- The ADR referenced in the story must have front matter `status: stable` (Accepted; game-template, PDR-0006) — if `draft` or `review` (Proposed), do not implement; surface this as a blocker and direct user to `/architecture-decision accept [ADR-id]`; `deprecated` (Deprecated or Superseded) also blocks, naming the successor. A story whose ADR field reads `N/A` references none, at every tier
 - All `## Dependencies` stories listed in the story file must already have `Status: Complete` (or `Status: Done`)
 - An engine must be configured — `engine.name` in `project.yaml`, or as legacy fallback an `**Engine**:` value in `.claude/docs/technical-preferences.md` that is not `[TO BE CONFIGURED]`
 - At `full`, `docs/architecture/tr-registry.yaml` must contain the story's TR-ID (optional at `standard`, not expected at `minimal`)
@@ -36,7 +36,7 @@ Bridges planning and code by loading the full context for a single story (story 
 ### Files Written
 | File | Guaranteed Fields / Sections | Notes |
 |------|------------------------------|-------|
-| `<code root>/[system]/[file].[ext]` | Doc-commented public APIs; no hardcoded gameplay values; follows ADR Implementation Guidelines and control-manifest required patterns | created or modified by the programmer agent; code root resolved per `.claude/docs/code-root-resolution.md` |
+| `<code root>/[system]/[file].[ext]` | Doc-commented public APIs; no hardcoded gameplay values; follows ADR 実装の指針 and control-manifest required patterns | created or modified by the programmer agent; code root resolved per `.claude/docs/code-root-resolution.md` |
 | `tests/unit/[system]/[story-slug]_test.[ext]` OR `tests/integration/[system]/[story-slug]_test.[ext]` | One test function per acceptance criterion (Logic/Integration stories only); naming per engine (`.claude/rules/test-standards.md`); no random seeds; no external I/O | created by the programmer agent; path matches `## Test Evidence` in story |
 | The story file's `## Files` section | The code and test files the programmer agent created or changed, one per line | replaced through `md-section.sh replace` (the section is added at the end when the story has none); named in the one In Progress ask, skipped when that ask is declined. `/story-done` checks scope against it |
 | `production/session-state/active.md` | `<!-- CHECKPOINT -->` block: current task (story path), next step, blocker, files in progress, run result | written on every outcome by `session-state.sh checkpoint`: the block is replaced, never appended (the file is created from `.claude/docs/templates/session-state.md` if absent) |
@@ -65,11 +65,11 @@ Bridges planning and code by loading the full context for a single story (story 
 
 ## Hard Constraints (Never Violate)
 - Never marks a story `Status: Done` or `Status: Complete` on its own judgement — that belongs to `/story-done`. The one exception is a dependency the user states is already done (the Phase 2 dependency answer "It is done, the status was never updated"): its `Status` is set to `Complete` only after "May I update [dependency path] Status to Complete?" is approved
-- Never begins implementation without loading the full context package (story, TR-ID from registry, ADR Decision + Implementation Guidelines — as distilled in the story, or re-read from the ADR after that mismatch answer — control-manifest layer rules, engine prefs)
-- Never implements a story whose referenced ADR has `Status: Proposed`, `Deprecated` or `Superseded` — surface as a blocker
+- Never begins implementation without loading the full context package (story, TR-ID from registry, ADR Decision + 実装の指針 — as distilled in the story, or re-read from the ADR after that mismatch answer — control-manifest layer rules, engine prefs)
+- Never implements a story whose referenced ADR has `status: draft`, `review` or `deprecated` (Proposed, Deprecated or Superseded) — surface as a blocker
 - Never writes a Logic or Integration story as complete without a test file at the path declared in `## Test Evidence`
 - Never touches files listed in the story's `## Out of Scope` section without explicit user approval
-- Never deviates from the ADR's Implementation Guidelines silently — deviations must be flagged in the summary
+- Never deviates from the ADR's 実装の指針 silently — deviations must be flagged in the summary
 - Never modifies ADR files or GDD files under any circumstances
 - Source and test files are written by the programmer agents; this skill writes none directly, except the verbatim `ScreenshotOnArg.cs` capture script on Unity, after an ask
 

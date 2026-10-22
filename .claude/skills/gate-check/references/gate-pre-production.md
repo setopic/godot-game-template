@@ -44,8 +44,8 @@ does not say what it checked, so it counts for none of the three, as
 - [ ] Technical preferences have naming conventions and performance budgets set
 - [ ] Accessibility tier is defined and documented (even "Basic" is acceptable — undefined is not)
 - [ ] At least one screen's UX spec started (often the main menu or core HUD is designed during Technical Setup)
-- [ ] All ADRs have an **Engine Compatibility section** with engine version stamped
-- [ ] All ADRs have a **GDD Requirements Addressed section** with explicit GDD linkage
+- [ ] All ADRs have an **エンジンとの互換 section** with engine version stamped
+- [ ] All ADRs have a **対応するGDDの要件 section** with explicit GDD linkage
 - [ ] No ADR references APIs listed in `docs/engine-reference/[engine]/deprecated-apis.md`
 - [ ] All HIGH RISK engine domains (per VERSION.md) have been explicitly addressed
       in the architecture document or flagged as open questions
@@ -58,14 +58,15 @@ eventually misses an edge; the script cannot:
 ```
 Bash: bash .claude/scripts/adr-dep-graph.sh
 ```
-It prints `ADRS`, `EDGES` (one `adr-A -> adr-B` per Depends-On reference),
-`NO_DEPS_SECTION` (ADRs with no Depends On), `UNFILLED_DEPS` (a Depends On row
+It prints `TDRS`, `ADRS`, `EDGES` (one `adr-A -> adr-B` per 前提 reference, from
+the `**前提**` row of `## 前提のADR` and the front matter's `depends_on`),
+`NO_DEPS_SECTION` (ADRs with no 前提), `UNFILLED_DEPS` (a 前提 row
 still the template's placeholder), a `CYCLE:` line per ADR on a dependency cycle
 with its edges into that cycle, `BLOCKED_BY_CYCLE` (ADRs on no cycle that depend
 on one) and `ORDER` (the rest, dependencies first).
 - **Any `CYCLE:` lines → FAIL**: "Circular ADR dependency: [the nodes on the
   `CYCLE:` lines]. Neither can reach Accepted while the cycle exists. Remove one
-  'Depends On' edge shown on a `CYCLE:` line to break the cycle." Name the
+  前提 edge (in the `**前提**` row and `depends_on`) shown on a `CYCLE:` line to break the cycle." Name the
   `BLOCKED_BY_CYCLE` ADRs as waiting on the cycle, not as part of it: none of
   their own edges is the one to remove.
 - No `CYCLE:` lines → this check passes. But the acyclic result is only as
@@ -75,7 +76,7 @@ on one) and `ORDER` (the rest, dependencies first).
   unknown, not none).
 
 **Engine Validation** (read `docs/engine-reference/[engine]/VERSION.md` first):
-- [ ] ADRs that touch post-cutoff engine APIs are flagged with Knowledge Risk: HIGH/MEDIUM
+- [ ] ADRs that touch post-cutoff engine APIs are flagged with **知識のリスク** HIGH/MEDIUM in エンジンとの互換
 - [ ] `/architecture-review` engine audit shows no deprecated API usage
 - [ ] All ADRs agree on the same engine version (no stale version references)
 

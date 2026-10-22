@@ -27,7 +27,7 @@ Estimated remediation: [X blocking items × ~Y min each = roughly Z hours]
 Before asking to write, show a **Gap Preview**:
 - List every BLOCKING gap as a one-line bullet describing the actual problem
   (e.g. `systems-index.md: 3 rows have parenthetical status values`,
-  `adr-0002.md: missing ## Status section`). No counts — show the actual items.
+  `adr-0002.md: missing front matter status:`). No counts — show the actual items.
 - Show HIGH / MEDIUM / LOW as counts only (e.g. `HIGH: 4, MEDIUM: 2, LOW: 1`).
 
 This gives the user enough context to judge scope before committing to writing the file.

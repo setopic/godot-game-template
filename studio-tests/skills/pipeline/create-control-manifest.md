@@ -10,7 +10,7 @@ Presentation), plus global rules from project config and engine reference docs.
 Story authors use it so stories inherit the correct architectural rules without
 reading every ADR.
 
-The skill counts ADRs first, resolves each ADR's `## Status` with a Grep before
+The skill counts ADRs first, resolves each ADR's front matter `status:` with `adr-status.sh` before
 reading any ADR body, and builds the manifest from the Accepted set only. It
 previews rule counts per layer, runs the **TD-MANIFEST** director gate when the
 review mode is `full` (skipped with a note in `solo` and `lean`), then asks
@@ -69,19 +69,19 @@ Fixture defaults.
 
 **Fixture:**
 - `docs/52-adr/` contains `adr-0001-*.md` … `adr-0004-*.md`, each with a
-  `## Status` section reading `Accepted`
-- Each ADR has `## Decision` (with "must"/"always" statements) and
-  `## Alternatives Considered` (with rejected alternatives)
+  front matter `status: stable` (Accepted)
+- Each ADR has `## 決定` (with "must"/"always" statements) and
+  `## 検討した案` (with rejected alternatives)
 - No existing `docs/architecture/control-manifest.md`
 - Review mode resolves to `solo`
 
 **Input:** `/create-control-manifest`
 
 **Expected behavior:**
-1. Globs `docs/51-tdr/tdr-*.md` and `docs/52-adr/adr-*.md` (N = 4), then Greps `^## Status` to resolve
+1. Runs `adr-status.sh` (N = `tdrs` + `adrs` = 4) and takes the `stable` rows as
    the Accepted set before reading any ADR body
-2. Greps only the Decision / Alternatives Considered / Performance Implications /
-   Engine Compatibility sections of the Accepted ADRs
+2. Greps only the 決定 / 検討した案 / 性能への影響 /
+   エンジンとの互換 sections of the Accepted ADRs
 3. Reports "Loaded 4 Accepted ADRs, engine: [name + version]."
 4. Shows the Control Manifest Preview (rule counts per layer, ADRs covered) and
    asks "Does this rule summary look complete?"
@@ -112,7 +112,7 @@ Fixture defaults.
 1. Glob returns N = 0
 2. Skill outputs: "No ADRs found — run `/architecture-decision` before building a
    control manifest."
-3. Skill stops — no Status Grep, no preview, no write ask, no file written
+3. Skill stops — no ADR section read, no preview, no write ask, no file written
 
 **Assertions:**
 - [ ] The "No ADRs found" message is printed
@@ -125,14 +125,14 @@ Fixture defaults.
 ### Case 3: Mixed ADR Statuses — Only Accepted ADRs included
 
 **Fixture:**
-- `docs/52-adr/` contains 5 ADRs: 3 with `## Status` Accepted, 2 with
-  `## Status` Proposed (ADR-0004, ADR-0005)
+- `docs/52-adr/` contains 5 ADRs: 3 with front matter `status: stable` (Accepted), 2 with
+  `status: draft` (Proposed; ADR-0004, ADR-0005)
 
 **Input:** `/create-control-manifest`
 
 **Expected behavior:**
-1. N = 5; the `^## Status` Grep returns 5 matches, 3 reading Accepted — the
-   "some Accepted" row applies and the Accepted set A = the 3 ADRs
+1. N = 5; `adr-status.sh` reports `stable 3` and `draft 2` — the
+   "some Accepted" row (`stable` ≥ 1) applies and the Accepted set A = the 3 ADRs
 2. Section extraction is filtered to set A
 3. Preview reports "Loaded 3 Accepted ADRs", `ADRs covered` lists only the 3, and
    `ADRs excluded` names ADR-0004 (Proposed) and ADR-0005 (Proposed)
@@ -140,7 +140,7 @@ Fixture defaults.
    none-Accepted case)
 
 **Assertions:**
-- [ ] Status is resolved with the `^## Status` Grep before any ADR section is read
+- [ ] Status is resolved with `adr-status.sh` (the front matter `status:`) before any ADR section is read
 - [ ] The preview's `ADRs covered` and the manifest's `ADRs Covered` list exactly the 3 Accepted ADRs
 - [ ] Both excluded ADRs are named, with their status, in the preview the user sees before approving — the skill does not silently omit them
 - [ ] No rule in the manifest is sourced from either Proposed ADR
@@ -201,25 +201,25 @@ Fixture defaults.
 
 ---
 
-### Case 6: Edge Case — No Accepted ADR, and ADRs with no `## Status`
+### Case 6: Edge Case — No Accepted ADR, and ADRs with no front matter `status:`
 
 **Fixture (none Accepted):**
-- `docs/52-adr/` contains 3 ADRs, each with `## Status` Proposed
+- `docs/52-adr/` contains 3 ADRs, each with front matter `status: draft` (Proposed)
 
 **Fixture (malformed):**
-- `docs/52-adr/` contains 3 ADRs, none with a `## Status` section
+- `docs/52-adr/` contains 3 ADRs, none with a front matter `status:`
 
 **Input (both fixtures):** `/create-control-manifest`
 
 **Expected behavior (none Accepted):**
-1. N = 3; the `^## Status` Grep matches 3, none reading Accepted
+1. N = 3; `adr-status.sh` reports `stable 0` and `draft 3`
 2. Reports "3 ADRs found, none Accepted. A manifest built from Proposed ADRs would
    encode decisions that may still change." and asks whether to proceed with the
    Proposed ADRs or stop
 
 **Expected behavior (malformed):**
-1. N = 3; the `^## Status` Grep matches nothing
-2. Reports "3 ADRs found, none has a `## Status` section — acceptance cannot be
+1. N = 3; `adr-status.sh` reports `no_status 3`
+2. Reports "3 ADRs found, none has a front matter `status:` — acceptance cannot be
    determined. Run `/architecture-decision retrofit [file]` on each." and stops
 
 **Assertions:**
@@ -232,8 +232,8 @@ Fixture defaults.
 
 ## Protocol Compliance
 
-- [ ] Counts ADRs and resolves `## Status` before reading ADR sections
-- [ ] Only Accepted ADRs included, and every excluded ADR is named with its status in the preview; the none-Accepted and no-`## Status` cases stop or ask instead of emitting an empty manifest
+- [ ] Counts ADRs and resolves front matter `status:` before reading ADR sections
+- [ ] Only Accepted ADRs included, and every excluded ADR is named with its status in the preview; the none-Accepted and no-front matter `status:` cases stop or ask instead of emitting an empty manifest
 - [ ] Rule summary shown to user before the gate and before "May I write"
 - [ ] "May I write the Control Manifest?" asked before writing `docs/architecture/control-manifest.md`
 - [ ] TD-MANIFEST runs in `full`, is skipped with a named note in `lean`/`solo`

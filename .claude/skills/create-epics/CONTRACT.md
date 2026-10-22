@@ -13,7 +13,7 @@ traceability — sits between architecture review and story decomposition.
 | `design/gdd/systems-index.md` | System list, layer assignments, priority order | Yes |
 | `design/gdd/[system].md` | `## Summary`, `## Acceptance Criteria`, `## Overview` (all 8 required sections) | Yes |
 | `docs/architecture/architecture.md` | Module ownership, API boundaries | Yes |
-| `docs/51-tdr/tdr-NNNN-[slug].md` or `docs/52-adr/adr-NNNN-[slug].md` (all governing ADRs) | `Status:`, `GDD Requirements Addressed`, `Decision`, `Engine Compatibility` | Yes |
+| `docs/51-tdr/tdr-NNNN-[slug].md` or `docs/52-adr/adr-NNNN-[slug].md` (all governing ADRs) | `Status:`, `対応するGDDの要件`, `Decision`, `エンジンとの互換` | Yes |
 | `docs/architecture/control-manifest.md` | `Manifest Version:` date in header | Yes |
 | `docs/architecture/tr-registry.yaml` | TR-IDs with `id`, `system`, requirement text | Yes |
 | `docs/engine-reference/[engine]/VERSION.md` | Engine name, version, risk levels | Yes |
@@ -66,7 +66,7 @@ traceability — sits between architecture review and story decomposition.
 - Never skip the per-epic approval prompt before writing
 - Never write an EPIC.md without first presenting the epic definition to the user
 - Never overwrite an existing EPIC.md or reset its `## Stories` table — update it in place, or skip it. `write-guard.sh overwrite` runs right before each new write and stops it when the file exists
-- Never mark a TR-ID as covered by an ADR unless that ADR's `Status:` is `Accepted`
+- Never mark a TR-ID as covered by an ADR unless that ADR's front matter `status:` is `stable` (Accepted; game-template, PDR-0006)
 - Never create epics for a layer whose dependency layer is not yet substantially complete
 
 ## Downstream Skill Expects
@@ -78,7 +78,7 @@ It will read:
 
 It assumes:
 - The `GDD:` path in EPIC.md resolves to a readable file
-- Every ADR listed in `## Governing ADRs` exists as a file and has an `Accepted` status
+- Every ADR listed in `## Governing ADRs` exists as a file and has `status: stable` (Accepted)
 - TR-IDs in `## GDD Requirements` match entries in `docs/architecture/tr-registry.yaml`
 - The epic slug used in the directory name matches the slug referenced in `index.md`
 - `Status: Ready` does not by itself mean no stories exist — an EPIC.md updated in place keeps its stories; read its `Stories:` line
@@ -86,6 +86,6 @@ It assumes:
 ## Known Fragile Points
 - If the EPIC.md template structure changes (section names, header field names, table column order), `/create-stories` will silently fail to parse governance data and may produce incomplete or incorrect stories
 - If `tr-registry.yaml` is regenerated with renumbered IDs after EPIC.md files are written, the TR-IDs in existing EPIC.md files become stale and mislead `/create-stories`
-- If an ADR is retroactively changed from `Accepted` to `Proposed` after the epic is written, the EPIC.md still shows it as governing. `/create-stories` reads every named ADR's current status with `adr-status.sh` and blocks the stories, but the epic's coverage column stays stale until `/create-epics` updates the epic in place
+- If an ADR is retroactively changed from `stable` to `draft` or `review` after the epic is written, the EPIC.md still shows it as governing. `/create-stories` reads every named ADR's current status with `adr-status.sh` and blocks the stories, but the epic's coverage column stays stale until `/create-epics` updates the epic in place
 - If `systems-index.md` layer assignments change after epics are created, the `Layer:` field in existing EPIC.md files will be incorrect and `/create-stories` will use the wrong layer context
 - `production/epics/index.md` rows are matched to epics by slug — an epic whose slug changes gets a new row, and the old row stays behind

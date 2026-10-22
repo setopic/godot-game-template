@@ -12,8 +12,29 @@ related: []
 
 # 言語をGDScriptにする
 
-- 日付: 2026-10-22
-- 状態: stable
+## 日付
+
+2026-10-22
+
+## 最終確認日
+
+なし
+
+## 決めた人
+
+なし
+
+## 要約
+
+なし
+
+## エンジンとの互換
+
+なし
+
+## 前提のADR
+
+なし
 
 ## 背景
 
@@ -35,11 +56,11 @@ game-templateの言語をGDScriptにする。`/setup-engine godot 4.7.2`のGDScr
 
 作品ごとに違う値は、決めずに`[TO BE CONFIGURED]`のまま残す。`engine.rendering`と`engine.physics`は、2Dか3Dかと、Webに出すかで決まる。`commands.build`は、作品の`export_presets.cfg`にある書き出しの設定の名前で決まる。`technical-preferences.md`の入力と対象の機種、性能の目安も、作品で決める。
 
-## 理由
+### 理由
 
 GDScriptは、Godotの中だけで書けて、別に.NET SDKを入れなくてよい。CCGSは、GDScriptを、Godotに組み込みで、最も早く試せる言語として挙げている。複数人で同じ環境をそろえるとき、入れる道具が少ないほうが、そろえる手間が少ない。
 
-## 却下した案
+## 検討した案
 
 | 案 | 却下理由 |
 | --- | --- |
@@ -54,9 +75,31 @@ CCGSのエージェントは、`.gd`のファイルを`godot-gdscript-specialist
 
 `.claude/docs/technical-preferences.md`は、CCGSの更新で`.claude/docs`ごと上書きされるので、取り込みのときに手で合わせる（[UC-02](../30-usecases/uc-02-ccgs-upgrade.md)）。
 
-## 見直しの条件
+## リスク
+
+なし
+
+## 対応するGDDの要件
+
+なし
+
+## 性能への影響
+
+なし
+
+## 移行の手順
+
+なし
+
+## 確かめ方
+
+### 見直しの条件
 
 C#でしか使えないライブラリが要る作品が出たとき。GDScriptでは処理が間に合わない部分があると分かったとき。
+
+## 関連
+
+なし
 
 ---
 

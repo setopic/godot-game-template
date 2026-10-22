@@ -37,7 +37,7 @@ Checked against the SKILL.md by `/skill-test spec` — no fixture needed.
 - [ ] Has a next-step handoff at the end (`/architecture-review`, `accept ADR-NNNN`)
 - [ ] Documents gate behavior: engine specialist validation, then TD-ADR in full mode; TD-ADR skipped in lean/solo with a named note
 - [ ] Documents that authoring always produces `Proposed` and only acceptance mode sets `Accepted` — retrofit's `Accepted` answer is routed through it
-- [ ] Mentions the engine version stamp from `docs/engine-reference/` (Engine Compatibility table)
+- [ ] Mentions the engine version stamp from `docs/engine-reference/` (エンジンとの互換 table)
 
 ---
 
@@ -59,7 +59,7 @@ In `lean` mode: TD-ADR is skipped (it is not a PHASE-GATE). Output notes
 In `solo` mode: TD-ADR is skipped. Output notes "TD-ADR skipped — Solo mode."
 The engine specialist validation still runs.
 
-In every mode the written ADR has `Status: Proposed`.
+In every mode the written ADR has `status: draft` (Proposed).
 
 ---
 
@@ -90,12 +90,12 @@ Fixture defaults.
 1. Step 1 reads `VERSION.md` first and displays the ENGINE KNOWLEDGE GAP WARNING for the Rendering domain
 2. Step 2 chooses the ADR kind without asking (the rendering approach is how the inside of the game is built), scans `docs/52-adr/` and assigns ADR-0003
 3. Step 3a reads the registry before any existing ADR
-4. Step 4 presents assumptions (problem, 2–3 alternatives, GDD linkage, dependencies, `Status: Proposed`) as a confirm/adjust `AskUserQuestion`; no ADR is generated until the user confirms
-5. Step 5 drafts the full template, including the Engine Compatibility table (engine, domain, knowledge risk, references consulted)
+4. Step 4 presents assumptions (problem, 2–3 alternatives, GDD linkage, dependencies, `status: draft` (Proposed)) as a confirm/adjust `AskUserQuestion`; no ADR is generated until the user confirms
+5. Step 5 drafts the full template, including the エンジンとの互換 table (engine, domain, knowledge risk, references consulted)
 6. `godot-specialist` validates the draft; minor notes go into the Risks section
 7. `technical-director` then spawns with gate TD-ADR and returns APPROVE
 8. GDD sync check prints `GDD sync: checked 1 referenced GDD(s), no naming inconsistencies.` — never silent
-9. "ADR draft is complete. May I write it?" — on yes, writes `docs/52-adr/adr-0003-rendering-approach.md` with `Status: Proposed`
+9. "ADR draft is complete. May I write it?" — on yes, writes `docs/52-adr/adr-0003-rendering-approach.md` with `status: draft` (Proposed)
 10. Registry candidates are shown and "May I update `docs/registry/architecture.yaml` with these [N] new stances?" is asked separately
 11. Closing output includes the fixed notice to run `/architecture-review` in a fresh session, and "Run `/architecture-decision accept ADR-0003` when the decision is settled"
 
@@ -104,7 +104,7 @@ Fixture defaults.
 - [ ] Assumptions are confirmed via `AskUserQuestion` before the ADR is generated; Status is shown as `Proposed`, never asked
 - [ ] The engine specialist validation runs before TD-ADR (sequential, not parallel)
 - [ ] One "May I write" approval covers the whole ADR; the file is `docs/52-adr/adr-0003-rendering-approach.md`
-- [ ] The written ADR has `Status: Proposed` even though TD-ADR returned APPROVE
+- [ ] The written ADR has `status: draft` (Proposed) even though TD-ADR returned APPROVE
 - [ ] The GDD sync check reports the clean result for `visual-effects.md` in one line
 - [ ] The registry update has its own approval prompt, separate from the ADR write
 - [ ] Closing output contains the fresh-session `/architecture-review` notice and the `accept ADR-0003` command
@@ -125,13 +125,13 @@ Fixture defaults.
 3. The user picks `Revise flagged items`; only then are the Decision or Alternatives sections revised (Step 5.6)
 4. The unresolved point is presented as its own `AskUserQuestion` with options from the review plus "Different approach — I'll describe it"
 5. The write approval is still asked; nothing is written before it
-6. The ADR is written with `Status: Proposed`
+6. The ADR is written with `status: draft` (Proposed)
 
 **Assertions:**
 - [ ] TD-ADR receives the ADR draft/path, engine version and domain as context
 - [ ] The CONCERNS are shown verbatim and the user chooses Revise / Accept / Discuss — the draft is not revised before that choice
 - [ ] Each unresolved decision is a separate `AskUserQuestion` with a free-text escape option
-- [ ] The ADR is written only after the "May I write" approval, with `Status: Proposed`
+- [ ] The ADR is written only after the "May I write" approval, with `status: draft` (Proposed)
 
 ---
 
@@ -141,7 +141,7 @@ Fixture defaults.
 - Scenario (a): `project.yaml` has `modes.review_mode: lean` and `engine.name: Godot`
 - Scenario (b): same project, invoked with `--review solo`
 - Scenario (c): invoked with `--review solo` on a project with no engine configured — `engine.name` unset and `.claude/docs/technical-preferences.md` still `[TO BE CONFIGURED]`; at Step 1's prompt the user carries on without running `/setup-engine`
-- `design/gdd/` holds no GDD, so the ADR's GDD Requirements Addressed names none
+- `design/gdd/` holds no GDD, so the ADR's 対応するGDDの要件 names none
 
 **Input:** (a) `/architecture-decision save-format` (b) and (c) `/architecture-decision save-format --review solo`
 
@@ -152,7 +152,7 @@ Fixture defaults.
 4. (c) No engine specialist is spawned, and the output records `Engine validation: NOT ASSESSED — no engine configured (engine.name unset in project.yaml)`
 5. The GDD sync check prints `GDD sync: NOT ASSESSED — [the ADR names no GDDs]`, not the clean one-line result
 6. "May I write it?" is still asked before the file is written
-7. The ADR is written with `Status: Proposed`
+7. The ADR is written with `status: draft` (Proposed)
 
 **Assertions:**
 - [ ] `technical-director` is not spawned in lean or solo mode
@@ -192,8 +192,8 @@ Fixture defaults.
 ### Case 5: Acceptance Mode — Status moves to Accepted only through `accept`
 
 **Fixture:**
-- `docs/52-adr/adr-0005-physics-layers.md` exists with `Status: Proposed`
-- Scenario (a): its `## ADR Dependencies` lists `Depends On: ADR-0002`, and ADR-0002 is `Proposed`
+- `docs/52-adr/adr-0005-physics-layers.md` exists with `status: draft` (Proposed)
+- Scenario (a): its `## 前提のADR` lists `前提: ADR-0002`, and ADR-0002 is `Proposed`
 - Scenario (b): its only dependency is ADR-0001, which is `Accepted`; three files under `production/epics/*/story-*.md` name `ADR-0005` and are Blocked — two in the header form `/create-stories` writes (`> **Status**: Blocked`), one as `**Status:** Blocked`
 - `modes.automation` is `autonomous`
 
@@ -204,7 +204,7 @@ Fixture defaults.
 2. (a) It refuses and names the blocker: ADR-0005 depends on ADR-0002, which is still Proposed; no file is edited
 3. (b) It finds the stories to unblock before asking, then asks "Accept ADR-0005 — [title]? …" with the count ("3 stories become Ready"), options `[A] Yes — accept it` / `[B] Not yet — leave it Proposed`
 4. (b) The prompt fires even though automation is `autonomous`
-5. (b) On yes: edits `## Status` to `Accepted`, leaves an existing `## Date` unchanged (adding one only if absent), moves the three stories from `Blocked` to `Ready`, and reports the ADR and each story that moved
+5. (b) On yes: edits the front matter `status:` to `stable` (Accepted), leaves an existing `## 日付` unchanged (adding one only if absent), moves the three stories from `Blocked` to `Ready`, and reports the ADR and each story that moved
 
 **Assertions:**
 - [ ] (a) Acceptance is refused when a dependency is not `Accepted`, naming ADR-0002; nothing is written
@@ -219,8 +219,8 @@ Fixture defaults.
 ### Case 5b: Acceptance Mode — a story that names the ADR only as a successor is left out
 
 **Fixture:**
-- `docs/52-adr/adr-0005-physics-layers.md` exists with `Status: Proposed`
-  and a `## ADR Dependencies` section whose only dependency, ADR-0001, is `Accepted`
+- `docs/52-adr/adr-0005-physics-layers.md` exists with `status: draft` (Proposed)
+  and a `## 前提のADR` section whose only dependency, ADR-0001, is `Accepted`
 - Three stories under `production/epics/` are `> **Status**: Blocked`:
   - `story-001.md`: blocked because ADR-0005 is Proposed
   - `story-002.md`: blocked with "BLOCKED: ADR-0003 is Superseded — point the
@@ -238,7 +238,7 @@ Fixture defaults.
    names ADR-0005 only as the successor to point at: it is still governed by
    ADR-0003, and accepting ADR-0005 does not re-point it
 3. The confirmation prompt says "1 story becomes Ready", not 2 or 3
-4. On yes: `## Status` becomes `Accepted`; only `story-001.md` moves from
+4. On yes: the front matter `status:` becomes `stable` (Accepted); only `story-001.md` moves from
    `Blocked` to `Ready`; the report lists the ADR and that one story
 
 **Assertions:**
@@ -252,24 +252,24 @@ Fixture defaults.
 ### Case 6: Retrofit — Missing Status answered `Accepted`
 
 **Fixture:**
-- `docs/52-adr/adr-0004-input-mapping.md` exists with Context, Decision, Consequences, Engine Compatibility and GDD Requirements Addressed, but no `## Status` and no `## ADR Dependencies`
+- `docs/52-adr/adr-0004-input-mapping.md` exists with 背景, 決定, 影響, エンジンとの互換 and 対応するGDDの要件, but no front matter `status:` and no `## 前提のADR`
 - ADR-0001 is `Accepted`
 - One file under `production/epics/*/story-*.md` names `ADR-0004` and has `> **Status**: Blocked`
 
 **Input:** `/architecture-decision retrofit docs/52-adr/adr-0004-input-mapping.md`
 
 **Expected behavior:**
-1. The retrofit block lists Status (BLOCKING), ADR Dependencies (HIGH) and Date (MEDIUM — the fixture has no `## Date` and no `## Last Verified`) as missing, then asks "Shall I add the 3 missing sections? I will not modify any existing content."
-2. Asked for the current status, the user answers "Accepted" — the decision is already in force; asked for dependencies, the user answers "Depends On: ADR-0001"
-3. The skill appends `## Status` as `Proposed`, the ADR Dependencies section and `## Date` (today, noted as the retrofit date); no existing section changes
+1. The retrofit block lists Status (BLOCKING), 前提のADR (HIGH) and Date (MEDIUM — the fixture has no `## 日付` and no `## 最終確認日`) as missing, then asks "Shall I add the 3 missing sections? I will not modify any existing content."
+2. Asked for the current status, the user answers "Accepted" — the decision is already in force; asked for dependencies, the user answers "前提: ADR-0001"
+3. The skill writes the front matter `status:` as `draft` (Proposed), the 前提のADR section and `## 日付` (today, noted as the retrofit date); no existing section changes
 4. It then runs acceptance mode on ADR-0004: the dependency check passes (ADR-0001 is Accepted), the blocked story is found, and "Accept ADR-0004 — [title]? …" is asked with "1 story becomes Ready"
-5. On yes: `## Status` becomes `Accepted`, the `## Date` the retrofit added is kept, and the story moves from `Blocked` to `Ready`
+5. On yes: the front matter `status:` becomes `stable` (Accepted), the `## 日付` the retrofit added is kept, and the story moves from `Blocked` to `Ready`
 
 **Assertions:**
 - [ ] Only the missing sections are appended; existing sections are untouched
-- [ ] The retrofit answer `Accepted` is never written straight into `## Status`; `Accepted` appears only after acceptance mode's dependency check and confirmation
+- [ ] The retrofit answer `Accepted` is never written straight into the front matter `status:`; `Accepted` appears only after acceptance mode's dependency check and confirmation
 - [ ] The confirmation prompt names the story count, as in Case 5
-- [ ] Variant — the user declines "Shall I add the 3 missing sections?": no section is written, `## Date` included
+- [ ] Variant — the user declines "Shall I add the 3 missing sections?": no section is written, `## 日付` included
 
 ---
 
@@ -290,7 +290,7 @@ on it"
 3. The TDR is numbered from `docs/51-tdr/` only: TDR-0004, written to
    `docs/51-tdr/tdr-0004-[slug].md`, with the heading `# TDR-0004: [Title]`
 4. In the second run the ADR is numbered from `docs/52-adr/` only: ADR-0003,
-   written to `docs/52-adr/adr-0003-[slug].md`; its `**Depends On**` row names
+   written to `docs/52-adr/adr-0003-[slug].md`; its `**前提**` row names
    `TDR-0004`
 5. Variant — the title is `input-handling` and nothing the user said settles
    whether it picks a library or structures the game: Step 2 asks with
@@ -299,20 +299,20 @@ on it"
 **Assertions:**
 - [ ] The kind is chosen before Step 3, and the two records are not merged into one file
 - [ ] Each kind takes its number from its own folder: TDR-0004 and ADR-0003, not 0004 for both
-- [ ] The ADR depends on the TDR; the TDR does not name the ADR in its `**Depends On**` row
+- [ ] The ADR depends on the TDR; the TDR does not name the ADR in its `**前提**` row
 - [ ] The unclear variant asks before Step 3 and writes nothing until the user answers
 
 ---
 
 ## Protocol Compliance
 
-- [ ] Engine context (`VERSION.md`) is loaded first and stamped into the Engine Compatibility table
+- [ ] Engine context (`VERSION.md`) is loaded first and stamped into the エンジンとの互換 table
 - [ ] Assumptions are confirmed via `AskUserQuestion` before the ADR is generated
 - [ ] "May I write" is asked once for the whole ADR before writing; the registry update has its own approval
 - [ ] TD-ADR runs only in full mode; lean/solo print a skip note naming the gate and mode
 - [ ] TD-ADR CONCERNS are shown verbatim with `Revise flagged items` / `Accept and proceed` / `Discuss further`, never revised without the user's choice
 - [ ] A TD-ADR `NOT ASSESSED` answer names the missing input and is never presented as an approval
-- [ ] Authoring always writes `Status: Proposed`; `Accepted` is set only by acceptance mode after its dependency check and explicit user confirmation — directly through `accept`, or when retrofit hands it an `Accepted` answer
+- [ ] Authoring always writes `status: draft` (Proposed); `Accepted` is set only by acceptance mode after its dependency check and explicit user confirmation — directly through `accept`, or when retrofit hands it an `Accepted` answer
 - [ ] Engine validation and the GDD sync check each report `NOT ASSESSED` when they cannot run, never a silent pass
 - [ ] Authoring does not unblock stories; it lists the stories still waiting on the ADR
 - [ ] Ends with next-step handoff: `/architecture-review` in a fresh session, and `/architecture-decision accept ADR-NNNN`
@@ -323,8 +323,8 @@ on it"
 
 - Retrofit is fixture-tested only for a missing Status answered `Accepted`
   (Case 6); the other answers (`Proposed`, `Deprecated`, `Superseded`) and the
-  retrofit of Engine Compatibility and GDD Requirements Addressed are not.
-- The acceptance-mode refusals for a missing `## Status`, an absent or `UNKNOWN`
+  retrofit of エンジンとの互換 and 対応するGDDの要件 are not.
+- The acceptance-mode refusals for a missing front matter `status:`, an absent or `UNKNOWN`
   dependency section, and an already-Accepted or Superseded ADR are not
   individually fixture-tested.
 - Of the GDD sync check's three outcomes, the one-line clean result (Case 1)

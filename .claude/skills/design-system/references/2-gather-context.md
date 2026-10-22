@@ -192,12 +192,12 @@ which you picked.
   > hit the absent branch every time: report it every time.
 - Read `docs/engine-reference/[engine]/breaking-changes.md` for domain-relevant entries
 - Find the domain-matching ADRs without reading every ADR to learn the field you
-  filter on — grep the Domain field first, then read only the matches:
+  filter on — grep the **分野** (Domain) row of エンジンとの互換 first, then read only the matches:
   ```
-  Grep pattern="\*\*Domain\*\*" glob="docs/{51-tdr/tdr,52-adr/adr}-*.md" output_mode="content"
+  Grep pattern="\*\*分野\*\*" glob="docs/{51-tdr/tdr,52-adr/adr}-*.md" output_mode="content"
   ```
-  Read only the ADRs whose Domain matches this system's category (its `## Decision`
-  and `## Engine Compatibility` sections); skip the rest.
+  Read only the ADRs whose 分野 matches this system's category (its `## 決定`
+  and `## エンジンとの互換` sections); skip the rest.
 
 **Step 3 — Present the Feasibility Brief:**
 

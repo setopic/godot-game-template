@@ -53,7 +53,7 @@ Fixture defaults.
 - Story file exists at `production/epics/core/story-light-pickup.md` containing:
   - A `GDD: design/gdd/light-system.md` reference quoting the specific requirement
   - `TR-light-001`, present with `status: active` in `docs/architecture/tr-registry.yaml`
-  - `ADR: ADR-0003`; `docs/52-adr/adr-0003-inventory.md` has `## Status` Accepted
+  - `ADR: ADR-0003`; `docs/52-adr/adr-0003-inventory.md` has front matter `status: stable` (Accepted)
   - `Type: Logic`, an `## Acceptance Criteria` section with 3 testable items, and a `## Test Evidence` section naming the test path
   - An estimate, an Out of Scope statement, and `Dependencies: None`
   - Engine notes (or "N/A — no engine API involved"), the relevant manifest rules, and a performance note
@@ -67,14 +67,14 @@ Fixture defaults.
 1. Skill reports "Validating 1 story files."
 2. Skill loads context once: greps `Manifest Version` from the control manifest,
    indexes `tr-registry.yaml`, and resolves every ADR status with one
-   `Grep pattern="^## Status" glob="docs/{51-tdr/tdr,52-adr/adr}-*.md"` scan
+   `bash .claude/scripts/adr-status.sh` call (the front matter `status:`)
 3. Skill evaluates all six checklist groups
 4. Skill outputs READY with all checks passing
 5. Phase 8 notes "QL-STORY-READY skipped — Solo mode."
 6. Section 7 surfaces other ready stories from the sprint
 
 **Assertions:**
-- [ ] ADR status is resolved from the one-scan `^## Status` Grep over `docs/52-adr/adr-*.md`, not by reading each ADR in full, and ADR-0003 is found Accepted
+- [ ] ADR status is resolved from the one `adr-status.sh` call over `docs/51-tdr/` and `docs/52-adr/`, not by reading each ADR in full, and ADR-0003 is found `stable` (Accepted)
 - [ ] Skill looks up `TR-light-001` in `tr-registry.yaml` and finds it active
 - [ ] The current manifest version is taken from a Grep of the manifest header, not a full read
 - [ ] The "Passing Checks (N/[total])" section names all six groups — Design Completeness, Architecture Completeness, Scope Clarity, Open Questions, Asset References ("no asset references"), Definition of Done — with the passing items under each
@@ -89,7 +89,7 @@ Fixture defaults.
 **Fixture:**
 - `project.yaml` sets `modes.workflow: full`
 - Story `production/epics/core/story-light-system.md` references `ADR-0005`
-- `docs/52-adr/adr-0005-light-system.md` exists with `## Status` Proposed
+- `docs/52-adr/adr-0005-light-system.md` exists with front matter `status: draft` (Proposed)
 - All other story content is complete
 
 **Input:** `/story-readiness production/epics/core/story-light-system.md`
@@ -104,7 +104,7 @@ Fixture defaults.
 - [ ] Output explicitly names ADR-0005 as the blocker
 - [ ] Output says to wait for the ADR's acceptance before implementing
 - [ ] Skill does not output READY regardless of other checks passing
-- [ ] Variant — same story at `modes.workflow: standard`, with `| **Layer** | Feature |` in ADR-0005's `## Engine Compatibility` table (non-critical): the story references the Proposed ADR, so the verdict is still BLOCKED — a referenced Proposed ADR blocks at every tier, because `/dev-story` stops on it
+- [ ] Variant — same story at `modes.workflow: standard`, with `| **層** | Feature |` in ADR-0005's `## エンジンとの互換` table (non-critical): the story references the Proposed ADR, so the verdict is still BLOCKED — a referenced Proposed ADR blocks at every tier, because `/dev-story` stops on it
 - [ ] Variant — the same non-critical ADR at `standard`, now `Accepted`, with the story's `Manifest Version:` older than the control manifest's: the stale version is listed under Gaps as advisory, with its `Fix:` line, and the verdict is READY — an advisory gap does not downgrade it
 
 ---
@@ -129,7 +129,7 @@ Fixture defaults.
 - [ ] No ADR, TR-ID or manifest gap is flagged — Architecture Completeness is N/A at `minimal`
 - [ ] The story is not BLOCKED: nothing requires outside action (no missing/DRAFT dependency, no unowned UNRESOLVED question)
 - [ ] Variant — the same `minimal` story with acceptance criteria traced to `design/game-brief.md`'s MVP feature (no `design/gdd/` path): "GDD requirement referenced" passes — the brief stands in for the GDD at `minimal`
-- [ ] Variant — the story also names `ADR-0005`, whose `## Status` is `Proposed`: the verdict is BLOCKED at `minimal` too — the referenced-ADR rule is the one Architecture Completeness item that is not N/A
+- [ ] Variant — the story also names `ADR-0005`, whose front matter `status: draft` (Proposed): the verdict is BLOCKED at `minimal` too — the referenced-ADR rule is the one Architecture Completeness item that is not N/A
 
 ---
 
@@ -252,7 +252,7 @@ Fixture defaults.
 - `project.yaml` sets `modes.workflow: full`
 - Story `production/epics/core/story-save-slots.md` passes every other item and
   references `ADR-0007`; `docs/52-adr/adr-0007-save-format.md` exists but has
-  no `## Status` section
+  no front matter `status:`
 - **Input:** `/story-readiness production/epics/core/story-save-slots.md`
 
 **Assertions (7b):**
@@ -268,16 +268,16 @@ Fixture defaults.
 - `project.yaml` sets `modes.workflow: standard` (a referenced dead ADR blocks at
   every tier; `standard` shows it is not left to the advisory rule)
 - Story A `production/epics/core/story-save-format.md` references `ADR-0006`;
-  `docs/52-adr/adr-0006-save-format.md` has `## Status` Superseded by ADR-0009
+  `docs/52-adr/adr-0006-save-format.md` has front matter `status: deprecated` (Superseded: ADR-0009 names it in its `supersedes`)
 - Story B `production/epics/core/story-input-map.md` references `ADR-0008`;
-  `docs/52-adr/adr-0008-input-map.md` has `## Status` Deprecated
+  `docs/52-adr/adr-0008-input-map.md` has front matter `status: deprecated` (Deprecated)
 - Both stories are otherwise complete
 
 **Input:** `/story-readiness production/epics/core/story-save-format.md`, then
 `/story-readiness production/epics/core/story-input-map.md`
 
 **Expected behavior:**
-1. The status scan reads `Superseded by ADR-0009` for A and `Deprecated` for B
+1. The status scan reads `deprecated` with `superseded_by` adr-0009 for A, and `deprecated` with no successor for B
 2. Both verdicts are BLOCKED, listing the ADR under Blockers: the decision no longer
    stands
 3. A's `Fix:` reads `BLOCKED: ADR-0006 is Superseded by ADR-0009 — point the story

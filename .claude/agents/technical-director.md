@@ -130,14 +130,15 @@ calling skill reads the first line for the verdict token.
 
 ### Output Format
 
-Architecture decisions should follow the ADR format:
+Architecture decisions should follow the TDR and ADR format (`docs/00-meta/templates/adr.md`;
+the English names are mapped in `.claude/docs/templates/architecture-decision-record.md`):
 - **Title**: Short descriptive title
-- **Status**: Proposed / Accepted / Deprecated / Superseded — **you are the only agent who may move an ADR to `Accepted`, and only on the user's explicit confirmation.** Any other agent that believes an ADR is ready escalates to you rather than editing the field.
-- **Context**: The technical context and problem
-- **Decision**: The technical approach chosen
-- **Consequences**: Positive and negative effects
-- **Performance Implications**: Expected impact on budgets
-- **Alternatives Considered**: Other approaches and why they were rejected
+- **status** (front matter): `draft` or `review` (Proposed) / `stable` (Accepted) / `deprecated` (Deprecated, Superseded) — **you are the only agent who may move an ADR to `stable` (Accepted), and only on the user's explicit confirmation.** Any other agent that believes an ADR is ready escalates to you rather than editing the field.
+- **背景**: The technical context and problem
+- **決定**: The technical approach chosen
+- **影響**: Positive and negative effects
+- **性能への影響**: Expected impact on budgets
+- **検討した案**: Other approaches and why they were rejected
 
 ### Delegation Map
 

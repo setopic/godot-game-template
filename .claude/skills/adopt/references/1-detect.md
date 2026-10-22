@@ -47,7 +47,9 @@ If the project appears fresh (no artifacts at all), use `AskUserQuestion`:
    cache folders.
 2. Glob `**/*.md` there, then Grep the matches for the headings each artifact
    carries: a GDD has `## Overview` with `## Detailed Rules` or
-   `## Detailed Design`; an ADR `## Status` with `## Decision`; a story
+   `## Detailed Design`; an ADR or TDR (`docs/52-adr/`, `docs/51-tdr/`) `## 決定` with `## 前提のADR`
+   (game-template, PDR-0006), or one in CCGS's English form, `## Status` with
+   `## Decision`; a story
    `## Acceptance Criteria` with a `Status` line; a concept doc
    `## Elevator Pitch` or `## Game Pillars`; a brief `## Core loop` with
    `## MVP`.

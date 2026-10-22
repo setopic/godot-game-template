@@ -3,7 +3,7 @@ name: architecture-decision
 description: "Create an ADR documenting a technical decision: context, alternatives considered, consequences."
 argument-hint: "[title | retrofit <path> | accept <ADR-id|TDR-id>] [--review full|lean|solo]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Edit, Agent, AskUserQuestion, Bash(wc -c *), Bash(bash "*/.claude/skills/architecture-decision/../../hooks/yaml-helper.sh" resolve_config *), Bash(bash .claude/scripts/registry.sh *)
+allowed-tools: Read, Glob, Grep, Write, Edit, Agent, AskUserQuestion, Bash(wc -c *), Bash(bash "*/.claude/skills/architecture-decision/../../hooks/yaml-helper.sh" resolve_config *), Bash(bash .claude/scripts/registry.sh *), Bash(bash .claude/scripts/adr-status.sh *), Bash(python -m tools.graph *)
 model: sonnet
 ---
 
@@ -34,9 +34,9 @@ which sections the skeleton emits (that is fixed). `modes.rigor` sets it
 alongside `workflow`; set `docs.density` explicitly to vary ADR verbosity alone:
 `terse` (the default, via `rigor: minimal`) = decision + alternatives as bullets, one line of rationale each;
 `balanced` = paragraph per section with light rationale (`rigor: standard`); `thorough` =
-full prose with trade-offs and worked rationale in Decision, Alternatives, and
-Consequences. Apply it to the prose sections; the Engine Compatibility, ADR
-Dependencies, and GDD Requirements tables are structural and stay whole at every
+full prose with trade-offs and worked rationale in 決定, 検討した案, and
+影響. Apply it to the prose sections; the エンジンとの互換, 前提のADR, and
+対応するGDDの要件 tables are structural and stay whole at every
 density.
 
 **`workflow`** (see `.claude/docs/workflow-modes.md`):
@@ -86,8 +86,9 @@ Choose the kind before Step 3, from the title and what the user has said:
    saving, and route every save through a SaveService built on it" is a TDR
    (library X) and an ADR (the SaveService). Tell the user it will be two
    records and write them one at a time, one full run of this skill each, the
-   TDR first. The ADR's `**Depends On**` row in `## ADR Dependencies` names the
-   TDR (`TDR-NNNN`): the ADR points at the TDR, never the other way round.
+   TDR first. The ADR's `**前提**` row in `## 前提のADR` names the
+   TDR (`TDR-NNNN`), and so does the ADR's front matter `depends_on`: the ADR
+   points at the TDR, never the other way round.
 3. **When the kind is unclear, do not guess.** Ask with `AskUserQuestion`:
    - Prompt: "Is this a decision about what the game uses from outside its own
      code (TDR), or about how the inside of the game is built (ADR)?"
@@ -150,14 +151,14 @@ If there are no remaining priority ADRs and no undesigned GDD systems, offer onl
 > The reviewing agent must be independent of the authoring context to give an unbiased
 > assessment. Running it here would invalidate the review.
 
-**Do NOT unblock stories here.** This ADR is `Proposed` — Step 5 guarantees it,
+**Do NOT unblock stories here.** This ADR is `Proposed` (`status: draft`) — Step 5 guarantees it,
 and a story blocked *pending this decision* is still pending it. Unblocking on
 authoring defeats the guard at the moment it becomes relevant: the pipeline
 appears to flow while running on decisions nobody has accepted.
 
 Instead, tell the user what is now waiting on acceptance:
 
-> "[TDR|ADR]-NNNN is written and `Proposed`. [N] stories remain `Blocked` pending it.
+> "[TDR|ADR]-NNNN is written and `Proposed` (`status: draft`). [N] stories remain `Blocked` pending it.
 > Run `/architecture-decision accept [TDR|ADR]-NNNN` when the decision is settled —
 > that is what moves them to `Ready`."
 

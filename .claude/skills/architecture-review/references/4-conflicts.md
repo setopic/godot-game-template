@@ -43,7 +43,7 @@ After conflict detection, analyse the dependency graph across all ADRs.
 Bash: bash .claude/scripts/adr-dep-graph.sh
 ```
 
-It collects every `Depends On` edge, finds the cycles and the order, and emits
+It collects every `前提` edge, finds the cycles and the order, and emits
 `ADRS:` / `EDGES:` / `NO_DEPS_SECTION:` / `UNFILLED_DEPS:` / `CYCLE:` /
 `BLOCKED_BY_CYCLE:` / `ORDER:`. A model tracing A→B→C→A across
 a dozen ADRs eventually misses an edge; the algorithm cannot. It reports
@@ -61,9 +61,9 @@ Then interpret:
    dependencies come first (Foundation), ADRs that depend on those come next, etc.
    Do not re-sort it by hand. An ADR in `NO_DEPS_SECTION` or `UNFILLED_DEPS` sits
    in it as if it depended on nothing: mark it so.
-2. **Flag unresolved dependencies**: cross the `EDGES:` list against the `## Status`
-   values already scanned in Phase 1b. If ADR-A depends on an ADR that is still
-   `Proposed` or does not exist, flag it:
+2. **Flag unresolved dependencies**: cross the `EDGES:` list against the front
+   matter `status:` values already scanned in Phase 1b. If ADR-A depends on an ADR
+   that is still Proposed (`draft` or `review`) or does not exist, flag it:
    ```
    ⚠️  ADR-0005 depends on ADR-0002 — but ADR-0002 is still Proposed.
        ADR-0005 cannot be safely implemented until ADR-0002 is Accepted.

@@ -6,7 +6,7 @@
 Given a changed GDD path, it asks git what changed (`git diff HEAD`, then the last
 commit), summarises the changed sections, checks the entity registry for
 downstream GDDs to re-check, then finds every ADR that references the GDD — by
-scanning `## GDD Requirements Addressed` tables plus a prose grep for the GDD's
+scanning `## 対応するGDDの要件` tables plus a prose grep for the GDD's
 basename — and reads only that affected set. Each affected ADR is classified
 Still Valid / Needs Review / Likely Superseded and the full Design Change Impact
 Report is shown before any action.
@@ -74,7 +74,7 @@ Fixture defaults.
 - `design/gdd/combat.md` has an uncommitted edit to a damage formula in its
   Formulas section
 - `docs/52-adr/` has 4 ADRs; ADR-0003 and ADR-0005 list `combat.md` in
-  `## GDD Requirements Addressed`; ADR-0003's decision assumed the old formula,
+  `## 対応するGDDの要件`; ADR-0003's decision assumed the old formula,
   ADR-0005's decision does not depend on it
 - `docs/architecture/requirements-traceability.md` exists
 
@@ -112,23 +112,23 @@ Fixture defaults.
 **Fixture (tables present):**
 - `project.yaml`: `modes.workflow: full`
 - `design/gdd/combat.md` has an uncommitted edit
-- 3 ADRs, each with a `## GDD Requirements Addressed` section, none naming
+- 3 ADRs, each with a `## 対応するGDDの要件` section, none naming
   `combat.md` in the table or in prose
 
 **Input (both fixtures):** `/propagate-design-change design/gdd/combat.md`
 
 **Expected behavior (tables present):**
 1. Both scans return 0 with N = 3
-2. The files-with-matches check for `## GDD Requirements Addressed` is non-empty
+2. The files-with-matches check for `## 対応するGDDの要件` is non-empty
 3. Reports "No ADR references combat.md — no architecture impact."
 
 **Fixture (tables absent):**
-- Same GDD edit; 3 ADRs, none containing a `## GDD Requirements Addressed` section
+- Same GDD edit; 3 ADRs, none containing a `## 対応するGDDの要件` section
   and none naming `combat.md`
 
 **Expected behavior (tables absent):**
 1. Both scans return 0 with N = 3; the section check is also empty
-2. Reports "3 ADRs found, none contains a 'GDD Requirements Addressed' section —
+2. Reports "3 ADRs found, none contains a '対応するGDDの要件' section —
    traceability cannot be computed (a `gate-pre-production` blocker). Run
    `/architecture-decision retrofit [adr]`."
 
@@ -222,9 +222,9 @@ Fixture defaults.
 **Fixture (standard):**
 - `project.yaml`: `modes.workflow: standard`, `modes.review_mode: solo`
 - `design/gdd/loot.md` has an uncommitted edit
-- 4 ADRs, by their Engine Compatibility `Layer`: ADR-0001 (Foundation, event bus,
+- 4 ADRs, by their エンジンとの互換 `**層**` row: ADR-0001 (Foundation, event bus,
   no mention of `loot.md`), ADR-0002 (Foundation, save system, lists `loot.md` in
-  `## GDD Requirements Addressed`), ADR-0006 (Feature, loot tables, names `loot.md`
+  `## 対応するGDDの要件`), ADR-0006 (Feature, loot tables, names `loot.md`
   in prose only), ADR-0007 (Feature, enemy AI, no mention)
 
 **Input (both fixtures):** `/propagate-design-change design/gdd/loot.md`
@@ -245,8 +245,8 @@ Fixture defaults.
 - [ ] Minimal: no ADR is globbed or read, no gate is spawned or noted, and no write ask is made
 - [ ] Standard: ADR-0007 is not counted or read, and neither it nor ADR-0001 is described as verified unaffected
 - [ ] Standard: the prose-only reference in ADR-0006 is caught by the basename grep
-- [ ] Standard: the Foundation ADRs are found from the `**Layer**` rows (`Grep pattern="\*\*Layer\*\*" glob="docs/{51-tdr/tdr,52-adr/adr}-*.md"`), not guessed from titles
-- [ ] Variant — ADR-0007 has no `**Layer**` row: it is treated as critical (when in doubt, critical) and joins the in-scope set, so N = 4
+- [ ] Standard: the Foundation ADRs are found from the `**層**` rows (`Grep pattern="\*\*層\*\*" glob="docs/{51-tdr/tdr,52-adr/adr}-*.md"`), not guessed from titles
+- [ ] Variant — ADR-0007 has no `**層**` row: it is treated as critical (when in doubt, critical) and joins the in-scope set, so N = 4
 
 ---
 
@@ -255,7 +255,7 @@ Fixture defaults.
 - [ ] Diffs the GDD and scans ADRs before producing the impact report
 - [ ] Impact report shown in full before any resolution ask
 - [ ] Resolution asked per ADR — never one decision for the whole set
-- [ ] "May I" asked before each file change; ADR content is never deleted, only marked Superseded
+- [ ] "May I" asked before each file change; ADR content is never deleted, only marked Superseded (its front matter `status:` set to `deprecated`)
 - [ ] TD-CHANGE-IMPACT runs in `full`, skipped with a named note in `lean`/`solo`
 - [ ] Ends with follow-up actions matching the resolutions (`/architecture-decision` for Superseded ADRs, `/architecture-review` when many are affected)
 

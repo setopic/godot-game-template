@@ -35,17 +35,20 @@ categories always ask).
 ### ADRs
 
 `bash .claude/scripts/adr-status.sh` reads every `docs/51-tdr/tdr-*.md` and `docs/52-adr/adr-*.md` in one
-pass: the counts first (`adrs`, then `accepted`, `proposed`, `deprecated`,
-`superseded`, `unfilled`, `other`, `no_status`), then one row per ADR with its
-status and layer. Establish the denominator first: decide from the counts, before
-reading any ADR:
+pass: the counts first (`tdrs`, `adrs`, then `draft`, `review`, `stable`,
+`deprecated`, `other`, `no_status`, `superseded`), then one row per TDR or ADR
+with its status and layer. The status is the front matter's `status:`
+(game-template, PDR-0006): Accepted is `stable`, Proposed is `draft` or
+`review`, Deprecated and Superseded are `deprecated`. Below, "ADRs" means TDRs
+and ADRs together, and N is `tdrs` plus `adrs`. Establish the denominator first:
+decide from the counts, before reading any ADR:
 
 | Counts | Meaning | Action |
 |---|---|---|
-| `adrs 0` | No ADRs. | "No ADRs found — run `/architecture-decision` before building a control manifest." Stop. |
-| `accepted` ≥ 1 | Normal. | The Accepted rows are the set **A**. Name every other ADR, with its status, in the Phase 4 preview: the user approves a manifest knowing what it leaves out. |
-| `accepted 0`, some with a status | No Accepted ADRs. | "[N] ADRs found, none Accepted. A manifest built from Proposed ADRs would encode decisions that may still change." Ask whether to go on with the Proposed ones or stop. **Never write an empty manifest silently.** |
-| every ADR `no_status` | **Malformed ADRs, not an empty Accepted set.** | "[N] ADRs found, none has a `## Status` section, so acceptance cannot be told. Run `/architecture-decision retrofit [file]` on each." Stop. Never treat them as Accepted. |
+| `tdrs 0` and `adrs 0` | No ADRs. | "No ADRs found — run `/architecture-decision` before building a control manifest." Stop. |
+| `stable` ≥ 1 | Normal. | The `stable` (Accepted) rows are the set **A**. Name every other ADR, with its status, in the Phase 4 preview: the user approves a manifest knowing what it leaves out. |
+| `stable 0`, some with a status | No Accepted ADRs. | "[N] ADRs found, none Accepted (`stable`). A manifest built from Proposed ADRs (`draft` or `review`) would encode decisions that may still change." Ask whether to go on with the Proposed ones or stop. **Never write an empty manifest silently.** |
+| every ADR `no_status` | **Malformed ADRs, not an empty Accepted set.** | "[N] ADRs found, none has a front matter `status:`, so acceptance cannot be told. Run `/architecture-decision retrofit [file]` on each." Stop. Never treat them as Accepted. |
 
 Each stop above ends with `Verdict: BLOCKED — [the reason]`. Note the number and
 title of every ADR a rule comes from.
@@ -76,30 +79,31 @@ Report: "Loaded [A] Accepted ADRs of [N], engine: [name + version]."
 For each ADR in **A**, read only four sections, never the whole file:
 
 ```
-bash .claude/scripts/md-section.sh extract docs/[51-tdr|52-adr]/[adr-file].md "Decision"
+bash .claude/scripts/md-section.sh extract docs/[51-tdr|52-adr]/[adr-file].md "決定"
 ```
 
-and the same for `Alternatives Considered`, `Performance Implications` and `Engine
-Compatibility`. Context, Consequences, Migration Plan and Validation Criteria say why
+and the same for `検討した案`, `性能への影響` and `エンジンとの互換`
+(game-template, PDR-0006: the sections are Japanese). 背景, 影響, 移行の手順
+and 確かめ方 say why
 a decision was made; the manifest records what to do. A section an ADR lacks: note
 it for that ADR and go on. A section missing from **every** ADR in A: report "No
 Accepted ADR has a `[section]` section — the manifest's [category] rules will be
 empty. Verify this is intended." Read beyond the four only when a section points
-outside itself ("subject to the constraints in Context"), and then that one section.
+outside itself ("subject to the constraints in 背景"), and then that one section.
 
 From each ADR:
 
-- **Required patterns** (Decision): every "must", "should", "required to",
-  "always", and every pattern or approach it mandates, including any `### Implementation
-  Guidelines` inside it. Never look for that sub-heading alone: many ADRs state
-  their mandates directly under Decision, and a scan for the sub-heading alone
+- **Required patterns** (決定): every "must", "should", "required to",
+  "always" (and 「必ず」「〜してはならない」 in a Japanese ADR), and every pattern
+  or approach it mandates, including any `### 実装の指針` inside it. Never look
+  for that sub-heading alone: many ADRs state their mandates directly under 決定, and a scan for the sub-heading alone
   yields an empty section.
-- **Forbidden approaches** (Alternatives Considered): every rejected alternative,
+- **Forbidden approaches** (検討した案): every rejected alternative,
   with why it was rejected as the rule ("never use X because Y"), and any named
   anti-pattern.
-- **Performance guardrails** (Performance Implications): budgets ("max N ms per
+- **Performance guardrails** (性能への影響): budgets ("max N ms per
   frame for this system") and memory limits.
-- **Engine API constraints** (Engine Compatibility): post-cutoff APIs that need
+- **Engine API constraints** (エンジンとの互換): post-cutoff APIs that need
   verifying, behaviour that differs from what a model would assume, fields or
   methods that changed in the pinned version.
 

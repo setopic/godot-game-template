@@ -78,18 +78,21 @@ record with a targeted grep (not a full read):
 
 ### 2b: ADR Format Audit
 
-For each ADR file found, check for these critical sections:
+For each ADR file found, check for these critical sections (game-template,
+PDR-0006: the sections are the Japanese ones of `docs/00-meta/templates/adr.md`,
+and the status is the front matter's `status:`, never a `## Status` section; an
+ADR still in CCGS's English form counts every one of them as missing):
 
 | Section | Impact if missing |
 |---|---|
-| `## Status` | **BLOCKING** — `/story-readiness` ADR status check silently passes everything |
-| `## ADR Dependencies` | HIGH — dependency ordering in `/architecture-review` breaks |
-| `## Engine Compatibility` | HIGH — post-cutoff API risk is unknown |
-| `## GDD Requirements Addressed` | MEDIUM — traceability matrix loses coverage |
-| `## Performance Implications` | LOW — not pipeline-critical |
+| front matter `status:` | **BLOCKING** — `/story-readiness` ADR status check silently passes everything |
+| `## 前提のADR` | HIGH — dependency ordering in `/architecture-review` breaks |
+| `## エンジンとの互換` | HIGH — post-cutoff API risk is unknown |
+| `## 対応するGDDの要件` | MEDIUM — traceability matrix loses coverage |
+| `## 性能への影響` | LOW — not pipeline-critical |
 
-For each ADR, record: which sections present, which missing, current Status value
-if the Status section exists.
+For each ADR, record: which sections present, which missing, current `status:` value
+if the front matter has one.
 
 ### 2c: systems-index.md Format Audit
 

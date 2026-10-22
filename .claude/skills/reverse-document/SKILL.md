@@ -3,7 +3,7 @@ name: reverse-document
 description: "Generate missing design or architecture docs from existing implementation — works backwards from code and prototypes."
 argument-hint: "<type> <path> (e.g., 'design src/gameplay/combat' or 'architecture Assets/Scripts/Core')"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Edit, Bash(bash "*/.claude/skills/reverse-document/../../hooks/yaml-helper.sh" resolve_config *)
+allowed-tools: Read, Glob, Grep, Write, Edit, Bash(bash "*/.claude/skills/reverse-document/../../hooks/yaml-helper.sh" resolve_config *), Bash(python -m tools.graph *)
 model: sonnet
 # Read-only diagnostic skill — no specialist agent delegation needed
 ---
@@ -198,7 +198,7 @@ Based on type, use appropriate template:
 | Type | Template | Output Path |
 |------|----------|-------------|
 | `design` | `templates/design-doc-from-implementation.md` | `design/gdd/[system-name].md` |
-| `architecture` | `templates/architecture-doc-from-code.md` | `docs/52-adr/adr-NNNN-[decision-name].md`, or `docs/51-tdr/tdr-NNNN-[decision-name].md` for technology from outside the game's code. Choose the kind as `/architecture-decision` Step 2 does; NNNN is the highest number in that kind's folder, plus one |
+| `architecture` | `docs/00-meta/templates/adr.md` (or `tdr.md`), created with `python -m tools.graph new`; `templates/architecture-doc-from-code.md` lists what to recover from the code | `docs/52-adr/adr-NNNN-[decision-name].md`, or `docs/51-tdr/tdr-NNNN-[decision-name].md` for technology from outside the game's code. Choose the kind as `/architecture-decision` Step 2 does; NNNN is the highest number in that kind's folder, plus one |
 | `concept` | `templates/concept-doc-from-prototype.md` | `prototypes/[name]/CONCEPT.md` or `design/concepts/[name].md` |
 
 **The `design` output scales with the workflow tier** (resolved in Phase 1):
@@ -213,6 +213,13 @@ Based on type, use appropriate template:
   `design/[system-name]-brief.md`.
 
 (`architecture` and `concept` outputs are tier-independent.)
+
+**An `architecture` output is a graph node** (game-template, PDR-0006). Create
+it with `python -m tools.graph new --type adr|tdr --id <ADR|TDR>-NNNN --title "..." --slug <decision-name> --status draft`,
+then fill the Japanese sections of the template it copies, never the English
+headings of `architecture-doc-from-code.md`. The reverse-documentation notice
+and every `INTENT UNKNOWN` mark go into `## 背景`; a section the code says
+nothing about is 「なし」. Run `python -m tools.graph check` after writing.
 
 **Draft structure**:
 - Capture **what exists** (mechanics, patterns, implementation)

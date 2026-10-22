@@ -63,8 +63,8 @@ and Read those ranges with offset and limit.
 2. **Under ~40KB** (`Bash: wc -c "docs/[51-tdr|52-adr]/[adr-file].md"`) — one full
    `Read` is fine; per-call overhead exceeds the savings from bounded reads at
    this size.
-3. **~40KB or larger** — bounded-read only `## Context`, `## Decision`, and
-   `## Consequences` (the sections that carry reasoning, not just facts) via
+3. **~40KB or larger** — bounded-read only `## 背景`, `## 決定`, and
+   `## 影響` (the sections that carry reasoning, not just facts) via
    `Read(offset, limit)` from the heading map.
 
 Read GDDs the same way `/design-system` Step 2b does: only GDDs the registry

@@ -68,7 +68,7 @@ Requirements with no ADR coverage, prioritised by layer (Foundation first):
 
 <!-- For each ADR, which GDD requirements does it address? -->
 
-| ADR | Title | GDD Requirements Addressed | Engine Risk |
+| ADR | Title | 対応するGDDの要件 | Engine Risk |
 |-----|-------|---------------------------|-------------|
 | ADR-0001 | [title] | TR-combat-001, TR-combat-002 | HIGH |
 

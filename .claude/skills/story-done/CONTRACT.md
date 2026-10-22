@@ -11,7 +11,7 @@ Closes the implementation loop for a single story by verifying every acceptance 
 | `production/epics/**/*.md` (the story file) | `Status:` (expected: `In Progress`, or `Ready` if `/dev-story` was skipped — `/dev-story` sets `In Progress`, and `/story-done` is the only skill that closes a story it verified — `/dev-story`'s dependency option `[C]` also sets `Complete`, on a dependency the user says is done, after an ask), `Type:`, `Manifest Version`, TR-ID(s), ADR reference(s), `## Acceptance Criteria`, list of files to create/modify, `## Test Evidence` path | No — status and completion notes written after approval |
 | `docs/architecture/tr-registry.yaml` | Entry per TR-ID with current `requirement` text | Yes |
 | GDD section referenced by each TR-ID | Acceptance criteria and key rules for cross-check | Yes |
-| `docs/51-tdr/tdr-NNNN-[slug].md` or `docs/52-adr/adr-NNNN-[slug].md` (referenced ADR) | `## Decision`, `## Consequences` | Yes |
+| `docs/51-tdr/tdr-NNNN-[slug].md` or `docs/52-adr/adr-NNNN-[slug].md` (referenced ADR) | `## 決定`, `## 影響` | Yes |
 | `docs/architecture/control-manifest.md` | `Manifest Version:` header date, forbidden patterns | Yes (existence checked; absent = skip staleness check) |
 | `production/session-state/active.md` | Active story path (used when no argument given) | No — `<!-- CHECKPOINT -->` block overwritten |
 
@@ -62,7 +62,7 @@ then `COMPLETE`; see the verdict section of `SKILL.md`.
 - Session state always records the final verdict and the next recommended story path
 
 ## Immutability Rules
-- READS but does NOT modify: `docs/architecture/tr-registry.yaml`, `docs/51-tdr/tdr-NNNN-[slug].md` or `docs/52-adr/adr-NNNN-[slug].md` (Decision + Consequences only), GDD sections, `docs/architecture/control-manifest.md`, source files under the code root — `src/`, `Assets/` or `Source/` by engine (searched only) — and test files under the engine's test root (existence checked; never run or edited)
+- READS but does NOT modify: `docs/architecture/tr-registry.yaml`, `docs/51-tdr/tdr-NNNN-[slug].md` or `docs/52-adr/adr-NNNN-[slug].md` (決定 + 影響 only), GDD sections, `docs/architecture/control-manifest.md`, source files under the code root — `src/`, `Assets/` or `Source/` by engine (searched only) — and test files under the engine's test root (existence checked; never run or edited)
 - MODIFIES: the story `.md` file (status + completion notes), `production/sprint-status.yaml` (if exists), `production/session-state/active.md` (the `<!-- CHECKPOINT -->` block, overwritten), `docs/tech-debt-register.md` (append a row, and update its `Last updated:` and `Total items:` lines, only with user approval)
 - Does NOT write to the code root or the test root under any circumstances
 

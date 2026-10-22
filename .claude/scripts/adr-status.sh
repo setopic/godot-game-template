@@ -1,18 +1,24 @@
 #!/usr/bin/env bash
 # adr-status.sh — each ADR's status, layer, dates, dependencies and missing
 # sections, in one pass, so a skill reads a table instead of opening every ADR
-# and grepping `## Status -A 3` per file.
+# and reading its front matter and sections per file.
+#
+# game-template (PDR-0006): TDRs and ADRs are graph nodes. The status is the
+# front matter's `status:` (draft, review, stable, deprecated), not a
+# `## Status` section; the sections are the Japanese ones of
+# docs/00-meta/templates/adr.md (日付, 最終確認日, 前提のADR, ...).
 #
 # Replaces the hand-run ADR reads in /architecture-decision, /architecture-review,
 # /create-control-manifest, /create-epics, /create-stories, /dev-story,
 # /gate-check, /code-review, /story-readiness, /adopt, /create-architecture,
 # /propagate-design-change and /project-stage-detect. adr-dep-graph.sh still
 # owns the dependency graph and its cycles; this script reads the same
-# Depends On row the same way, so the two agree on every edge.
+# 前提 row (and the front matter's depends_on) the same way, so the two agree
+# on every edge.
 #
 # EMITS OBSERVATIONS, NOT A VERDICT (CLAUDE.md, "Helpers in .claude/scripts/").
-# Whether a Proposed ADR blocks a story, which sections an ADR must have, and
-# what a missing Layer row means are the calling skill's rules: the skills'
+# Whether a draft or review ADR blocks a story, which sections an ADR must have, and
+# what a missing 層 row means are the calling skill's rules: the skills'
 # own lists of required sections disagree, so this script reports every
 # section of the shipped template that is missing and leaves the choice there.
 #
@@ -27,26 +33,33 @@
 #   -h, --help  this text
 # An ADR named more than once (by ID, number or path) is reported once.
 #
-# Output: TSV. Counts first, then one row per ADR:
-#   adrs <n> <scope>, template_sections <n> <template path>, then the number of
-#   ADRs in each status: accepted, proposed, deprecated, superseded, unfilled,
-#   other, no_status
-#   ADR <id> <path> <status> <layer> <date> <last_verified> <version>
+# Output: TSV. Counts first, then one row per TDR or ADR:
+#   tdrs <n> <scope>, adrs <n> <scope>, template_sections <n> <template path>,
+#   then the number of records (TDRs and ADRs together) in each status: draft,
+#   review, stable, deprecated, other, no_status; then superseded, the
+#   deprecated ones a later record's `supersedes` names
+#   TDR|ADR <id> <path> <status> <layer> <date> <last_verified> <version>
 #       <depends_on> <superseded_by> <missing> <unfilled>
-#   NOT_FOUND <ID or PATH>          for an argument that names no ADR
+#   NOT_FOUND <ID or PATH>          for an argument that names no record
+# The first column is TDR for a tdr-NNNN file and ADR for an adr-NNNN file.
+# CCGS's statuses map onto the front matter's: Proposed is draft or review,
+# Accepted is stable, Deprecated is deprecated, Superseded is deprecated with
+# a successor (superseded_by is not `-`).
 # Columns (`-` means not there):
-#   status        Accepted | Proposed | Deprecated | Superseded: the first word
-#                 under `## Status`; UNFILLED while it is still the template's
-#                 [bracket]; OTHER for anything else
-#   layer         the `**Layer**` row's value, or UNFILLED
-#   date, last_verified   the first YYYY-MM-DD under `## Date` and `## Last
-#                 Verified`, or UNFILLED
+#   status        draft | review | stable | deprecated: the front matter's
+#                 `status:`; OTHER for any other value; `-` when there is none
+#   layer         the `**層**` row's value, or UNFILLED
+#   date, last_verified   the first YYYY-MM-DD under `## 日付` and `## 最終確認日`;
+#                 `-` when the section says なし or is not there; UNFILLED
+#                 otherwise
 #   version       last_verified, else date, else `unversioned` (the rule
 #                 /create-stories and /dev-story stamp stories with)
-#   depends_on    every ADR-N and TDR-N on the `**Depends On**` row of `## ADR
-#                 Dependencies`, as adr-NNNN or tdr-NNNN, comma-separated; `none` when the
-#                 row names none; UNFILLED while it is the template's bracket
-#   superseded_by the ADR a Superseded status names
+#   depends_on    every ADR-N and TDR-N on the `**前提**` row of `## 前提のADR`
+#                 and in the front matter's depends_on, as adr-NNNN or tdr-NNNN,
+#                 comma-separated; `none` when they name none (or the section
+#                 says なし); UNFILLED while the row is the template's bracket
+#   superseded_by the TDR or ADR whose front matter `supersedes` names this one
+#                 (read from every file in the two folders)
 #   missing       the template's `##` sections this ADR lacks, comma-separated
 #                 (titles compared without case or a leading number)
 #   unfilled      how many lines are still a [bracketed] line of the template,
@@ -90,7 +103,7 @@ fi
 # game-template (PDR-0006): TDRs and ADRs sit in a folder per kind.
 TDR_DIR="docs/51-tdr"
 ADR_DIR="docs/52-adr"
-TEMPLATE=".claude/docs/templates/architecture-decision-record.md"
+TEMPLATE="docs/00-meta/templates/adr.md"
 # adr_id PATH — adr-dep-graph.sh's id: the first adr-<digits> or tdr-<digits>
 # in the name, lower case.
 adr_id() { printf '%s\n' "${1##*/}" | tr '[:upper:]' '[:lower:]' | grep -oE '[at]dr-[0-9]+' | head -1; }
@@ -144,6 +157,22 @@ EOF
 fi
 
 LIST=$(printf '%s' "$FILES" | awk 'NF' )
+
+# Which record supersedes which: "old<TAB>new" for each id in a file's front
+# matter `supersedes` (inline [..] or a block list), over every file in the
+# two folders, so a record named alone still learns its successor.
+SUPMAP=$(printf '%s\n' "$ALL" | while IFS= read -r f; do
+  [ -n "$f" ] || continue
+  awk -v me="$(adr_id "$f")" '
+    { sub(/\r$/, "") }
+    NR == 1 { if ($0 != "---") exit; infm = 1; next }
+    infm && $0 == "---" { exit }
+    infm && /^[A-Za-z_]+:/ { key = $0; sub(/:.*/, "", key) }
+    infm && key == "supersedes" {
+      s = $0
+      while (match(s, /[AaTt][Dd][Rr]-[0-9]+/)) { printf "%s\t%s\n", tolower(substr(s, RSTART, RLENGTH)), me; s = substr(s, RSTART + RLENGTH) }
+    }' "$f"
+done)
 TPL_ARG=""
 [ -f "$TEMPLATE" ] && TPL_ARG="$TEMPLATE"
 
@@ -155,10 +184,12 @@ TPL_ARG=""
 # file, "./" in front of a relative one so a name like x=1.md is not read as an
 # assignment; an absolute one (/..., C:/...) is opened as it is.
 { [ -n "$TPL_ARG" ] && printf '%s\n' "$TPL_ARG"; printf '%s\n' "$LIST"; } | awk 'NF { sub(/^\.\//, ""); print }' | \
-TPL="$TPL_ARG" SCOPE="$SCOPE" awk '
+TPL="$TPL_ARG" SCOPE="$SCOPE" SUPMAP="$SUPMAP" awk '
   # Git for Windows gawk reads files in text mode; BINMODE keeps the bytes.
   BEGIN {
-    BINMODE = 3; tpl = ENVIRON["TPL"]; nadr = 0
+    BINMODE = 3; tpl = ENVIRON["TPL"]; nadr = 0; ntdr = 0; nrec = 0
+    nsm = split(ENVIRON["SUPMAP"], sm, "\n")
+    for (i = 1; i <= nsm; i++) if (split(sm[i], sp, "\t") == 2 && !(sp[1] in supby)) supby[sp[1]] = sp[2]
     # The list arrives on /dev/stdin, named, so the main input stays the files: with
     # a bare getline, gawk read the first file as more of stdin and skipped its FNR 1.
     while ((getline f < "/dev/stdin") > 0) lst[++nlst] = f
@@ -198,47 +229,52 @@ TPL="$TPL_ARG" SCOPE="$SCOPE" awk '
   function cell2(s,    n, c) { n = split(s, c, "|"); return n >= 3 ? trim(c[3]) : "" }
   function value_of(raw) { return (raw == "") ? "-" : raw }
 
-  function flush(    st, w, sb, ver, miss, i, t) {
+  # The value of a date section: the first YYYY-MM-DD of its first line; `-` when
+  # the section is not there or says なし; UNFILLED for anything else.
+  function date_of(line, sname) {
+    if (line == "") return (sname in has) ? "UNFILLED" : "-"
+    if (first_date(line) != "") return first_date(line)
+    return (line == "なし") ? "-" : "UNFILLED"
+  }
+
+  function flush(    st, w, sb, ver, miss, i, t, kind) {
     if (cur == "") return
     st = "-"; sb = "-"
-    if (status_line != "") {
-      w = status_line; gsub(/[*_`]/, "", w); w = tolower(trim(w)); sub(/[^a-z].*$/, "", w)
-      if (w == "accepted") st = "Accepted"
-      else if (w == "proposed") st = "Proposed"
-      else if (w == "deprecated") st = "Deprecated"
-      else if (w == "superseded") { st = "Superseded"; sb = adr_ids(status_line); if (sb == "") sb = "-"; else sub(/,.*/, "", sb) }
-      else if (substr(trim(status_line), 1, 1) == "[") st = "UNFILLED"
-      else st = "OTHER"
-    } else if ("status" in has) st = "OTHER"
+    w = fm_status; gsub(/["\047]/, "", w); w = trim(w)
+    if (w == "draft" || w == "review" || w == "stable" || w == "deprecated") st = w
+    else if (w != "") st = "OTHER"
     cnt[st == "-" ? "no_status" : tolower(st)]++
-    d = (date_line == "") ? (("date" in has) ? "UNFILLED" : "-") : (first_date(date_line) != "" ? first_date(date_line) : "UNFILLED")
-    lv = (lv_line == "") ? (("last verified" in has) ? "UNFILLED" : "-") : (first_date(lv_line) != "" ? first_date(lv_line) : "UNFILLED")
+    if (cur_id in supby) { sb = supby[cur_id]; if (st == "deprecated") cnt["superseded"]++ }
+    d = date_of(date_line, "日付")
+    lv = date_of(lv_line, "最終確認日")
     ver = (lv ~ /^[0-9]/) ? lv : ((d ~ /^[0-9]/) ? d : "unversioned")
     # The ids come from the whole row and an ADR naming itself is dropped, as
     # adr-dep-graph.sh builds its edges; the cell decides UNFILLED versus none.
-    if (dep_seen) {
-      dep = ""; nd = split(adr_ids(dep_row), dl, ",")
+    if (dep_seen || fm_deps != "") {
+      dep = ""; nd = split(adr_ids(dep_row " " fm_deps), dl, ",")
       for (i = 1; i <= nd; i++) if (dl[i] != cur_id) dep = dep (dep == "" ? "" : ",") dl[i]
       if (dep == "") dep = (substr(dep_cell, 1, 1) == "[") ? "UNFILLED" : "none"
     } else dep = "-"
     lay = (layer_seen) ? ((substr(layer_cell, 1, 1) == "[") ? "UNFILLED" : value_of(layer_cell)) : "-"
     miss = ""
     for (i = 1; i <= ntpl; i++) if (!(tsec[i] in has)) miss = miss (miss == "" ? "" : ",") ttitle[i]
-    nadr++
+    kind = (substr(cur_id, 1, 3) == "tdr") ? "TDR" : "ADR"
+    if (kind == "TDR") ntdr++; else nadr++
+    nrec++
     t = cur_path; gsub(/\t/, " ", t); gsub(/\t/, " ", lay)
-    rows[nadr] = "ADR\t" cur_id "\t" t "\t" st "\t" lay "\t" d "\t" lv "\t" ver "\t" dep "\t" sb "\t" (miss == "" ? "-" : miss) "\t" unfilled
+    rows[nrec] = kind "\t" cur_id "\t" t "\t" st "\t" lay "\t" d "\t" lv "\t" ver "\t" dep "\t" sb "\t" (miss == "" ? "-" : miss) "\t" unfilled
     cur = ""
   }
 
   function begin(f) {
     flush()
-    infence = ""; incomment = 0; sec = ""
+    infence = ""; incomment = 0; sec = ""; infm = 0; fmkey = ""
     if (f == "./" tpl) { intpl = 1 } else {
       intpl = 0; cur = f; cur_path = f; sub(/^\.\//, "", cur_path)
       # The id adr-dep-graph.sh uses: the first adr-<digits> or tdr-<digits>
       # in the file name, lower case.
       b = tolower(cur_path); sub(/^.*\//, "", b); cur_id = match(b, /[at]dr-[0-9]+/) ? substr(b, RSTART, RLENGTH) : "-"
-      split("", has); status_line = ""; date_line = ""; lv_line = ""
+      split("", has); fm_status = ""; fm_deps = ""; date_line = ""; lv_line = ""
       dep_seen = 0; dep_cell = ""; dep_row = ""; layer_seen = 0; layer_cell = ""; unfilled = 0
     }
   }
@@ -251,6 +287,17 @@ TPL="$TPL_ARG" SCOPE="$SCOPE" awk '
   FNR == 1 { reach(FILENAME); begin(FILENAME) }
   {
     line = $0; sub(/\r$/, "", line)
+    # The front matter: its status and depends_on; no line of it is a section.
+    if (FNR == 1 && line == "---") { infm = 1; next }
+    if (infm) {
+      if (line == "---") { infm = 0; next }
+      if (line ~ /^[A-Za-z_]+:/) {
+        fmkey = line; sub(/:.*/, "", fmkey); v = line; sub(/^[^:]*:/, "", v)
+        if (!intpl && fmkey == "status") fm_status = trim(v)
+      }
+      if (!intpl && fmkey == "depends_on") fm_deps = fm_deps " " line
+      next
+    }
     if (infence) { if (closes(line, infence)) infence = ""; next }
     f = fence_of(line); if (f != "") { infence = f; next }
     cstart = incomment; rest = ""; s = line
@@ -276,20 +323,22 @@ TPL="$TPL_ARG" SCOPE="$SCOPE" awk '
     # The first line of text under a field heading is its value; a > quote is
     # the template guidance, not the value.
     if (substr(r, 1, 1) != ">") {
-      if (sec == "status" && status_line == "") status_line = r
-      if (sec == "date" && date_line == "") date_line = r
-      if (sec == "last verified" && lv_line == "") lv_line = r
+      if (sec == "日付" && date_line == "") date_line = r
+      if (sec == "最終確認日" && lv_line == "") lv_line = r
     }
-    if (!layer_seen && r ~ /^\|[ \t]*\*\*Layer\*\*[ \t]*\|/) { layer_seen = 1; layer_cell = cell2(r) }
-    if (sec == "adr dependencies" && !dep_seen && r ~ /\*\*Depends On\*\*/) { dep_seen = 1; dep_row = r; dep_cell = cell2(r); if (dep_cell == "") dep_cell = r }
+    if (!layer_seen && r ~ /^\|[ \t]*\*\*層\*\*[ \t]*\|/) { layer_seen = 1; layer_cell = cell2(r) }
+    if (sec == "前提のadr" && !dep_seen && r ~ /\*\*前提\*\*/) { dep_seen = 1; dep_row = r; dep_cell = cell2(r); if (dep_cell == "") dep_cell = r }
+    # A section that says only なし names no dependency: none, not missing.
+    if (sec == "前提のadr" && !dep_seen && r == "なし") { dep_seen = 1; dep_row = ""; dep_cell = r }
   }
   END {
     flush(); reach("")
+    printf "tdrs\t%d\t%s\n", ntdr, ENVIRON["SCOPE"]
     printf "adrs\t%d\t%s\n", nadr, ENVIRON["SCOPE"]
     printf "template_sections\t%d\t%s\n", ntpl, (tpl == "" ? "-" : tpl)
-    split("accepted proposed deprecated superseded unfilled other no_status", names, " ")
+    split("draft review stable deprecated other no_status superseded", names, " ")
     for (i = 1; i <= 7; i++) printf "%s\t%d\n", names[i], cnt[names[i]] + 0
-    for (i = 1; i <= nadr; i++) print rows[i]
+    for (i = 1; i <= nrec; i++) print rows[i]
   }
 '
 

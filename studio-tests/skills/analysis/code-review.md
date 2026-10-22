@@ -5,7 +5,7 @@
 `/code-review [file(s)] [story-path]` performs an architectural review of source
 files. It reads the target files and the project coding standards (Phase 1),
 resolves the engine specialists from `project.yaml` (Phase 2), checks compliance
-with any referenced ADR by reading only its `## Decision` and `## Consequences`
+with any referenced ADR by reading only its `## 決定` and `## 影響`
 sections (Phase 3), then evaluates six standards checks, architecture and SOLID,
 and game-specific concerns (Phases 4–6). Applicable engine specialists — and
 `qa-tester` for Logic/Integration stories — are spawned in parallel, and every
@@ -61,7 +61,7 @@ Fixture defaults.
   - All tuning values loaded from `assets/data/`
   - Depends on interfaces, not concrete classes
 - Header comment: `# Implements ADR-0004 (docs/52-adr/adr-0004-health.md)`
-- `docs/52-adr/adr-0004-health.md` has `## Decision` and `## Consequences` sections, and the code follows the chosen approach
+- `docs/52-adr/adr-0004-health.md` has `## 決定` and `## 影響` sections, and the code follows the chosen approach
 - The specialist reports no issues; there is nothing to suggest
 
 **Input:** `/code-review src/gameplay/health_component.gd`
@@ -69,14 +69,14 @@ Fixture defaults.
 **Expected behavior:**
 1. Skill reads the source file and the coding standards
 2. Skill finds the `ADR-0004` reference in the file header
-3. Skill greps the ADR's `^## ` headings, then reads only the `## Decision` and `## Consequences` spans
+3. Skill greps the ADR's `^## ` headings, then reads only the `## 決定` and `## 影響` spans
 4. `godot-gdscript-specialist` is spawned via `Agent` for the `.gd` file; `shader: null` and `ui: null` are treated as unset and not spawned
 5. Report shows ADR Compliance: COMPLIANT, Standards Compliance: 6/6 passing, Engine Specialist Findings: CLEAN, Testability: `N/A — no story path given`, and a Positive Observations section
 6. Verdict is APPROVED
 7. Phase 9 `AskUserQuestion` offers [A] Run `/story-done` and [B] Stop here
 
 **Assertions:**
-- [ ] The ADR is read with a heading map and bounded reads of `## Decision` and `## Consequences`, not an unbounded full read
+- [ ] The ADR is read with a heading map and bounded reads of `## 決定` and `## 影響`, not an unbounded full read
 - [ ] `godot-gdscript-specialist` is spawned for the `.gd` file; no agent named `null` is spawned
 - [ ] Standards Compliance reads `6/6 passing` and ADR Compliance reads COMPLIANT
 - [ ] Testability reads `N/A — no story path given`; no `qa-tester` is spawned without a story
@@ -122,7 +122,7 @@ Fixture defaults.
 **Fixture:**
 - `project.yaml`: `engine.name: godot`, `specialists.code: godot-gdscript-specialist`
 - `src/core/save_system.gd` header: `# Implements ADR-0010 (docs/52-adr/adr-0010-save-format.md)`
-- `adr-0010-save-format.md` `## Decision`: save data goes through `SaveService` as JSON; direct `FileAccess` writes from gameplay code are explicitly rejected
+- `adr-0010-save-format.md` `## 決定`: save data goes through `SaveService` as JSON; direct `FileAccess` writes from gameplay code are explicitly rejected
 - `save_system.gd` writes save data with `FileAccess.open(..., FileAccess.WRITE)` directly at line 58
 - Code otherwise meets all six standards checks
 

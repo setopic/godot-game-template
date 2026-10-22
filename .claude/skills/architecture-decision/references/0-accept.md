@@ -20,12 +20,19 @@ never leaves.
    for a `TDR-` id (game-template, PDR-0006: each kind is numbered in its own
    folder, so the prefix picks the folder). If **no** file matches,
    or **more than one** does, stop and say which — do not pick one. If the file
-   has no `## Status` section, stop and say so; a missing Status is exactly what
-   retrofit mode is for.
-2. **Check the current status.** If it is already `Accepted`, say so and stop.
-   If it is `Deprecated` or `Superseded`, refuse: reviving a superseded decision
-   is a new ADR, not a status edit.
-3. **Check its dependencies first.** Read `## ADR Dependencies`.
+   has no front matter `status:`, stop and say so; a missing status is exactly
+   what retrofit mode is for.
+
+   > **game-template (PDR-0006): the status lives only in the front matter's
+   > `status:`.** There is no `## Status` section. Proposed is `draft` or
+   > `review`, Accepted is `stable`, Deprecated is `deprecated`, and Superseded
+   > is `deprecated` with the successor's `supersedes` naming this ADR.
+   > `bash .claude/scripts/adr-status.sh <id>` reads it.
+2. **Check the current status.** If it is already `stable` (Accepted), say so
+   and stop. If it is `deprecated` (Deprecated or Superseded), refuse: reviving a
+   superseded decision is a new ADR, not a status edit.
+3. **Check its dependencies first.** Read `## 前提のADR` (its `**前提**` row)
+   and the front matter's `depends_on`.
 
    **If that section is absent, empty, or reads `UNKNOWN`, do not read it as
    "no dependencies" — refuse and say which:**
@@ -38,8 +45,8 @@ never leaves.
    shape this gate exists to prevent — the check would examine nothing and report
    clean.
 
-   If it depends on any ADR that is not itself `Accepted`, **refuse and name them**:
-   > "ADR-0005 depends on ADR-0002, which is still Proposed. Accept ADR-0002
+   If it depends on any ADR that is not itself `stable` (Accepted), **refuse and name them**:
+   > "ADR-0005 depends on ADR-0002, which is still Proposed (`draft`). Accept ADR-0002
    > first — an accepted decision resting on an unaccepted one is not a decision,
    > it is a deferral with a different label."
    This is the same dependency rule `/architecture-review` already flags; here it
@@ -74,14 +81,14 @@ never leaves.
    rather than a generic claim: **the user is being asked to authorise an effect, and should be
    shown the effect.** If none match, say "no stories are waiting on this" — that
    is useful information, not an empty result to omit.
-6. On confirmation, `Edit` the `## Status` line to `Accepted`. Leave an existing
-   `## Date` as it is: it records when the ADR was written, and `/create-stories`
-   stamps stories with it (or `## Last Verified`), so rewriting it on acceptance
-   would make every story drafted against the Proposed ADR look out of date to
-   `/dev-story`. **If that section is absent, add it** with today's date — retrofit
-   mode already owns this shape, and acceptance must not fail on a template that
-   predates the field.
+6. On confirmation, `Edit` the front matter's `status:` line to `status: stable`.
+   Leave an existing `## 日付` as it is: it records when the ADR was written, and
+   `/create-stories` stamps stories with it (or `## 最終確認日`), so rewriting it
+   on acceptance would make every story drafted against the Proposed ADR look out
+   of date to `/dev-story`. **If that section is absent, add it** with today's
+   date — retrofit mode already owns this shape, and acceptance must not fail on
+   a template that predates the field.
 7. Then set each story found in step 5 from `Blocked` to `Ready`. Unblocking is a
    consequence of acceptance, never of authoring — see Step 6's note below.
-8. Report what moved: the ADR (and its `## Date`, if one was added), and every
+8. Report what moved: the ADR (and its `## 日付`, if one was added), and every
    story that became Ready.
