@@ -17,9 +17,12 @@
 # section of the shipped template that is missing and leaves the choice there.
 #
 # Usage: bash .claude/scripts/adr-status.sh [--root DIR] [ID|PATH ...]
-#   ID          ADR-0003, adr-0003 or 0003: the ADR whose file name carries it
-#   PATH        an ADR file, relative to the root or absolute
-#   (none)      every docs/architecture/adr-*.md (one level, as adr-dep-graph.sh)
+#   ID          ADR-0003, adr-0003 or 0003, or TDR-0001 or tdr-0001: the ADR
+#               or TDR whose file name carries it. A bare number is an ADR:
+#               the two kinds are numbered apart (game-template, PDR-0006)
+#   PATH        an ADR or TDR file, relative to the root or absolute
+#   (none)      every docs/51-tdr/tdr-*.md and docs/52-adr/adr-*.md (one
+#               level, as adr-dep-graph.sh)
 #   --root DIR  the project; defaults to the repo this script is in
 #   -h, --help  this text
 # An ADR named more than once (by ID, number or path) is reported once.
@@ -40,8 +43,8 @@
 #                 Verified`, or UNFILLED
 #   version       last_verified, else date, else `unversioned` (the rule
 #                 /create-stories and /dev-story stamp stories with)
-#   depends_on    every ADR-N on the `**Depends On**` row of `## ADR
-#                 Dependencies`, as adr-NNNN, comma-separated; `none` when the
+#   depends_on    every ADR-N and TDR-N on the `**Depends On**` row of `## ADR
+#                 Dependencies`, as adr-NNNN or tdr-NNNN, comma-separated; `none` when the
 #                 row names none; UNFILLED while it is the template's bracket
 #   superseded_by the ADR a Superseded status names
 #   missing       the template's `##` sections this ADR lacks, comma-separated
@@ -84,13 +87,17 @@ else
   cd "$(dirname "$0")/../.." 2>/dev/null || { echo "adr-status: cannot reach the repo root" >&2; exit 1; }
 fi
 
-ADR_DIR="docs/architecture"
+# game-template (PDR-0006): TDRs and ADRs sit in a folder per kind.
+TDR_DIR="docs/51-tdr"
+ADR_DIR="docs/52-adr"
 TEMPLATE=".claude/docs/templates/architecture-decision-record.md"
-# adr_id PATH — adr-dep-graph.sh's id: the first adr-<digits> in the name, lower case.
-adr_id() { printf '%s\n' "${1##*/}" | tr '[:upper:]' '[:lower:]' | grep -oE 'adr-[0-9]+' | head -1; }
+# adr_id PATH — adr-dep-graph.sh's id: the first adr-<digits> or tdr-<digits>
+# in the name, lower case.
+adr_id() { printf '%s\n' "${1##*/}" | tr '[:upper:]' '[:lower:]' | grep -oE '[at]dr-[0-9]+' | head -1; }
 
-FILES=""; MISSED=""; SCOPE="$ADR_DIR/adr-*.md"
-ALL=$(find "$ADR_DIR" -maxdepth 1 -type f -name 'adr-*.md' 2>/dev/null | sort)
+FILES=""; MISSED=""; SCOPE="$TDR_DIR/tdr-*.md $ADR_DIR/adr-*.md"
+ALL=$({ find "$TDR_DIR" -maxdepth 1 -type f -name 'tdr-*.md' 2>/dev/null
+        find "$ADR_DIR" -maxdepth 1 -type f -name 'adr-*.md' 2>/dev/null; } | sort)
 # add_file PATH — onto FILES unless that file is there already, under any
 # spelling (-ef: the same file, whether named by ID, ./path or absolute path).
 add_file() {
@@ -110,14 +117,19 @@ else
     # A Windows path's backslashes as slashes, so its file name reads alike.
     case "$a" in [A-Za-z]:\\*) a=$(printf '%s' "$a" | sed 's|\\|/|g') ;; esac
     if [ -f "$a" ]; then add_file "${a#./}"; continue; fi
-    # An ID: ADR-0003, adr-0003 or 0003, compared on its number.
-    want=$(printf '%s' "$a" | tr '[:upper:]' '[:lower:]' | sed 's/^adr-//')
+    # An ID: ADR-0003, adr-0003 or 0003 (an ADR), or TDR-0001, compared on
+    # its kind and number.
+    want=$(printf '%s' "$a" | tr '[:upper:]' '[:lower:]')
+    kind=adr
+    case "$want" in tdr-*) kind=tdr ;; esac
+    want="${want#"$kind"-}"
     hit=""
     case "$want" in
       ''|*[!0-9]*) ;;
       *) while IFS= read -r f; do
            [ -n "$f" ] || continue
-           n=$(adr_id "$f"); n="${n#adr-}"
+           n=$(adr_id "$f")
+           case "$n" in "$kind"-*) n="${n#"$kind"-}" ;; *) continue ;; esac
            # Numbers compare as numbers: 3 and 0003 are one ADR.
            [ -n "$n" ] && [ "$((10#$n))" = "$((10#$want))" ] && { hit="$f"; break; }
          done <<EOF
@@ -173,10 +185,11 @@ TPL="$TPL_ARG" SCOPE="$SCOPE" awk '
     return k >= length(f) && trim(substr(s, k + 1)) == ""
   }
   function first_date(s) { return match(s, /[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/) ? substr(s, RSTART, RLENGTH) : "" }
-  # Every ADR-N in s, as adr-N lower case, in order, without repeats.
+  # Every ADR-N and TDR-N in s, as adr-N or tdr-N lower case, in order,
+  # without repeats.
   function adr_ids(s,    out, seen, id) {
     out = ""; split("", seen)
-    while (match(s, /[Aa][Dd][Rr]-[0-9]+/)) {
+    while (match(s, /[AaTt][Dd][Rr]-[0-9]+/)) {
       id = tolower(substr(s, RSTART, RLENGTH)); s = substr(s, RSTART + RLENGTH)
       if (!(id in seen)) { seen[id] = 1; out = out (out == "" ? "" : ",") id }
     }
@@ -222,8 +235,9 @@ TPL="$TPL_ARG" SCOPE="$SCOPE" awk '
     infence = ""; incomment = 0; sec = ""
     if (f == "./" tpl) { intpl = 1 } else {
       intpl = 0; cur = f; cur_path = f; sub(/^\.\//, "", cur_path)
-      # The id adr-dep-graph.sh uses: the first adr-<digits> in the file name, lower case.
-      b = tolower(cur_path); sub(/^.*\//, "", b); cur_id = match(b, /adr-[0-9]+/) ? substr(b, RSTART, RLENGTH) : "-"
+      # The id adr-dep-graph.sh uses: the first adr-<digits> or tdr-<digits>
+      # in the file name, lower case.
+      b = tolower(cur_path); sub(/^.*\//, "", b); cur_id = match(b, /[at]dr-[0-9]+/) ? substr(b, RSTART, RLENGTH) : "-"
       split("", has); status_line = ""; date_line = ""; lv_line = ""
       dep_seen = 0; dep_cell = ""; dep_row = ""; layer_seen = 0; layer_cell = ""; unfilled = 0
     }

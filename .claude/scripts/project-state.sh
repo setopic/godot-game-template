@@ -19,7 +19,7 @@
 #
 # Output: TSV, one `key<TAB>value<TAB>source` row per fact, in this order:
 #   root, engine, code_root, source_files, concept, systems_index, gdd_files,
-#   adr, story, prototype, sprint, milestone, origin_url,
+#   adr, tdr, story, prototype, sprint, milestone, origin_url,
 #   stage_yaml, stage_txt, stage, phase, phase_inferred
 # `-` means no value. Every row is always printed, so a missing row is a bug,
 # never "nothing found".
@@ -28,6 +28,12 @@
 #   code_root       the same answer and source label as resolve_code_root in
 #                   .claude/hooks/yaml-helper.sh; never defaults to src
 #   source_files    `unknown` when code_root is unset: unknown is not zero
+#   adr, tdr        game-template (PDR-0006) keeps ADRs (the game's own
+#                   structure) in docs/52-adr/ and TDRs (the engine, language
+#                   and other technology from outside the game) in
+#                   docs/51-tdr/. Only adr feeds phase_inferred: the template
+#                   ships TDRs for the engine it pins, so a TDR says nothing
+#                   about how far the project has got
 #   stage_yaml      project.stage in project.yaml as written (even if invalid)
 #   stage_txt       first non-blank line of production/stage.txt as written
 #   stage           the resolved stage: a valid stage_yaml, else a valid
@@ -194,7 +200,8 @@ SYSIDX=""
 [ -f design/gdd/systems-index.md ] && SYSIDX="design/gdd/systems-index.md"
 
 GDD=$(count design/gdd -maxdepth 1 -type f -name '*.md')
-ADR=$(count docs/architecture -maxdepth 1 -type f -name 'adr-*.md')
+ADR=$(count docs/52-adr -maxdepth 1 -type f -name 'adr-*.md')
+TDR=$(count docs/51-tdr -maxdepth 1 -type f -name 'tdr-*.md')
 STORY=$(count production/epics -type f -name 'story-*.md')
 PROTO=$(count prototypes -mindepth 1 -maxdepth 1 -type d)
 SPRINT=$(count production/sprints -maxdepth 1 -type f -name '*.md')
@@ -216,7 +223,8 @@ row source_files "$SRC_FILES" "$SSRC"
 row concept "$CONCEPT" "$( [ -n "$CONCEPT" ] && echo found || echo absent )"
 row systems_index "$SYSIDX" "$( [ -n "$SYSIDX" ] && echo found || echo absent )"
 row gdd_files "$GDD" "design/gdd/*.md"
-row adr "$ADR" "docs/architecture/adr-*.md"
+row adr "$ADR" "docs/52-adr/adr-*.md"
+row tdr "$TDR" "docs/51-tdr/tdr-*.md"
 row story "$STORY" "production/epics/**/story-*.md"
 row prototype "$PROTO" "prototypes/*/"
 row sprint "$SPRINT" "production/sprints/*.md"

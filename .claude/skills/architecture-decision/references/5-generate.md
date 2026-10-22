@@ -17,7 +17,7 @@
 Following this format:
 
 ```markdown
-# ADR-[NNNN]: [Title]
+# [TDR|ADR]-[NNNN]: [Title]
 
 ## Status
 [Proposed | Accepted | Deprecated | Superseded by ADR-XXXX]
@@ -213,7 +213,7 @@ If GDD sync issues were found:
 
 If no GDD sync issues:
 - "ADR draft is complete. May I write it?"
-  - [A] Write ADR to `docs/architecture/adr-[NNNN]-[slug].md`
+  - [A] Write ADR to `docs/51-tdr/tdr-[NNNN]-[slug].md` (a TDR) or `docs/52-adr/adr-[NNNN]-[slug].md` (an ADR), as Step 2 chose
   - [B] Not yet — I need to review further
 
 If yes to any write option, write the file, creating the directory if needed.
@@ -251,7 +251,7 @@ Ask using `AskUserQuestion`:
   - Options: "Yes — update the registry", "Not yet — I want to review the candidates", "Skip registry update"
 
 Only proceed if the user selects yes. If yes: append new entries. Never modify existing entries — if a stance is
-changing, set the old entry to `status: "superseded_by: ADR-[NNNN]"` and add the new entry. Keep the quotes:
+changing, set the old entry to `status: "superseded_by: [TDR|ADR]-[NNNN]"` and add the new entry. Keep the quotes:
 unquoted, the second colon makes the file invalid YAML.
 
 After writing, run `bash .claude/scripts/registry.sh validate` and fix every row about an entry this write added

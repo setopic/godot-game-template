@@ -65,7 +65,7 @@ Fixture defaults.
   `engine.version`, `engine.language`, `engine.rendering`, `engine.physics`
 - `design/gdd/` contains 3 GDD files; each has all 8 required sections with content
   and a valid `> **Status**:` field
-- `docs/architecture/adr-0001.md` exists with `## Status`, `## ADR Dependencies`,
+- `docs/52-adr/adr-0001.md` exists with `## Status`, `## ADR Dependencies`,
   `## Engine Compatibility`, `## GDD Requirements Addressed` and `## Performance Implications`
 - `docs/architecture/tr-registry.yaml` and `docs/architecture/control-manifest.md` exist
 - `docs/engine-reference/[engine]/VERSION.md` exists

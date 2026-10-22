@@ -149,8 +149,8 @@ left without an architectural decision to support it by the end of this session.
 To learn **what has already been decided and in which domain**, scan the ADR
 headers — do not full-read every ADR to produce a list of numbers and domains:
 ```
-Grep pattern="^## (Status|Summary)" glob="docs/architecture/adr-*.md" output_mode="content" -A 4
-Grep pattern="\*\*Domain\*\*" glob="docs/architecture/adr-*.md" output_mode="content"
+Grep pattern="^## (Status|Summary)" glob="docs/{51-tdr/tdr,52-adr/adr}-*.md" output_mode="content" -A 4
+Grep pattern="\*\*Domain\*\*" glob="docs/{51-tdr/tdr,52-adr/adr}-*.md" output_mode="content"
 ```
 `## Summary` (a 2-sentence what-and-why) plus `## Status` and the Engine
 Compatibility `Domain` field are exactly "what was decided and its domain". List

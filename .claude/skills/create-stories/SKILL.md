@@ -139,7 +139,7 @@ Read no GDD, control manifest, TR registry or ADR at `minimal`. Go to Phase 3.
 - `standard`: stop only when it is critical (Foundation layer); otherwise warn, go
   on, and write the stories it governs as `Blocked` until it exists.
 - On stopping: "Epic references [ADR-NNNN: title] but no file for it was found in
-  `docs/architecture/`. Check the epic's Governing ADRs list, or run
+  `docs/51-tdr/` or `docs/52-adr/`. Check the epic's Governing ADRs list, or run
   `/architecture-decision` to create it. Cannot create stories until the
   referenced ADR files exist."
 

@@ -69,7 +69,7 @@ Fixture defaults.
 - `project.yaml` has `project.stage: Production` and `engine.name: Godot`
 - `src/` has 24 source files; `design/gdd/` has 4 GDDs and `systems-index.md`,
   one GDD per indexed system
-- `docs/architecture/` has `architecture.md` and 5 ADRs; `design/art/art-bible.md`
+- `docs/architecture/` has `architecture.md` and `docs/52-adr/` has 5 ADRs; `design/art/art-bible.md`
   and the UX specs exist; `tests/unit/` holds tests for each system — no doc type
   the `full` tier flags is missing, so there is no gap to weigh
 - `production/sprints/sprint-002.md` exists
@@ -99,7 +99,7 @@ Fixture defaults.
 **Fixture:**
 - No `project.stage` in `project.yaml` and no `production/stage.txt`
 - `engine.name: Godot`; `src/` has 14 source files
-- `design/gdd/` has 3 GDDs; `docs/architecture/` has no ADRs
+- `design/gdd/` has 3 GDDs; `docs/52-adr/` has no ADRs
 - Resolved workflow tier: `full`
 
 **Input:** `/project-stage-detect programmer`

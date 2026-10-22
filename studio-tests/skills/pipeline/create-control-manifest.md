@@ -2,7 +2,7 @@
 
 ## Skill Summary
 
-`/create-control-manifest` reads the Accepted ADRs in `docs/architecture/` and
+`/create-control-manifest` reads the Accepted ADRs in `docs/51-tdr/` and `docs/52-adr/` and
 generates a control manifest — a flat, actionable rules sheet that captures the
 required patterns, forbidden approaches, performance guardrails and engine API
 constraints for each architectural layer (Foundation, Core, Feature,
@@ -68,7 +68,7 @@ Fixture defaults.
 ### Case 1: Happy Path — 4 Accepted ADRs create a correct manifest
 
 **Fixture:**
-- `docs/architecture/` contains `adr-0001-*.md` … `adr-0004-*.md`, each with a
+- `docs/52-adr/` contains `adr-0001-*.md` … `adr-0004-*.md`, each with a
   `## Status` section reading `Accepted`
 - Each ADR has `## Decision` (with "must"/"always" statements) and
   `## Alternatives Considered` (with rejected alternatives)
@@ -78,7 +78,7 @@ Fixture defaults.
 **Input:** `/create-control-manifest`
 
 **Expected behavior:**
-1. Globs `docs/architecture/adr-*.md` (N = 4), then Greps `^## Status` to resolve
+1. Globs `docs/51-tdr/tdr-*.md` and `docs/52-adr/adr-*.md` (N = 4), then Greps `^## Status` to resolve
    the Accepted set before reading any ADR body
 2. Greps only the Decision / Alternatives Considered / Performance Implications /
    Engine Compatibility sections of the Accepted ADRs
@@ -104,7 +104,7 @@ Fixture defaults.
 ### Case 2: Failure Path — No ADRs found
 
 **Fixture:**
-- `docs/architecture/` directory exists but contains no `adr-*.md` files
+- `docs/51-tdr/` and `docs/52-adr/` exist but contain no `tdr-*.md` or `adr-*.md` files
 
 **Input:** `/create-control-manifest`
 
@@ -125,7 +125,7 @@ Fixture defaults.
 ### Case 3: Mixed ADR Statuses — Only Accepted ADRs included
 
 **Fixture:**
-- `docs/architecture/` contains 5 ADRs: 3 with `## Status` Accepted, 2 with
+- `docs/52-adr/` contains 5 ADRs: 3 with `## Status` Accepted, 2 with
   `## Status` Proposed (ADR-0004, ADR-0005)
 
 **Input:** `/create-control-manifest`
@@ -153,7 +153,7 @@ Fixture defaults.
 **Fixture:**
 - `docs/architecture/control-manifest.md` already exists with
   `Manifest Version` and `Last Updated` both dated last week
-- `docs/architecture/` contains Accepted ADRs, one of them accepted since then
+- `docs/52-adr/` contains Accepted ADRs, one of them accepted since then
 - `production/epics/` already holds epics with stories, so the first-run
   `/create-epics` next step does not apply
 
@@ -204,10 +204,10 @@ Fixture defaults.
 ### Case 6: Edge Case — No Accepted ADR, and ADRs with no `## Status`
 
 **Fixture (none Accepted):**
-- `docs/architecture/` contains 3 ADRs, each with `## Status` Proposed
+- `docs/52-adr/` contains 3 ADRs, each with `## Status` Proposed
 
 **Fixture (malformed):**
-- `docs/architecture/` contains 3 ADRs, none with a `## Status` section
+- `docs/52-adr/` contains 3 ADRs, none with a `## Status` section
 
 **Input (both fixtures):** `/create-control-manifest`
 

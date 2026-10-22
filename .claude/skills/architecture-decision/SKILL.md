@@ -1,7 +1,7 @@
 ---
 name: architecture-decision
 description: "Create an ADR documenting a technical decision: context, alternatives considered, consequences."
-argument-hint: "[title | retrofit <path> | accept <ADR-id>] [--review full|lean|solo]"
+argument-hint: "[title | retrofit <path> | accept <ADR-id|TDR-id>] [--review full|lean|solo]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Agent, AskUserQuestion, Bash(wc -c *), Bash(bash "*/.claude/skills/architecture-decision/../../hooks/yaml-helper.sh" resolve_config *), Bash(bash .claude/scripts/registry.sh *)
 model: sonnet
@@ -68,9 +68,44 @@ Use the user's response as the title, then proceed to Step 1.
 
 **Read `references/1-engine-context.md` now and follow it** — this phase's steps are in that file, not here. Read it again if the conversation was compacted or resumed during this phase.
 
-## 2. Determine the next ADR number
+## 2. Choose the record kind, then the next number
 
-Scan `docs/architecture/` for existing ADRs to find the next number.
+game-template (PDR-0006) splits what this skill writes into two kinds. Each
+kind has its own folder and its own numbers, from 0001:
+
+| Kind | ID | File | What it records |
+|---|---|---|---|
+| TDR (Technology Decision Record) | `TDR-NNNN` | `docs/51-tdr/tdr-NNNN-[slug].md` | What the game uses from outside its own code: the engine and its version, the language, libraries, target platforms, build and export. Which physics engine to use is a TDR |
+| ADR (Architecture Decision Record) | `ADR-NNNN` | `docs/52-adr/adr-NNNN-[slug].md` | How the inside of the game is built, where only the people building it see a difference and the player sees none: the event system, the save data format, how scenes are split |
+
+Choose the kind before Step 3, from the title and what the user has said:
+
+1. **Ask one question: does this decide what to use from outside the game's
+   code (TDR), or how to build the inside of the game (ADR)?**
+2. **A decision that does both is two records.** Example: "use library X for
+   saving, and route every save through a SaveService built on it" is a TDR
+   (library X) and an ADR (the SaveService). Tell the user it will be two
+   records and write them one at a time, one full run of this skill each, the
+   TDR first. The ADR's `**Depends On**` row in `## ADR Dependencies` names the
+   TDR (`TDR-NNNN`): the ADR points at the TDR, never the other way round.
+3. **When the kind is unclear, do not guess.** Ask with `AskUserQuestion`:
+   - Prompt: "Is this a decision about what the game uses from outside its own
+     code (TDR), or about how the inside of the game is built (ADR)?"
+   - Options: `[A] TDR — [one line on why it could be a TDR]` /
+     `[B] ADR — [one line on why it could be an ADR]` /
+     `[C] Both — split it into a TDR and an ADR`
+   In retrofit and acceptance mode the kind is already set by the file's folder
+   and name: do not ask.
+
+Then take the next number for that kind: the highest number among that kind's
+files in its folder, plus one. Run `bash .claude/scripts/registry.sh next-id tdr`
+or `bash .claude/scripts/registry.sh next-id adr`; it reads only that kind's
+folder. The other kind's numbers do not count: TDR-0003 and ADR-0001 can both
+be the newest.
+
+From here on, "the ADR" in this skill means the record being written, of
+either kind. Wherever a step shows `ADR-[NNNN]` or `adr-[NNNN]-[slug].md`, use
+the chosen kind's ID and path from the table above.
 
 ---
 
@@ -91,13 +126,13 @@ Scan `docs/architecture/` for existing ADRs to find the next number.
 After the ADR is written (and registry optionally updated), close with `AskUserQuestion`.
 
 Before generating the widget:
-1. Read the `## Required ADRs` section of `docs/architecture/architecture.md` (by section) and list `docs/architecture/adr-*.md`: a required ADR with no file is still unwritten. Without `architecture.md`, look for ADRs flagged in technical-preferences.md or systems-index.md as prerequisites
+1. Read the `## Required ADRs` section of `docs/architecture/architecture.md` (by section) and list `docs/51-tdr/tdr-*.md` and `docs/52-adr/adr-*.md`: a required ADR with no file in either folder is still unwritten. Without `architecture.md`, look for ADRs flagged in technical-preferences.md or systems-index.md as prerequisites
 2. Check if all prerequisite ADRs are now written. If yes, include a "Start writing GDDs" option.
 3. List ALL remaining priority ADRs as individual options — not just the next one or two.
 
 Widget format:
 ```
-ADR-[NNNN] written and registry updated. What would you like to do next?
+[TDR|ADR]-[NNNN] written and registry updated. What would you like to do next?
 [1] Write [next-priority-adr-name] — [brief description from prerequisites list]
 [2] Write [another-priority-adr] — [brief description]  (include ALL remaining ones)
 [N] Start writing GDDs — run `/design-system [first-undesigned-system]` (only show if all prerequisite ADRs are written)
@@ -122,8 +157,8 @@ appears to flow while running on decisions nobody has accepted.
 
 Instead, tell the user what is now waiting on acceptance:
 
-> "ADR-NNNN is written and `Proposed`. [N] stories remain `Blocked` pending it.
-> Run `/architecture-decision accept ADR-NNNN` when the decision is settled —
+> "[TDR|ADR]-NNNN is written and `Proposed`. [N] stories remain `Blocked` pending it.
+> Run `/architecture-decision accept [TDR|ADR]-NNNN` when the decision is settled —
 > that is what moves them to `Ready`."
 
 List the blocked stories by path so the cost of leaving it Proposed is visible.

@@ -17,7 +17,8 @@ fi
 # line, so the retry reads the section it needs. One refused read costs a turn;
 # the read it stops can cost tens of thousands of tokens, and a ranged read
 # always passes, so nothing can get stuck behind it. Watched: design/,
-# docs/architecture/, production/session-state/; the bar is
+# docs/architecture/, docs/51-tdr/ and docs/52-adr/ (the TDRs and ADRs,
+# game-template PDR-0006), production/session-state/; the bar is
 # features.read_guard_kb (40 KB); features.read_guard: off turns it off.
 #
 # The logic is `.claude/scripts/read-guard.sh check`, its helper twin; this
@@ -66,7 +67,7 @@ case "$_VR_P" in
 esac
 shopt -u nocasematch
 case "$_VR_P" in
-  *design*|*architecture*|*session-state*) ;;
+  *design*|*architecture*|*51-tdr*|*52-adr*|*session-state*) ;;
   *) exit 0 ;;
 esac
 

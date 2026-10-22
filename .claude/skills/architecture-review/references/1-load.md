@@ -32,7 +32,7 @@ finding or the verdict. `[engine]` is the lowercased `engine.name` from
 engine-reference paths out.
 
 ```
-Bash: bash .claude/scripts/review-receipts.sh check "[latest-report]" docs/architecture/adr-*.md design/gdd/*.md docs/architecture/tr-registry.yaml docs/architecture/architecture.md docs/engine-reference/[engine]/*.md docs/engine-reference/[engine]/modules/*.md project.yaml .claude/docs/technical-preferences.md docs/consistency-failures.md .claude/skills/architecture-review/SKILL.md .claude/skills/architecture-review/references/*.md
+Bash: bash .claude/scripts/review-receipts.sh check "[latest-report]" docs/51-tdr/tdr-*.md docs/52-adr/adr-*.md design/gdd/*.md docs/architecture/tr-registry.yaml docs/architecture/architecture.md docs/engine-reference/[engine]/*.md docs/engine-reference/[engine]/modules/*.md project.yaml .claude/docs/technical-preferences.md docs/consistency-failures.md .claude/skills/architecture-review/SKILL.md .claude/skills/architecture-review/references/*.md
 ```
 
 Phase 8 stamps the same list into this run's report; keep the two identical,
@@ -86,7 +86,7 @@ from all GDDs and ADRs:
 
 ```
 Grep pattern="## Summary" glob="design/gdd/*.md" output_mode="content" -A 4
-Grep pattern="## Summary" glob="docs/architecture/adr-*.md" output_mode="content" -A 3
+Grep pattern="## Summary" glob="docs/{51-tdr/tdr,52-adr/adr}-*.md" output_mode="content" -A 3
 ```
 
 **Fail open on a missing Summary.** Establish the denominator: glob
@@ -114,7 +114,7 @@ ADR); at realistic sizes a full load of both exhausts the context window before
 Phase 2 starts, and most of what it loads is narrative this skill never uses.
 
 **Establish the denominator first.** Glob `design/gdd/*.md` and count **N_gdd**;
-glob `docs/architecture/adr-*.md` and count **N_adr**. Report both. A section
+glob `docs/51-tdr/tdr-*.md` and `docs/52-adr/adr-*.md` and count **N_adr**. Report both. A section
 scan matching fewer than the denominator means those documents lack the section —
 **never treat an absent section as an absent document.** The scan narrows the
 *read* set; it never shrinks the *in-scope* set.
@@ -145,7 +145,7 @@ the dependency edges — not Context, Consequences, Alternatives, Migration Plan
 Validation Criteria, which explain *why* a decision was made.
 
 ```
-Grep pattern="^## (Status|Decision|GDD Requirements Addressed|Engine Compatibility|ADR Dependencies|Performance Implications)" glob="docs/architecture/adr-*.md" output_mode="content" -A 30
+Grep pattern="^## (Status|Decision|GDD Requirements Addressed|Engine Compatibility|ADR Dependencies|Performance Implications)" glob="docs/{51-tdr/tdr,52-adr/adr}-*.md" output_mode="content" -A 30
 ```
 
 Interpret against **N_adr**, and distinguish the two zero-match cases — they are

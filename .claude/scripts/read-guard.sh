@@ -21,7 +21,9 @@
 # Output of check: TSV rows, in this order
 #   guard <on | off> <source>          features.read_guard
 #   threshold <bytes> <source>         features.read_guard_kb x 1024
-#   watched <yes | no>                 under design/, docs/architecture/ or
+#   watched <yes | no>                 under design/, docs/architecture/,
+#                                      docs/51-tdr/, docs/52-adr/ (the TDRs
+#                                      and ADRs, game-template PDR-0006) or
 #                                      production/session-state/, and not an
 #                                      image or a PDF
 #   size <bytes | ->                   - when the file is not there
@@ -130,7 +132,7 @@ LIMIT=$((KB * 1024))
 
 WATCHED=no
 case "$RPATH" in
-  design/*|docs/architecture/*|production/session-state/*) WATCHED=yes ;;
+  design/*|docs/architecture/*|docs/51-tdr/*|docs/52-adr/*|production/session-state/*) WATCHED=yes ;;
 esac
 # Images and PDFs are read whole by the Read tool's own rules, not by lines.
 shopt -s nocasematch

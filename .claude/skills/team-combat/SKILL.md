@@ -121,8 +121,8 @@ Phase 6 is a spoken status report, not an artifact — no path, and none needed.
 > phase" — a check that cannot run when no path was named.
 >
 > **The two `docs/architecture/` entries are a judgement call, not a convention.**
-> That directory holds ADRs (`adr-NNNN-*.md`); a sketch is a precursor to one, not
-> one itself, and **nothing in the repo reads either file**. Say so when
+> ADRs sit in `docs/52-adr/` (`adr-NNNN-*.md`, game-template PDR-0006); a sketch
+> is a precursor to one, not one itself, and **nothing in the repo reads either file**. Say so when
 > reporting, so the sketch is understood as a record rather than an input to a
 > later gate.
 

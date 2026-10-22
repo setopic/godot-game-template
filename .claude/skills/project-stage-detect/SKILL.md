@@ -101,8 +101,10 @@ track, and the judgement calls.
 - Check for READMEs (documented vs undocumented)
 - Assess if prototypes are archived or active
 
-**Architecture Docs** (`docs/architecture/`):
-- Count ADRs (Architecture Decision Records)
+**Architecture Docs** (`docs/architecture/`, `docs/51-tdr/`, `docs/52-adr/`):
+- Count ADRs (Architecture Decision Records, `docs/52-adr/adr-*.md`) and TDRs
+  (`docs/51-tdr/tdr-*.md`) apart. Only ADRs show progress: the template ships
+  TDRs for the engine it pins
 - Check for overview/index documents
 
 **Tests** (`tests/`):
@@ -161,7 +163,7 @@ for gaps the tier above says to surface):
 
 - "I see combat code (`<code root>/gameplay/combat/`) but no `design/gdd/combat-system.md`. Was this prototyped first, or should we reverse-document?"
 - "You have 15 ADRs but no architecture overview. Should I create one to help new contributors?"
-- (`standard`/`full` only) "I see [N] systems under `<code root>/` but no ADRs in `docs/architecture/`. Were those decisions recorded somewhere else, or should we write the critical ones with `/architecture-decision`?"
+- (`standard`/`full` only) "I see [N] systems under `<code root>/` but no ADRs in `docs/52-adr/`. Were those decisions recorded somewhere else, or should we write the critical ones with `/architecture-decision`?"
 - (`standard`/`full` only) "No sprint plans in `production/`. Are you tracking work elsewhere (Jira, Trello, etc.)?"
 - "I found a game concept but no systems index. Have you decomposed the concept into individual systems yet, or should we run `/map-systems`?"
 - "Prototypes directory has 3 projects with no READMEs. Were these experiments, or do they need documentation?"

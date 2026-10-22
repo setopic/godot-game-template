@@ -115,7 +115,7 @@ Fixture defaults.
 **Fixture:**
 - `project.yaml`: `modes.workflow: standard`
 - Story file with `Status: Ready` and `ADR Governing Implementation: ADR-0005`
-- `docs/architecture/adr-0005-*.md` exists with `## Status` Proposed
+- `docs/52-adr/adr-0005-*.md` exists with `## Status` Proposed
 
 **Input:** `/dev-story production/epics/[epic-slug]/story-[NNN]-[slug].md`
 
@@ -144,7 +144,7 @@ The `full` column of the file-check table has its own STOP rule, so the
 - `project.yaml`: `modes.workflow: full`
 - Story file with `Status: Ready`, `ADR Governing Implementation: ADR-0005` and an
   `ADR Version` older than ADR-0005's `## Last Verified` date
-- `docs/architecture/adr-0005-*.md` exists with `## Status` Proposed;
+- `docs/52-adr/adr-0005-*.md` exists with `## Status` Proposed;
   `docs/architecture/tr-registry.yaml` and the control manifest exist
 
 **Input:** `/dev-story production/epics/[epic-slug]/story-[NNN]-[slug].md`

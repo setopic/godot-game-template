@@ -10,14 +10,16 @@ rest), and `accept <ADR-id>` (the only path that moves an ADR from `Proposed` to
 `Accepted`, it writes `Proposed` and hands the ADR to acceptance mode.
 
 Normal authoring loads engine context first (`docs/engine-reference/[engine]/VERSION.md`,
-plus a knowledge-gap warning for MEDIUM/HIGH-risk domains), picks the next ADR
-number, checks `docs/registry/architecture.yaml` for binding stances, then
+plus a knowledge-gap warning for MEDIUM/HIGH-risk domains), chooses the record
+kind (a TDR in `docs/51-tdr/` for technology from outside the game's code, or an
+ADR in `docs/52-adr/` for how the inside of the game is built; game-template
+PDR-0006) and that kind's next number, checks `docs/registry/architecture.yaml` for binding stances, then
 presents its assumptions as a confirm/adjust `AskUserQuestion` (Status is always
 `Proposed` and is never asked). It then drafts the whole ADR from its template in
 one pass, has the primary engine specialist validate it (Step 5.5), runs the
 TD-ADR gate in `full` review mode only (Step 5.6), runs a GDD sync check that
 always reports, and asks once — "May I write it?" — before writing
-`docs/architecture/adr-[NNNN]-[slug].md`. A separate approval covers the registry
+`docs/52-adr/adr-[NNNN]-[slug].md` (or `docs/51-tdr/tdr-[NNNN]-[slug].md`). A separate approval covers the registry
 update. The closing output tells the user to run `/architecture-review` in a
 fresh session and `/architecture-decision accept ADR-NNNN` when the decision is
 settled. Authoring never sets `Accepted` and never unblocks stories.
@@ -77,7 +79,7 @@ Fixture defaults.
 **Fixture:**
 - `project.yaml` has `engine.name: Godot` and `modes.review_mode: full`
 - `docs/engine-reference/godot/VERSION.md` exists and marks the pinned version HIGH risk; `breaking-changes.md` lists a Rendering change
-- `docs/architecture/` contains `adr-0001-*.md` and `adr-0002-*.md`; none covers rendering
+- `docs/52-adr/` contains `adr-0001-*.md` and `adr-0002-*.md`; none covers rendering
 - `docs/registry/architecture.yaml` exists with no stance touching rendering
 - `design/gdd/visual-effects.md` exists; the user confirms it as the GDD driving the decision, and its names match the ADR's Key Interfaces
 - The engine specialist finds only minor notes; TD-ADR returns APPROVE
@@ -86,14 +88,14 @@ Fixture defaults.
 
 **Expected behavior:**
 1. Step 1 reads `VERSION.md` first and displays the ENGINE KNOWLEDGE GAP WARNING for the Rendering domain
-2. Step 2 scans `docs/architecture/` and assigns ADR-0003
+2. Step 2 chooses the ADR kind without asking (the rendering approach is how the inside of the game is built), scans `docs/52-adr/` and assigns ADR-0003
 3. Step 3a reads the registry before any existing ADR
 4. Step 4 presents assumptions (problem, 2–3 alternatives, GDD linkage, dependencies, `Status: Proposed`) as a confirm/adjust `AskUserQuestion`; no ADR is generated until the user confirms
 5. Step 5 drafts the full template, including the Engine Compatibility table (engine, domain, knowledge risk, references consulted)
 6. `godot-specialist` validates the draft; minor notes go into the Risks section
 7. `technical-director` then spawns with gate TD-ADR and returns APPROVE
 8. GDD sync check prints `GDD sync: checked 1 referenced GDD(s), no naming inconsistencies.` — never silent
-9. "ADR draft is complete. May I write it?" — on yes, writes `docs/architecture/adr-0003-rendering-approach.md` with `Status: Proposed`
+9. "ADR draft is complete. May I write it?" — on yes, writes `docs/52-adr/adr-0003-rendering-approach.md` with `Status: Proposed`
 10. Registry candidates are shown and "May I update `docs/registry/architecture.yaml` with these [N] new stances?" is asked separately
 11. Closing output includes the fixed notice to run `/architecture-review` in a fresh session, and "Run `/architecture-decision accept ADR-0003` when the decision is settled"
 
@@ -101,7 +103,7 @@ Fixture defaults.
 - [ ] `VERSION.md` is read before any other step, and the knowledge-gap warning is shown for the HIGH-risk domain
 - [ ] Assumptions are confirmed via `AskUserQuestion` before the ADR is generated; Status is shown as `Proposed`, never asked
 - [ ] The engine specialist validation runs before TD-ADR (sequential, not parallel)
-- [ ] One "May I write" approval covers the whole ADR; the file is `docs/architecture/adr-0003-rendering-approach.md`
+- [ ] One "May I write" approval covers the whole ADR; the file is `docs/52-adr/adr-0003-rendering-approach.md`
 - [ ] The written ADR has `Status: Proposed` even though TD-ADR returned APPROVE
 - [ ] The GDD sync check reports the clean result for `visual-effects.md` in one line
 - [ ] The registry update has its own approval prompt, separate from the ADR write
@@ -190,7 +192,7 @@ Fixture defaults.
 ### Case 5: Acceptance Mode — Status moves to Accepted only through `accept`
 
 **Fixture:**
-- `docs/architecture/adr-0005-physics-layers.md` exists with `Status: Proposed`
+- `docs/52-adr/adr-0005-physics-layers.md` exists with `Status: Proposed`
 - Scenario (a): its `## ADR Dependencies` lists `Depends On: ADR-0002`, and ADR-0002 is `Proposed`
 - Scenario (b): its only dependency is ADR-0001, which is `Accepted`; three files under `production/epics/*/story-*.md` name `ADR-0005` and are Blocked — two in the header form `/create-stories` writes (`> **Status**: Blocked`), one as `**Status:** Blocked`
 - `modes.automation` is `autonomous`
@@ -198,7 +200,7 @@ Fixture defaults.
 **Input:** `/architecture-decision accept ADR-0005`
 
 **Expected behavior:**
-1. The skill globs `docs/architecture/adr-0005-*.md` and reads the single match
+1. The skill globs `docs/52-adr/adr-0005-*.md` and reads the single match
 2. (a) It refuses and names the blocker: ADR-0005 depends on ADR-0002, which is still Proposed; no file is edited
 3. (b) It finds the stories to unblock before asking, then asks "Accept ADR-0005 — [title]? …" with the count ("3 stories become Ready"), options `[A] Yes — accept it` / `[B] Not yet — leave it Proposed`
 4. (b) The prompt fires even though automation is `autonomous`
@@ -217,7 +219,7 @@ Fixture defaults.
 ### Case 5b: Acceptance Mode — a story that names the ADR only as a successor is left out
 
 **Fixture:**
-- `docs/architecture/adr-0005-physics-layers.md` exists with `Status: Proposed`
+- `docs/52-adr/adr-0005-physics-layers.md` exists with `Status: Proposed`
   and a `## ADR Dependencies` section whose only dependency, ADR-0001, is `Accepted`
 - Three stories under `production/epics/` are `> **Status**: Blocked`:
   - `story-001.md`: blocked because ADR-0005 is Proposed
@@ -250,11 +252,11 @@ Fixture defaults.
 ### Case 6: Retrofit — Missing Status answered `Accepted`
 
 **Fixture:**
-- `docs/architecture/adr-0004-input-mapping.md` exists with Context, Decision, Consequences, Engine Compatibility and GDD Requirements Addressed, but no `## Status` and no `## ADR Dependencies`
+- `docs/52-adr/adr-0004-input-mapping.md` exists with Context, Decision, Consequences, Engine Compatibility and GDD Requirements Addressed, but no `## Status` and no `## ADR Dependencies`
 - ADR-0001 is `Accepted`
 - One file under `production/epics/*/story-*.md` names `ADR-0004` and has `> **Status**: Blocked`
 
-**Input:** `/architecture-decision retrofit docs/architecture/adr-0004-input-mapping.md`
+**Input:** `/architecture-decision retrofit docs/52-adr/adr-0004-input-mapping.md`
 
 **Expected behavior:**
 1. The retrofit block lists Status (BLOCKING), ADR Dependencies (HIGH) and Date (MEDIUM — the fixture has no `## Date` and no `## Last Verified`) as missing, then asks "Shall I add the 3 missing sections? I will not modify any existing content."
@@ -268,6 +270,37 @@ Fixture defaults.
 - [ ] The retrofit answer `Accepted` is never written straight into `## Status`; `Accepted` appears only after acceptance mode's dependency check and confirmation
 - [ ] The confirmation prompt names the story count, as in Case 5
 - [ ] Variant — the user declines "Shall I add the 3 missing sections?": no section is written, `## Date` included
+
+---
+
+### Case 7: Record kind — a decision that is both a TDR and an ADR, then an unclear one
+
+**Fixture:**
+- As Case 1, plus `docs/51-tdr/` contains `tdr-0001-*.md` … `tdr-0003-*.md`
+- `docs/52-adr/` contains `adr-0001-*.md` and `adr-0002-*.md`
+
+**Input:** `/architecture-decision save-system`, and the user says: "use the
+library SaveKit for saving, and route every save through one SaveService built
+on it"
+
+**Expected behavior:**
+1. Step 2 sees two decisions: SaveKit is technology from outside the game's code
+   (TDR), the SaveService is how the inside of the game is built (ADR)
+2. It tells the user this will be two records, written one at a time, the TDR first
+3. The TDR is numbered from `docs/51-tdr/` only: TDR-0004, written to
+   `docs/51-tdr/tdr-0004-[slug].md`, with the heading `# TDR-0004: [Title]`
+4. In the second run the ADR is numbered from `docs/52-adr/` only: ADR-0003,
+   written to `docs/52-adr/adr-0003-[slug].md`; its `**Depends On**` row names
+   `TDR-0004`
+5. Variant — the title is `input-handling` and nothing the user said settles
+   whether it picks a library or structures the game: Step 2 asks with
+   `AskUserQuestion` (TDR / ADR / both) before Step 3, and does not guess
+
+**Assertions:**
+- [ ] The kind is chosen before Step 3, and the two records are not merged into one file
+- [ ] Each kind takes its number from its own folder: TDR-0004 and ADR-0003, not 0004 for both
+- [ ] The ADR depends on the TDR; the TDR does not name the ADR in its `**Depends On**` row
+- [ ] The unclear variant asks before Step 3 and writes nothing until the user answers
 
 ---
 
@@ -298,4 +331,4 @@ Fixture defaults.
   and `NOT ASSESSED` (Case 3) are tested; the warning block and its
   three-option write approval are not.
 - `team.size` and `docs.density` variations are not tested.
-- ADR numbering is not independently fixture-tested beyond Case 1.
+- ADR numbering is not independently fixture-tested beyond Cases 1 and 7.

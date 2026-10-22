@@ -13,7 +13,7 @@ implementation and produces a READY / NEEDS WORK / BLOCKED / NOT ASSESSED verdic
 | `production/epics/[epic-slug]/story-NNN-[slug].md` | All header fields (`Status:`, `Layer:`, `Type:`, `Manifest Version:`), `## Context` (GDD path, TR-ID, ADR reference, Engine Notes, Control Manifest Rules), `## Acceptance Criteria`, `## Test Evidence`, `## Dependencies`, `## Out of Scope` | Yes |
 | `docs/architecture/control-manifest.md` | `Manifest Version:` date in header, layer rules | Yes (if exists) |
 | `docs/architecture/tr-registry.yaml` | `id`, `status` fields per TR entry | Yes (if exists) |
-| `docs/architecture/adr-NNNN-[slug].md` (all ADRs referenced in stories) | `## Status`, the `**Layer**` row (read through `adr-status.sh`) | Yes |
+| `docs/51-tdr/tdr-NNNN-[slug].md` or `docs/52-adr/adr-NNNN-[slug].md` (all ADRs referenced in stories) | `## Status`, the `**Layer**` row (read through `adr-status.sh`) | Yes |
 | `production/sprint-status.yaml` | `file:` entries (for `sprint` scope, read through `story-facts.sh --sprint`) | Yes (if exists) |
 
 > **Tier.** The manifest, TR registry and ADR rows are

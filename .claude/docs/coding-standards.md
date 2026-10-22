@@ -1,7 +1,9 @@
 # Coding Standards
 
 - All game code must include doc comments on public APIs
-- Architecture decisions are recorded as ADRs in `docs/architecture/`. **How many is
+- Architecture decisions are recorded as TDRs in `docs/51-tdr/` (what the game
+  uses from outside its own code: engine, language, libraries, platforms, build)
+  and ADRs in `docs/52-adr/` (how the inside of the game is built). **How many is
   set by `modes.workflow`** — all ADRs at `full`, *critical* ADRs only at `standard`,
   and none required at `minimal`, where the decision log and `design/game-brief.md`
   carry the rationale instead. See `.claude/docs/workflow-modes.md`.

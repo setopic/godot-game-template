@@ -116,7 +116,7 @@ must say so in the output, whichever mode skipped it.
 
 **Derive recommended options before building the widget**: Read the system's category and layer from the systems index (already in context from Phase 2), then determine the recommended option for each tab:
 - **Framing tab**: keyed on the `Category` column (`Core · Gameplay · Progression · Economy · Persistence · UI · Audio · Narrative · Meta`). Player-facing — `Gameplay`, `UI`, `Audio`, `Narrative` → `[C] Both` recommended. Internal — `Core`, `Persistence`, `Meta` → `[A]` recommended. Mixed — `Economy`, `Progression` → `[C] Both`. **Tiebreak, when Layer and Category disagree** (a `Foundation`-layer `Gameplay` system is the common case): **Category wins** — the framing describes what the section is *about*, and a player-facing system stays player-facing wherever it sits in the dependency graph.
-- **ADR ref tab**: Glob `docs/architecture/adr-*.md` and grep for the system name in the GDD Requirements section of any ADR. If a matching ADR is found → `[A] Yes — cite the ADR` recommended. If none found → `[B] No` recommended.
+- **ADR ref tab**: Glob `docs/51-tdr/tdr-*.md` and `docs/52-adr/adr-*.md` and grep for the system name in the GDD Requirements section of any ADR. If a matching ADR is found → `[A] Yes — cite the ADR` recommended. If none found → `[B] No` recommended.
 - **Fantasy tab**: Foundation/Infrastructure layer → `[B] No` recommended. All other categories → `[A] Yes` recommended.
 
 Append `(Recommended)` to the appropriate option text in each tab.

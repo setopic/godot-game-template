@@ -194,7 +194,7 @@ phases:
         required: true
         repeatable: true
         artifact:
-          glob: "docs/architecture/adr-*.md"
+          glob: "docs/52-adr/adr-*.md"
           min_count: 3
         description: "Document key technical decisions as ADRs. Minimum 3 Foundation-layer ADRs required."
 

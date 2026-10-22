@@ -5,7 +5,8 @@
 
 **If the argument starts with `retrofit` followed by a file path**
 
-(e.g., `/architecture-decision retrofit docs/architecture/adr-0001-event-system.md`):
+(e.g., `/architecture-decision retrofit docs/52-adr/adr-0001-event-system.md`, or
+a TDR such as `docs/51-tdr/tdr-0003-physics-engine.md`):
 
 Enter **retrofit mode**:
 

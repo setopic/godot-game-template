@@ -36,8 +36,9 @@
 #   type, layer, estimate   the header fields (`> **Type**: Logic` and the
 #                 other forms story-status.sh reads)
 #   tr_ids        every TR-<system>-<number> in the file, comma-separated
-#   adrs          the ADR ids on the governing-ADR line (`ADR Governing
-#                 Implementation`, `Governing ADRs`, `ADR`), or n/a
+#   adrs          the ADR and TDR ids on the governing-ADR line (`ADR
+#                 Governing Implementation`, `Governing ADRs`, `ADR`), as
+#                 adr-NNNN or tdr-NNNN (game-template, PDR-0006), or n/a
 #   ac            `- [ ]` and `- [x]` items under `## Acceptance Criteria`
 #   qa_cases      `- **AC-N**` items under `## QA Test Cases`
 #   test_evidence the `Status:` line under `## Test Evidence`
@@ -223,7 +224,7 @@ LINT="$LINT" GRAN="$GRAN" SPRINT="$SPRINT" SCOPE_LABEL="$SCOPE_LABEL" awk '
     cnt[state]++
     t = (type == "") ? "-" : (bracketed(type) ? "UNFILLED" : type)
     adrv = "-"
-    if (adr_line != "") { adrv = add_ids("", tolower(adr_line), "adr-[0-9]+"); if (adrv == "") adrv = (tolower(adr_line) ~ /n\/a/) ? "n/a" : (bracketed(adr_line) ? "UNFILLED" : "-") }
+    if (adr_line != "") { adrv = add_ids("", tolower(adr_line), "[at]dr-[0-9]+"); if (adrv == "") adrv = (tolower(adr_line) ~ /n\/a/) ? "n/a" : (bracketed(adr_line) ? "UNFILLED" : "-") }
     nst++
     rows[nst] = "STORY\t" path "\t" state "\t" clean(status) "\t" t "\t" clean(bracketed(layer) ? "UNFILLED" : layer) "\t" \
       clean(bracketed(estimate) ? "UNFILLED" : estimate) "\t" (trs == "" ? "-" : trs) "\t" adrv "\t" \

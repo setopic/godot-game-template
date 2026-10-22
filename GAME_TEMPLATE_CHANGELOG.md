@@ -6,6 +6,32 @@
 
 現在の版は、`tools/graph/layers/game-template.toml`の`version`に書く。版の付け方と見出しの書き方は、[PROJECT_TEMPLATE_CHANGELOG.md](PROJECT_TEMPLATE_CHANGELOG.md)の「版の付け方」に合わせる。
 
+## 0.6.0（2026-10-23）
+
+### 変更
+
+CCGSのスキルとスクリプトが書き、読むADRの置き場を、`docs/architecture/`からTDRとADRのフォルダに移した（PDR-0006、#16）。TDRは`docs/51-tdr/tdr-NNNN-[slug].md`に、ADRは`docs/52-adr/adr-NNNN-[slug].md`に置く。番号は種別ごとに、そのフォルダの最大の番号に1を足して振る。`docs/architecture/`のほかの文書（`architecture.md`、`control-manifest.md`、`tr-registry.yaml`など）の置き場は変えていない。
+
+`/architecture-decision`に、書く前にTDRかADRかを選ぶ手順（Step 2）を足した。ゲームのコードの外から何を使うかを決めるならTDR、ゲームの中をどう組むかを決めるならADRにする。1つの話が両方にまたがるときは、TDRとADRの2つに分けてTDRから先に書き、ADRの`**Depends On**`の行でTDRを指す。どちらか決めきれないときは、推測せずに利用者に聞く。書くidとパスは、選んだ種別に合わせる。
+
+スクリプトは、`TDR-NNNN`と`ADR-NNNN`の両方を読み、2つのフォルダを見るようにした。`adr-dep-graph.sh`、`adr-status.sh`、`story-facts.sh`は、依存の行やストーリーの行にあるTDRのidも読む。`adr-status.sh`に番号だけを渡すと、ADRとして探す。`registry.sh next-id`には`tdr`を足した。`registry.sh`は、アーキテクチャの登録簿の`status`に`superseded_by: TDR-NNNN`も認める。`read-guard.sh`と`validate-read.sh`は、2つのフォルダの大きな文書も丸ごとの読み込みを止める。
+
+プロジェクトの段階を推し量る箇所は、ADRだけを数え、TDRを数えない。このテンプレートは、固定したエンジンのTDR（TDR-0001、TDR-0002）を配っているので、TDRを数えると、作り始めたばかりの派生も先の段階にあると判定される。当たるのは、`project-state.sh`の`phase_inferred`、`statusline.sh`、`detect-gaps.sh`、`workflow-catalog.yaml`のADRの段、`/help`、`/project-stage-detect`、`/gate-check`の「ADRが3つ以上」の項目である。`project-state.sh`は、ADRの数とは別にTDRの数を`tdr`の行に出す。
+
+これに合わせて、`.claude/`の下のスキル・エージェント・文書のADRのパスと、`studio-tests/`のテストの前提と期待、`docs/registry/architecture.yaml`と`docs/WORKFLOW-GUIDE.md`の例のパスを直した。`studio-tests/skills/authoring/architecture-decision.md`には、種別を選ぶ手順を確かめるCase 7を足した。`graph.toml`の`exclude`の注記は、`docs/architecture/`がADRの置き場ではなくなったので書き直した。
+
+ADRの本文の節（`## Status`などの英語の節）・状態の書き方・フロントマターは、まだCCGSのままである。そのため、`/architecture-decision`でいまADRやTDRを書くと、フロントマターの無いファイルが`docs/51-tdr/`か`docs/52-adr/`に入り、`check`が落ちる。節と`status`を合わせるのは、次の版である。
+
+この版で直したCCGSのファイルは、UC-02の手順3で、CCGSの更新のときに「手で合わせる」に出る。
+
+### 取り込む側の作業
+
+次の版が出るまで、`/architecture-decision`を使わない。使うと、上に書いたとおり`check`が落ちる。
+
+`docs/architecture/`に自分のADR（`adr-NNNN-*.md`）があれば、CCGSのスキルとスクリプトからはもう見えない。1つずつ、TDRかADRかを決めて、その種別のフォルダに移す。番号は種別ごとに0001から振り直し、そのADRを指しているストーリー・ADR・`docs/registry/architecture.yaml`のidとパスも直す。移したファイルは、次の版で節と`status`を合わせるまで`check`が落ちる。
+
+`.claude/`の下のCCGSのファイルを自分で直していて競合したら、ADRのパスとidの読み方はこの層のものに合わせ、自分で足した行は残す。
+
 ## 0.5.2（2026-10-23）
 
 ### 変更

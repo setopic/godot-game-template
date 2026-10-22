@@ -61,7 +61,7 @@
 
 ## Architecture Decisions Log
 
-<!-- Quick reference linking to full ADRs in docs/architecture/ -->
+<!-- Quick reference linking to full TDRs in docs/51-tdr/ and ADRs in docs/52-adr/ -->
 - [No ADRs yet — use /architecture-decision to create one]
 
 ## Engine Specialists

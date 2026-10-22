@@ -53,7 +53,7 @@ Fixture defaults.
 - Story file exists at `production/epics/core/story-light-pickup.md` containing:
   - A `GDD: design/gdd/light-system.md` reference quoting the specific requirement
   - `TR-light-001`, present with `status: active` in `docs/architecture/tr-registry.yaml`
-  - `ADR: ADR-0003`; `docs/architecture/adr-0003-inventory.md` has `## Status` Accepted
+  - `ADR: ADR-0003`; `docs/52-adr/adr-0003-inventory.md` has `## Status` Accepted
   - `Type: Logic`, an `## Acceptance Criteria` section with 3 testable items, and a `## Test Evidence` section naming the test path
   - An estimate, an Out of Scope statement, and `Dependencies: None`
   - Engine notes (or "N/A — no engine API involved"), the relevant manifest rules, and a performance note
@@ -67,14 +67,14 @@ Fixture defaults.
 1. Skill reports "Validating 1 story files."
 2. Skill loads context once: greps `Manifest Version` from the control manifest,
    indexes `tr-registry.yaml`, and resolves every ADR status with one
-   `Grep pattern="^## Status" glob="docs/architecture/adr-*.md"` scan
+   `Grep pattern="^## Status" glob="docs/{51-tdr/tdr,52-adr/adr}-*.md"` scan
 3. Skill evaluates all six checklist groups
 4. Skill outputs READY with all checks passing
 5. Phase 8 notes "QL-STORY-READY skipped — Solo mode."
 6. Section 7 surfaces other ready stories from the sprint
 
 **Assertions:**
-- [ ] ADR status is resolved from the one-scan `^## Status` Grep over `docs/architecture/adr-*.md`, not by reading each ADR in full, and ADR-0003 is found Accepted
+- [ ] ADR status is resolved from the one-scan `^## Status` Grep over `docs/52-adr/adr-*.md`, not by reading each ADR in full, and ADR-0003 is found Accepted
 - [ ] Skill looks up `TR-light-001` in `tr-registry.yaml` and finds it active
 - [ ] The current manifest version is taken from a Grep of the manifest header, not a full read
 - [ ] The "Passing Checks (N/[total])" section names all six groups — Design Completeness, Architecture Completeness, Scope Clarity, Open Questions, Asset References ("no asset references"), Definition of Done — with the passing items under each
@@ -89,7 +89,7 @@ Fixture defaults.
 **Fixture:**
 - `project.yaml` sets `modes.workflow: full`
 - Story `production/epics/core/story-light-system.md` references `ADR-0005`
-- `docs/architecture/adr-0005-light-system.md` exists with `## Status` Proposed
+- `docs/52-adr/adr-0005-light-system.md` exists with `## Status` Proposed
 - All other story content is complete
 
 **Input:** `/story-readiness production/epics/core/story-light-system.md`
@@ -251,13 +251,13 @@ Fixture defaults.
 **Case 7b — a referenced ADR with no readable status:**
 - `project.yaml` sets `modes.workflow: full`
 - Story `production/epics/core/story-save-slots.md` passes every other item and
-  references `ADR-0007`; `docs/architecture/adr-0007-save-format.md` exists but has
+  references `ADR-0007`; `docs/52-adr/adr-0007-save-format.md` exists but has
   no `## Status` section
 - **Input:** `/story-readiness production/epics/core/story-save-slots.md`
 
 **Assertions (7b):**
 - [ ] The ADR check is NOT ASSESSED — the status is unknown, not failed — and the verdict is NOT ASSESSED: not BLOCKED, not READY
-- [ ] Output names `docs/architecture/adr-0007-save-format.md` and routes to `/architecture-decision retrofit docs/architecture/adr-0007-save-format.md`
+- [ ] Output names `docs/52-adr/adr-0007-save-format.md` and routes to `/architecture-decision retrofit docs/52-adr/adr-0007-save-format.md`
 - [ ] Variant — the story names `ADR-0007` but no such file exists: that is a finding about the story, so the verdict is BLOCKED ("referenced ADR is missing"), not NOT ASSESSED
 
 ---
@@ -268,9 +268,9 @@ Fixture defaults.
 - `project.yaml` sets `modes.workflow: standard` (a referenced dead ADR blocks at
   every tier; `standard` shows it is not left to the advisory rule)
 - Story A `production/epics/core/story-save-format.md` references `ADR-0006`;
-  `docs/architecture/adr-0006-save-format.md` has `## Status` Superseded by ADR-0009
+  `docs/52-adr/adr-0006-save-format.md` has `## Status` Superseded by ADR-0009
 - Story B `production/epics/core/story-input-map.md` references `ADR-0008`;
-  `docs/architecture/adr-0008-input-map.md` has `## Status` Deprecated
+  `docs/52-adr/adr-0008-input-map.md` has `## Status` Deprecated
 - Both stories are otherwise complete
 
 **Input:** `/story-readiness production/epics/core/story-save-format.md`, then

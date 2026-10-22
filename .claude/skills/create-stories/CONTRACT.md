@@ -12,7 +12,7 @@ and `/story-readiness` + `/dev-story`.
 |------|---------------------------|-----------|
 | `production/epics/[epic-slug]/EPIC.md` | `Layer:`, `GDD:` path, `Architecture Module:`, `## Governing ADRs` table, `## GDD Requirements` table with TR-IDs | Yes |
 | `design/gdd/[filename].md` | The sections required at the system's tier (all 8 at `full`; the 5 required + conditional Formulas at `standard`), especially `## Acceptance Criteria`, `## Formulas`, `## Edge Cases` | Yes |
-| `docs/architecture/adr-NNNN-[slug].md` (all governing ADRs) | `## Status`, `## Summary`, `## Decision` (incl. `### Implementation Guidelines`), `## Engine Compatibility`, `## Last Verified` / `## Date`, the `**Depends On**` row (read through `adr-status.sh`) | Yes |
+| `docs/51-tdr/tdr-NNNN-[slug].md` or `docs/52-adr/adr-NNNN-[slug].md` (all governing ADRs) | `## Status`, `## Summary`, `## Decision` (incl. `### Implementation Guidelines`), `## Engine Compatibility`, `## Last Verified` / `## Date`, the `**Depends On**` row (read through `adr-status.sh`) | Yes |
 | `docs/architecture/control-manifest.md` | Layer rules (required patterns, forbidden patterns, guardrails), `Manifest Version:` date in header | Yes |
 | `docs/architecture/tr-registry.yaml` | All TR-IDs for the epic's system, with stable `id` values | Yes |
 
@@ -79,7 +79,7 @@ It will read:
 It assumes:
 - `Manifest Version:` in the story header is a date string that can be compared against the manifest's current `Manifest Version:` date
 - `TR-[system]-NNN` IDs are resolvable in `docs/architecture/tr-registry.yaml`
-- The ADR referenced by name in `ADR Governing Implementation:` exists as a file in `docs/architecture/` (pattern: `adr-NNNN-[slug].md`)
+- The ADR referenced by name in `ADR Governing Implementation:` exists as a file in `docs/52-adr/` (pattern: `adr-NNNN-[slug].md`) or, for a TDR, in `docs/51-tdr/` (pattern: `tdr-NNNN-[slug].md`)
 - `Status: Ready` means the story is a candidate for assignment (not Draft, not in progress)
 - `## Acceptance Criteria` contains checkbox items that are directly testable
 - `## Test Evidence` specifies an exact file path or evidence doc path where proof will be stored
