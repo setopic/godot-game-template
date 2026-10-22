@@ -223,6 +223,33 @@ runs and the last assertion below would test nothing.)
 - [ ] No `Agent` call is made, and Phase 5's next-step widgets run — so the run is `lean`, not the `solo` default
 - [ ] Variant — the same fixture with `--review solo` on the input: the flag wins over the config, and no Phase 5 widget runs
 
+### Case 7: Related DDRs — checked here, since graph does not
+
+**Fixture:**
+- As Case 1; `design/gdd/save.md`'s `> **Related DDRs**:` line names `DDR-0001`
+  and `DDR-0004`
+- `docs/53-ddr/ddr-0001-*.md` names `design/gdd/save.md` on its `対応するGDD`
+  line; there is no `ddr-0004-*.md`
+- The GDD's Core Rules say "we tried save-anywhere but rejected it"
+
+**Input:** `/design-review design/gdd/save.md`
+
+**Expected behavior:**
+1. The Related DDRs item is checked: DDR-0001 resolves and names this GDD;
+   DDR-0004 has no file in `docs/53-ddr/`, reported as a recommendation
+2. The rejected-option history in Core Rules is a recommendation to move it into
+   a DDR (`.claude/docs/design-decision-records.md`)
+3. Neither finding blocks approval on its own
+4. Variant — the GDD predates the field and has no `Related DDRs` line: the same
+   recommendation, not a blocker
+
+**Assertions:**
+- [ ] The review says the GDD side is not checked by `tools.graph check`, so this review is where it is checked
+- [ ] A Related DDRs finding is ADVISORY, never a missing REQUIRED section
+- [ ] If the user revises a rule between alternatives in [A] Revise now, a DDR is written after an ask, and listed in the summary table
+
+---
+
 ---
 
 ## Protocol Compliance

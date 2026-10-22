@@ -22,6 +22,16 @@ with the successor's `supersedes` naming it)
 - Never skip `stable` — stories referencing a `draft` ADR are auto-blocked
 - Use `/architecture-decision accept <id>` to move a record to `stable`
 
+## DDRs (`docs/53-ddr/`)
+
+game-template (PDR-0006): game design decisions (what the player can do, see
+or feel) are graph nodes too, in the six sections of
+`docs/00-meta/templates/ddr.md` (背景, 決定, 理由, 却下した案, 影響, 見直しの条件).
+The line with an ADR is whether the player can tell the difference; a topic
+with both sides is a DDR and an ADR whose `depends_on` names the DDR. Create
+one with `python -m tools.graph new --type ddr`, following
+`.claude/docs/design-decision-records.md`.
+
 ## Other architecture documents (`docs/architecture/`)
 
 **TR Registry:** `docs/architecture/tr-registry.yaml`

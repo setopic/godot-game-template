@@ -36,6 +36,7 @@ tags: [index]
 | 横断 | `50-pdr/` | [IDX-PDR 開発の進め方の決定](./50-pdr/index.md) |
 | 横断 | `51-tdr/` | [IDX-TDR ゲームの外の技術の決定](./51-tdr/index.md) |
 | 横断 | `52-adr/` | [IDX-ADR ゲームの中の構成の決定](./52-adr/index.md) |
+| 横断 | `53-ddr/` | [IDX-DDR ゲームデザインの決定](./53-ddr/index.md) |
 
 ## 使い方
 

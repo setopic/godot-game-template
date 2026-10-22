@@ -24,6 +24,10 @@
 
 - All design docs use Markdown
 - Each mechanic has a dedicated document in `design/gdd/`
+- Game design decisions (what the player can do, see or feel) are recorded as
+  DDRs in `docs/53-ddr/` (game-template, PDR-0006); the GDD lists them on its
+  `Related DDRs` line and holds the current specification only. See
+  `.claude/docs/design-decision-records.md`
 - **How many of the 8 sections are required depends on `modes.workflow`** —
   all 8 at `full`, 5 (+ Formulas when the system defines numeric rules — rates,
   curves, thresholds, costs; the system's `Category` is a hint, not the test) at

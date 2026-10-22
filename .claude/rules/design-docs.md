@@ -16,6 +16,7 @@ paths:
 - Acceptance criteria must be testable — a QA tester must be able to verify pass/fail
 - No hand-waving: "the system should feel good" is not a valid specification
 - Balance values must link to their source formula or rationale
+- **The GDD holds the current specification only** (game-template, PDR-0006). A design decision chosen between real alternatives, with its reasons and rejected options, is a DDR in `docs/53-ddr/`; list its ID on the GDD's `> **Related DDRs**:` line. The GDD is outside the graph, so nothing checks that line: confirm it by eye. See `.claude/docs/design-decision-records.md`
 - Design documents MUST be written incrementally: create skeleton first, then fill
   each section one at a time with user approval between sections. Write each
   approved section to the file immediately to persist decisions and manage context

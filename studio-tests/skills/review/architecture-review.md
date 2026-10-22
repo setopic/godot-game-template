@@ -88,6 +88,7 @@ Fixture defaults.
 - [ ] Output reports "Loaded [N] GDDs, [M] ADRs, engine: [name + version]"
 - [ ] A Traceability Matrix lists each TR-ID with its GDD, system, requirement, ADR coverage and status; every row is ✅
 - [ ] The ADR dependency order is `adr-dep-graph.sh`'s `ORDER:` row, not hand-tracing, and puts `adr-0001` first; `NO_DEPS_SECTION` and `UNFILLED_DEPS` are empty, so the acyclic result is a clean graph rather than a structural gap
+- [ ] Variant — `adr-0002` also names `DDR-0001` in its `depends_on`: `adr-dep-graph.sh` lists `adr-0002 -> ddr-0001` under `DDR_DEPS`, and `EDGES`, `ORDER` and the cycle result are unchanged; the report names DDR-0001 as a design decision ADR-0002 builds on, not as an ADR to order
 - [ ] Verdict is PASS only because all requirements are covered by **Accepted** ADRs, no conflicts exist, and engine references agree
 - [ ] The report header has `Mode: full` and `Workflow: full` lines
 - [ ] The report includes the `review-receipts.sh hash` lines for every review input (ADRs, GDDs, TR registry, engine reference, `project.yaml`, the skill's own files), taken after the TR registry is written

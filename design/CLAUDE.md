@@ -35,6 +35,14 @@ section — accept either heading, never rewrite one into the other.
 
 **Systems index:** `design/gdd/systems-index.md` — update when adding a new GDD.
 
+**Design decisions (DDRs):** game-template (PDR-0006). A GDD holds the current
+specification only. A decision chosen between real alternatives that changes
+what the player can do, see or feel is a DDR in `docs/53-ddr/`, written with
+`python -m tools.graph new --type ddr`. The DDR names the GDD on its `対応するGDD`
+line; the GDD lists the DDR on its `> **Related DDRs**:` header line. The GDD
+is outside the graph, so nothing checks the GDD's side: confirm it by eye. See
+`.claude/docs/design-decision-records.md`.
+
 **Design order:** Foundation → Core → Feature → Presentation → Polish
 
 **Validation:** Run `/design-review [path]` after authoring any GDD.

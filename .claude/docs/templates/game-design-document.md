@@ -7,6 +7,7 @@
 > **Last Updated**: [today's date]
 > **Last Verified**: [today's date]
 > **Implements Pillar**: [from context]
+> **Related DDRs**: [DDR-NNNN, ... | None]
 
 ## Summary
 

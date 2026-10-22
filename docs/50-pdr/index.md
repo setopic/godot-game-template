@@ -12,7 +12,7 @@ tags: [index]
 
 決定を変えるときは、既存のPDRを書き換えず、新しいPDRを起こして`supersedes`で繋ぐ。置き換えられた側は`status: deprecated`にする。番号は4桁のゼロ埋めで振り、欠番を作らない。番号は種別ごとに0001から振る。
 
-ゲームの外の技術の決定は[IDX-TDR](../51-tdr/index.md)に、ゲームの中の構成の決定は[IDX-ADR](../52-adr/index.md)に置く。
+ゲームの外の技術の決定は[IDX-TDR](../51-tdr/index.md)に、ゲームの中の構成の決定は[IDX-ADR](../52-adr/index.md)に、ゲームデザインの決定は[IDX-DDR](../53-ddr/index.md)に置く。
 
 ## ノード一覧
 

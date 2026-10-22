@@ -12,7 +12,7 @@ tags: [index]
 
 決定を変えるときは、既存のADRを書き換えず、新しいADRを起こして`supersedes`で繋ぐ。置き換えられた側は`status: deprecated`にする。番号は4桁のゼロ埋めで振り、欠番を作らない。番号は種別ごとに0001から振る。
 
-開発の進め方の決定は[IDX-PDR](../50-pdr/index.md)に、ゲームの外の技術の決定は[IDX-TDR](../51-tdr/index.md)に置く。
+開発の進め方の決定は[IDX-PDR](../50-pdr/index.md)に、ゲームの外の技術の決定は[IDX-TDR](../51-tdr/index.md)に置く。プレイヤーから違いが分かる決定は、ADRではなく[IDX-DDR](../53-ddr/index.md)のゲームデザインの決定に書く。1つの話が両方にまたがるときは2つに分け、ADRの`depends_on`でDDRを指す。
 
 ## ノード一覧
 

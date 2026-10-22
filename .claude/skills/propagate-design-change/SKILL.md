@@ -3,7 +3,7 @@ name: propagate-design-change
 description: "Finds architecture decisions (ADRs) made stale by a changed GDD and walks through resolving each. Use when the user changed a number or rule in a GDD and asks which ADRs or architecture decisions are now out of date."
 argument-hint: "[path/to/changed-gdd.md] [--review full|lean|solo]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Edit, Agent, AskUserQuestion, Bash(bash "*/.claude/skills/propagate-design-change/../../hooks/yaml-helper.sh" resolve_config *), Bash(git diff *), Bash(git log *), Bash(bash .claude/scripts/adr-status.sh*), Bash(bash .claude/scripts/md-section.sh *), Bash(python -m tools.graph *)
+allowed-tools: Read, Glob, Grep, Write, Edit, Agent, AskUserQuestion, Bash(bash "*/.claude/skills/propagate-design-change/../../hooks/yaml-helper.sh" resolve_config *), Bash(git diff *), Bash(git log *), Bash(bash .claude/scripts/adr-status.sh*), Bash(bash .claude/scripts/md-section.sh *), Bash(python -m tools.graph *), Bash(bash .claude/scripts/registry.sh next-id ddr)
 model: sonnet
 ---
 
@@ -88,6 +88,34 @@ this system's facts: search it for `source: design/gdd/[filename]`. For each ent
 whose value the diff changed, its `referenced_by:` list names the GDDs that may now
 disagree. List them under "Downstream GDDs to re-check".
 
+## Phase 3b: The DDR for this change
+
+game-template (PDR-0006). The GDD holds the current specification only; why a
+rule is so lives in its DDRs (`docs/53-ddr/`), listed on the GDD's
+`> **Related DDRs**:` line. Read `.claude/docs/design-decision-records.md`.
+It runs at `standard` and `full`. At `minimal` the design record is
+`design/game-brief.md` and no DDRs are kept: say "No DDR check at minimal
+workflow." in one line and go on to Phase 4.
+
+1. Read the `Related DDRs` line with the Grep tool (pattern `Related DDRs`, content
+   mode, on `design/gdd/[filename].md`).
+   No line, or `None`: there is no DDR to compare against; go to step 3.
+2. For each listed DDR, read its 決定 section
+   (`bash .claude/scripts/md-section.sh extract <ddr> "決定"`). Does the change
+   reverse or alter what it decided?
+3. Classify the change, and say which in the change summary:
+   - **Alters a recorded decision** — a new DDR whose `supersedes` names the old
+     one; the old one becomes `deprecated`.
+   - **A new design decision** (chosen between real alternatives, changes what
+     the player can do, see or feel) with no DDR — a new DDR.
+   - **Neither** (a value moved inside a documented Tuning Knob range, wording,
+     a clarification) — no DDR; say so in one line.
+
+Ask "May I write [N] DDRs for this change to `docs/53-ddr/`?" For each approved
+one, follow the steps in `design-decision-records.md`, and put its ID on the
+GDD's `Related DDRs` line in place of the ID it supersedes. Declined: name the
+unrecorded decisions in the Phase 9 report.
+
 ## Phase 4: The ADRs in scope
 
 `bash .claude/scripts/adr-status.sh` lists every ADR with its status, layer and
@@ -108,9 +136,12 @@ check." Stop.
    (`bash .claude/scripts/md-section.sh extract <adr> "対応するGDDの要件"`),
    for rows naming the changed GDD;
 2. a search of the ADRs for the changed GDD's file name, which catches an ADR that
-   cites it in prose without a table row.
+   cites it in prose without a table row;
+3. a search of the ADRs' front matter `depends_on` for a DDR that Phase 3b
+   superseded (the Grep tool, pattern `DDR-NNNN`, on `docs/52-adr/`), which catches an ADR built
+   on the old design decision.
 
-The union of the two is the affected set **M**.
+The union of the three is the affected set **M**.
 
 | Result | Meaning | Action |
 |---|---|---|
@@ -249,8 +280,8 @@ requirement:
 
 Ask "May I write the change impact report to
 `docs/architecture/change-impact-[date]-[system-slug].md`?" It holds the change
-summary, the impact analysis, the resolution chosen for each ADR, and the ADRs that
-need writing or updating.
+summary, the DDRs written or left unwritten in Phase 3b, the impact analysis, the
+resolution chosen for each ADR, and the ADRs that need writing or updating.
 
 ## Phase 10: Follow-up
 

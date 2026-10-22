@@ -6,6 +6,32 @@
 
 現在の版は、`tools/graph/layers/game-template.toml`の`version`に書く。版の付け方と見出しの書き方は、[PROJECT_TEMPLATE_CHANGELOG.md](PROJECT_TEMPLATE_CHANGELOG.md)の「版の付け方」に合わせる。
 
+## 0.8.0（2026-10-23）
+
+### 変更
+
+ゲームデザインの決定を、DDR（Design Decision Record）として書く種別を足した（PDR-0006、#16）。DDRに書くのは、プレイヤーができること、見るもの、感じることが変わる決定である。ルールや仕様の判断と、却下した案を書く。`graph.toml`に`ddr`の種別（接頭辞`DDR`、`docs/53-ddr/`、層90、`exempt_layer`、`immutable`）を足した。節はPDRと同じ6節（背景・決定・理由・却下した案・影響・見直しの条件）で、状態はフロントマターの`status`に持つ。番号は種別ごとに0001から振る。雛形は`docs/00-meta/templates/ddr.md`、目次は`docs/53-ddr/index.md`である。
+
+ADRとDDRの境は、「プレイヤーから違いが分かるか」である。1つの話が両方にまたがるときは2つに分け、ADRの`depends_on`でDDRを指す。`/architecture-decision`の種別を選ぶ手順（Step 2）に、この境を足した。ADRに書こうとしたものがデザインの決定なら、ADRに書かずにDDRへ回す。
+
+GDD（`design/gdd/`）とDDRは、両方から指す。DDRは「背景」の節の「対応するGDD」の行にGDDのパスを書く。GDDは、先頭の`> **Related DDRs**:`の行にDDRのidを書く。この行は、CCGSのGDDの雛形（`.claude/docs/templates/game-design-document.md`）と、`/design-system`が作る骨組みに足した。GDDはいまの仕様だけを書き、決定の経緯はDDRが持つ。GDDはgraphの外にあるので、GDDからDDRへの参照は`check`が確かめない。`/design-review`の完全性の確認で、目で確かめる。
+
+DDRを書く手順は、`.claude/docs/design-decision-records.md`に1か所にまとめた。`/design-system`（5b-bis）、`/design-review`（Revise nowの手順）、`/propagate-design-change`（Phase 3b）は、デザインの決定が出たらこの手順でDDRを書き、GDDの`Related DDRs`の行に足す。DDRは`python -m tools.graph new --type ddr`で作る。`registry.sh next-id`には`ddr`を足した。`/propagate-design-change`は、置き換えたDDRを`depends_on`で指しているADRも、影響を受けるADRに数える。`minimal`の進め方では、DDRを確かめない。
+
+`adr-status.sh`と`adr-dep-graph.sh`は、DDRを依存の一覧に入れない。DDRは実装の順を決めるものではなく、ADRの外の前提だからである。`adr-status.sh`の依存の列には出ない。DDRだけを指すADRは`none`になる。`adr-dep-graph.sh`は、ADRが指すDDRを`DDR_DEPS`の行に分けて出し、`EDGES`・`ORDER`・循環の判定には入れない。DDRの循環と状態は、graphの`check`が確かめる。
+
+これに合わせて、`graph.toml`の注記、`docs/index.md`とREADMEのフォルダの表、PDR・TDR・ADRの目次、TDRとADRの雛形の注記を直した。`.claude/`の下の`coding-standards.md`、`rules/design-docs.md`、`design/CLAUDE.md`、`docs/CLAUDE.md`にもDDRを足した。`studio-tests/`には、`/architecture-decision`・`/design-system`・`/design-review`・`/propagate-design-change`のDDRの場合と、`/architecture-review`の`DDR_DEPS`の場合を足した。CCGSの英語のファイルの中の説明文は、英語で書いた。
+
+この版で直したCCGSのファイルは、UC-02の手順3で、CCGSの更新のときに「手で合わせる」に出る。
+
+### 取り込む側の作業
+
+`docs/53-ddr/`を自分で別の用途に使っていたら、取り込む前に別のフォルダへ移す。
+
+`.claude/`の下のGDDの雛形やスキルを自分で直していて競合したら、`Related DDRs`の行とDDRの手順はこの層のものに合わせ、自分で足した行は残す。
+
+いまあるGDDに、`Related DDRs`の行は自動では足されない。GDDに決定の経緯（却下した案など）を書いているなら、DDRに移し、GDDの先頭に`> **Related DDRs**:`の行を足す。`/design-review`は、行が無いGDDを推奨の指摘として挙げる。
+
 ## 0.7.0（2026-10-23）
 
 ### 変更

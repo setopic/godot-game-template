@@ -89,6 +89,10 @@ Foundationの層の記録をCoreの層のエピックが指すことはよくあ
 
 <!--
 「前提」の行に書いたTDRとADRは、フロントマターの`depends_on`にも書く。
+
+ゲームデザインの決定（DDR、docs/53-ddr/）を前提にするときは、そのDDRのidも`depends_on`に書く。
+「前提」の行に書いてもよい。CCGSのスクリプトは、DDRを依存の一覧に入れない。
+adr-status.shの依存の列には出ず、adr-dep-graph.shはDDR_DEPSに分けて出す。
 -->
 
 ## 背景

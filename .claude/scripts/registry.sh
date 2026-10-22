@@ -38,6 +38,7 @@
 #                   tr SLUG   TR-SLUG-NNN, from the TR registry
 #                   adr       ADR-NNNN, from docs/52-adr/adr-NNNN-*.md
 #                   tdr       TDR-NNNN, from docs/51-tdr/tdr-NNNN-*.md
+#                   ddr       DDR-NNNN, from docs/53-ddr/ddr-NNNN-*.md
 #                             (game-template, PDR-0006: each kind is
 #                             numbered in its own folder)
 #                   bug       BUG-NNNN, from production/qa/bugs/BUG-*.md
@@ -207,7 +208,7 @@ case "$CMD" in
         [ $NARG -eq 2 ] || usage "next-id $KIND takes one slug"
         is_slug "${POS[2]}" || usage "not a slug: ${POS[2]}"
         RG_ARG="${POS[2]}" ;;
-      adr|tdr|bug|asset|td|sprint|season)
+      adr|tdr|ddr|bug|asset|td|sprint|season)
         [ $NARG -eq 1 ] || usage "next-id $KIND takes no scope" ;;
       *) usage "unknown ID kind: $KIND" ;;
     esac
@@ -269,12 +270,13 @@ files() {
 }
 
 if [ "$CMD" = next-id ] && [ "$KIND" != tr ]; then
-  # Padding per kind is what the skills that number them write: ADR, TDR and
-  # BUG four digits, the rest three (season none). Starting numbers are 1.
+  # Padding per kind is what the skills that number them write: ADR, TDR, DDR
+  # and BUG four digits, the rest three (season none). Starting numbers are 1.
   # (pat) with its opening paren: bash 3.2 misparses a bare pat) inside $( ).
   NLIST=$(case "$KIND" in
     (adr) files docs/52-adr 'adr-*.md' ;;
     (tdr) files docs/51-tdr 'tdr-*.md' ;;
+    (ddr) files docs/53-ddr 'ddr-*.md' ;;
     (bug) files production/qa/bugs 'bug-*.md' -i ;;
     (asset) [ -f design/assets/asset-manifest.md ] && echo design/assets/asset-manifest.md
             files design/assets/specs '*.md' ;;
@@ -291,6 +293,7 @@ if [ "$CMD" = next-id ] && [ "$KIND" != tr ]; then
   case "$KIND" in
     adr) next_seen adr - 'ADR-%04d' names '^adr-[0-9]+' "$@" ;;
     tdr) next_seen tdr - 'TDR-%04d' names '^tdr-[0-9]+' "$@" ;;
+    ddr) next_seen ddr - 'DDR-%04d' names '^ddr-[0-9]+' "$@" ;;
     bug) next_seen bug - 'BUG-%04d' names '^[Bb][Uu][Gg]-[0-9]+' "$@" ;;
     asset) next_seen asset - 'ASSET-%03d' text 'ASSET-[0-9]+' "$@" ;;
     td) next_seen td - 'TD-%03d' text 'TD-[0-9]+' "$@" ;;

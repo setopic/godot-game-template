@@ -3,7 +3,7 @@ name: design-review
 description: "Reviews one design document for completeness, internal consistency, implementability, and design standards. Before handing to programmers."
 argument-hint: "[path-to-design-doc] [--review full|lean|solo]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Edit, Agent, AskUserQuestion, Bash(bash "*/.claude/skills/design-review/../../hooks/yaml-helper.sh" resolve_config *), Bash(bash .claude/scripts/review-receipts.sh check *), Bash(bash .claude/scripts/review-receipts.sh hash *), Bash(bash .claude/scripts/gdd-structure-check.sh *), Bash(grep -E '^  - name:' design/registry/entities.yaml), Bash(grep -n -i -E *)
+allowed-tools: Read, Glob, Grep, Write, Edit, Agent, AskUserQuestion, Bash(bash "*/.claude/skills/design-review/../../hooks/yaml-helper.sh" resolve_config *), Bash(bash .claude/scripts/review-receipts.sh check *), Bash(bash .claude/scripts/review-receipts.sh hash *), Bash(bash .claude/scripts/gdd-structure-check.sh *), Bash(grep -E '^  - name:' design/registry/entities.yaml), Bash(grep -n -i -E *), Bash(bash .claude/scripts/registry.sh next-id ddr), Bash(python -m tools.graph *)
 model: sonnet
 ---
 
@@ -163,6 +163,14 @@ spot-read any section the verdict actually turns on.
 - [ ] Has Dependencies section (other systems listed) — REQUIRED at `full`/`standard`
 - [ ] Has Tuning Knobs section (configurable values identified) — REQUIRED at `full`; ADVISORY at `standard` unless `workflow_overrides.tuning_knobs`
 - [ ] Has Acceptance Criteria section (testable success conditions) — REQUIRED at `full`/`standard`
+- [ ] Has the `> **Related DDRs**:` header line, and each ID on it is a file in
+  `docs/53-ddr/` whose `対応するGDD` line names this GDD — ADVISORY at all tiers.
+  game-template (PDR-0006): the GDD is outside the graph, so `tools.graph check`
+  does not see this line; this review is where it is checked. A GDD that carries
+  decision history (rejected options, "we used to …") instead of DDRs gets a
+  recommendation to move that history into a DDR
+  (`.claude/docs/design-decision-records.md`). A missing line on a GDD written
+  before the field existed is the same recommendation, not a blocker
 
 ---
 
@@ -380,6 +388,13 @@ If NEEDS REVISION or MAJOR REVISION NEEDED, build the options from the findings:
 **If user selects [A] — Revise now:**
 
 Work through all blocking items, asking for design decisions only where you cannot resolve the issue from the GDD and existing docs alone. Group all design-decision questions into a single multi-tab `AskUserQuestion` before making any edits — do not interrupt mid-revision for each blocker individually.
+
+A revision that changes what the player can do, see or feel, chosen between
+real alternatives, is a design decision (game-template, PDR-0006). Write it as a
+DDR and list its ID in the GDD's `Related DDRs` line, following
+`.claude/docs/design-decision-records.md`; when it reverses a decision an
+existing DDR records, the new DDR `supersedes` that one. Ask before writing,
+as for the GDD edits, and list the DDRs written in the summary table.
 
 After all revisions are complete, show a summary table (blocker → fix applied) and use `AskUserQuestion` for a **post-revision closing widget**:
 

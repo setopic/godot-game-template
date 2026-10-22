@@ -34,6 +34,15 @@
 #   UNFILLED_DEPS: adr-X, ...     ADRs whose 前提 row is still the
 #                                 template's [bracketed] placeholder: what they
 #                                 depend on is unknown, not none
+#   DDR_DEPS:                     one "adr-A -> ddr-N" per DDR the ADR names on
+#                                 its 前提 row or in depends_on; absent when
+#                                 none does. game-template (PDR-0006): a DDR
+#                                 (docs/53-ddr/) is a game design decision the
+#                                 ADR builds on, not a record to implement, so
+#                                 it is a prerequisite from outside this graph:
+#                                 no edge, no CYCLE, no place in ORDER, and an
+#                                 ADR naming only DDRs is a leaf. Its status
+#                                 and cycles are graph's (tools.graph check)
 #   CYCLE: adr-A -> adr-B         one line per ADR on a dependency cycle (an ADR
 #                                 that depends, through its edges, on itself),
 #                                 with its edges to the ADRs on that cycle: one
@@ -91,12 +100,31 @@ if [ -z "$adr_files" ]; then
 fi
 
 SOH=$(printf '\001')
-n=0; nt=0; edges=""; nodes=""; no_deps=""; unfilled=""
+n=0; nt=0; edges=""; nodes=""; no_deps=""; unfilled=""; ddr_edges=""
 while IFS= read -r f; do
     [ -n "$f" ] || continue
     from=$(adr_id "$f")
     case "$from" in tdr-*) nt=$((nt + 1)) ;; *) n=$((n + 1)) ;; esac
     [ -n "$from" ] && nodes="$nodes$from"$'\n'
+
+    # The DDRs on the 前提 row and in depends_on, for DDR_DEPS only.
+    ddrs=$(awk '
+        { sub(/\r$/, "") }
+        NR == 1 && $0 == "---" { infm = 1; next }
+        infm {
+            if ($0 == "---") { infm = 0; next }
+            if ($0 ~ /^[A-Za-z_]+:/) { key = $0; sub(/:.*/, "", key) }
+            if (key == "depends_on") print
+            next
+        }
+        /^## /{ insec = ($0 ~ /^## 前提のADR[ \t]*$/) ? 1 : 0 }
+        insec && /\*\*前提\*\*/ { print }
+    ' "$f" | grep -oiE '(^|[^A-Za-z0-9])ddr-[0-9]+' | grep -oiE 'ddr-[0-9]+' | tr 'A-Z' 'a-z' | sort -u)
+    while IFS= read -r t; do
+        [ -n "$t" ] && ddr_edges="$ddr_edges$from	$t"$'\n'
+    done <<EOF
+$ddrs
+EOF
 
     # Slice the `## 前提のADR` section and print its `**前提**` rows and the
     # front matter's depends_on, then, after a \001, the first row's value
@@ -170,6 +198,13 @@ fi
 # no_deps and unfilled carry a leading space per append; strip it, then comma-join.
 [ -n "$no_deps" ] && echo "NO_DEPS_SECTION: $(printf '%s' "${no_deps# }" | sed 's/ /, /g')"
 [ -n "$unfilled" ] && echo "UNFILLED_DEPS: $(printf '%s' "${unfilled# }" | sed 's/ /, /g')"
+if [ -n "$ddr_edges" ]; then
+    echo "DDR_DEPS:"
+    printf '%s' "$ddr_edges" | while IFS='	' read -r a b; do
+        [ -n "$a" ] || continue
+        echo "  $a -> $b"
+    done
+fi
 
 # An ADR is on a cycle when it can reach itself, which a walk from each ADR
 # answers. Peeling leaves (Kahn's algorithm) alone cannot: what is left over is
