@@ -28,8 +28,17 @@ preference. The answer sets `engine.language` (`"C++"` or `"Blueprint"`).
 
 ---
 
-Read `CLAUDE.md` and show the user the proposed Technology Stack changes.
-Ask: "May I write these engine settings to `CLAUDE.md`?"
+### Which file holds the Technology Stack
+
+game-template (ADR-0007): the Technology Stack section and the
+`ENGINE-REFERENCE-IMPORT` line may live in a file under `.claude/rules/` instead
+of the root `CLAUDE.md`. Find the file that holds the `ENGINE-REFERENCE-IMPORT`
+marker: the root `CLAUDE.md` first, then `.claude/rules/*.md`. In game-template
+this is `.claude/rules/ccgs-studio.md`. Every "`CLAUDE.md`" below in Section 4 and
+Section 8 means that file.
+
+Read that file and show the user the proposed Technology Stack changes.
+Ask: "May I write these engine settings to `<that file>`?"
 
 Wait for confirmation before making any edits.
 
@@ -64,6 +73,11 @@ to point at the configured engine:
 - Godot → `@docs/engine-reference/godot/VERSION.md`
 - Unity → `@docs/engine-reference/unity/VERSION.md`
 - Unreal → `@docs/engine-reference/unreal/VERSION.md`
+
+An `@` import resolves relative to the file that holds it. In the root
+`CLAUDE.md` write the forms above. In a file under `.claude/rules/`, keep the
+`../../` prefix the line already has (`@../../docs/engine-reference/<engine>/VERSION.md`);
+without it the import silently loads nothing. Change only the `<engine>` part.
 
 This keeps a Unity or Unreal project from loading the Godot reference in every
 session. It is idempotent — re-running `/setup-engine` for a different

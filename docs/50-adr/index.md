@@ -22,6 +22,7 @@ tags: [index]
 - [ADR-0003 graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む](./adr-0003-ccgs-import.md)
 - [ADR-0004 ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す](./adr-0004-claude-md-split.md)
 - [ADR-0005 言語をGDScriptにする](./adr-0005-gdscript.md)
+- [ADR-0007 CCGSのsession-start.shとsetup-engineを、rulesのファイルから読み込みの行を探す形に直す](./adr-0007-engine-import-in-rules.md)
 <!-- graph:children:end -->
 
 ## 追加するとき

@@ -6,6 +6,20 @@
 
 現在の版は、`tools/graph/layers/game-template.toml`の`version`に書く。版の付け方と見出しの書き方は、[PROJECT_TEMPLATE_CHANGELOG.md](PROJECT_TEMPLATE_CHANGELOG.md)の「版の付け方」に合わせる。
 
+## 0.3.1（2026-10-22）
+
+### 修正
+
+CCGSの`.claude/hooks/session-start.sh`と`/setup-engine`が、エンジンの版の読み込みの行を`.claude/rules/ccgs-studio.md`から探すようにした（#11）。これまでは、ルートの`CLAUDE.md`しか探さなかったので、エンジンの照合が黙って行われず、`/setup-engine`を実行し直しても書き換える行を見つけられなかった。ルートの`CLAUDE.md`は、これまでどおり手を入れない。
+
+決めたことは、ADR-0007に書いた。直したファイルはCCGSの更新で上書きされるので、UC-02に戻して合わせる手順を足した。
+
+### 取り込む側の作業
+
+無い。
+
+---
+
 ## 0.3.0（2026-10-22）
 
 ### 追加
