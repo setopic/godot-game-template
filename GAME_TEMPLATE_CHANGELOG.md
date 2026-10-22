@@ -6,6 +6,20 @@
 
 現在の版は、`tools/graph/layers/game-template.toml`の`version`に書く。版の付け方と見出しの書き方は、[PROJECT_TEMPLATE_CHANGELOG.md](PROJECT_TEMPLATE_CHANGELOG.md)の「版の付け方」に合わせる。
 
+## 0.3.0（2026-10-22）
+
+### 追加
+
+CCGSの`/setup-engine godot 4.7.2`に当たる設定をし、言語をGDScriptにした（#1）。`.claude/rules/ccgs-studio.md`の「Technology Stack」、`.claude/docs/technical-preferences.md`、`project.yaml`の`engine`・`specialists`・`naming`・`commands`の節に、GDScriptの場合の値を書いた。描画の方式、物理エンジン、書き出しの設定のように作品ごとに違う値は、`[TO BE CONFIGURED]`のまま残した。
+
+決めたことは、ADR-0005に書いた。UC-02には、CCGSの更新で上書きされる`technical-preferences.md`を戻して合わせる手順を足した。
+
+### 取り込む側の作業
+
+無い。設定は`make update`で届く。`[TO BE CONFIGURED]`のまま残した`engine.rendering`、`engine.physics`、`commands.build`は、作品を作るときに`/settings`で決める。
+
+---
+
 ## 0.2.0（2026-10-22）
 
 ### 追加
