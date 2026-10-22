@@ -165,6 +165,7 @@ graph LR
   PDR-0006 -.->|decides| UC-02
   TDR-0002 -.->|decides| UC-02
   UC-01 -->|depends_on| DOM-01
+  UC-02 -->|depends_on| PDR-0006
   classDef draft stroke-dasharray: 4\,3;
   classDef deprecated opacity:0.5;
   class CON-01 draft;

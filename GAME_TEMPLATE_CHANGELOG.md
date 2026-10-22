@@ -6,6 +6,16 @@
 
 現在の版は、`tools/graph/layers/game-template.toml`の`version`に書く。版の付け方と見出しの書き方は、[PROJECT_TEMPLATE_CHANGELOG.md](PROJECT_TEMPLATE_CHANGELOG.md)の「版の付け方」に合わせる。
 
+## 0.5.2（2026-10-23）
+
+### 変更
+
+UC-02（CCGSの更新を取り込む）を、PDR-0006に沿って書き直した（#16）。これまでは、「上書きしてよいファイル」の一覧を`git checkout`でまとめて写し、この層で直したファイルを戻していた。いまは、CCGSで変わったファイルごとに、いまの版のCCGSと手元を`git diff v<いまの版> HEAD`で比べる。差が無いファイルは新しい版をそのまま写し、差があるファイルだけ`git diff v<いまの版> ccgs/main`を読んで手で合わせる。直したファイルの一覧は、手で持たない。
+
+### 取り込む側の作業
+
+無い。UC-02は、game-templateを保守する人の手順である。
+
 ## 0.5.1（2026-10-23）
 
 ### 追加
