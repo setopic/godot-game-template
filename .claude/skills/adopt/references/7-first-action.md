@@ -23,9 +23,9 @@ Use `AskUserQuestion`:
   - "I'll fix it myself"
   - "Done — leave me with the plan"
 
-**If ADRs are missing `## Status` (and no parenthetical issue):**
+**If ADRs are missing the front matter `status:` (and no parenthetical issue):**
 Use `AskUserQuestion`:
-- "The most urgent fix is adding `## Status` to [N] ADR(s): [list filenames].
+- "The most urgent fix is adding a front matter `status:` to [N] ADR(s): [list filenames].
   Without it, /story-readiness silently passes all ADR checks. Start with
   [first affected filename]?"
   - "Yes — retrofit [first affected filename] now"

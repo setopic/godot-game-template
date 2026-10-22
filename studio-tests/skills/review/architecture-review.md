@@ -60,9 +60,9 @@ Fixture defaults.
 - `project.yaml` sets `modes.workflow: full`, `engine.name: Godot`, `engine.version: 4.6`
 - `design/gdd/systems-index.md` plus two system GDDs (`combat.md`, `inventory.md`),
   each with a `## Summary` and technical requirements in its Detailed Rules
-- `docs/52-adr/adr-0001-*.md` … `adr-0003-*.md`, each with `## Status: Accepted`,
-  `## GDD Requirements Addressed`, `## Engine Compatibility` and `## ADR Dependencies`,
-  whose `**Depends On**` row is filled in — `None` for `adr-0001`, `ADR-0001` for
+- `docs/52-adr/adr-0001-*.md` … `adr-0003-*.md`, each with `## status: stable`,
+  `## 対応するGDDの要件`, `## エンジンとの互換` and `## 前提のADR`,
+  whose `**前提**` row is filled in — `None` for `adr-0001`, `ADR-0001` for
   `adr-0002` and `adr-0003` — so `adr-dep-graph.sh` finds real edges and lists no
   ADR under `NO_DEPS_SECTION`; together they cover every requirement; no two contradict
 - `docs/architecture/architecture.md` exists and names every system in the index
@@ -127,8 +127,8 @@ Fixture defaults.
 ### Case 3: Partial Path — coverage resting on a Proposed ADR
 
 **Fixture:**
-- As Case 1, except `adr-0003` (the only ADR covering `TR-inventory-001`) has `## Status: Proposed`
-- `adr-0004` (Accepted) has `**Depends On**: ADR-0003` in its `## ADR Dependencies` table
+- As Case 1, except `adr-0003` (the only ADR covering `TR-inventory-001`) has `## status: draft`
+- `adr-0004` (Accepted) has `**前提**: ADR-0003` in its `## 前提のADR` table
 
 **Input:** `/architecture-review`
 
@@ -138,7 +138,7 @@ Fixture defaults.
 3. Verdict is capped at CONCERNS and names the way out: `/architecture-decision accept ADR-0003`
 
 **Assertions:**
-- [ ] Skill reads each ADR's `## Status` before marking coverage; a Proposed ADR never yields ✅
+- [ ] Skill reads each ADR's front matter `status:` before marking coverage; a Proposed ADR never yields ✅
 - [ ] Verdict is CONCERNS (not PASS) when coverage rests on a Proposed ADR
 - [ ] Output names `/architecture-decision accept ADR-0003` as the route to clear it
 - [ ] The unresolved dependency on a Proposed ADR is flagged
@@ -157,14 +157,14 @@ Fixture defaults.
 **Case 4b — ADRs present but none has a scannable section:**
 - As Case 1 (`modes.workflow: full` — at the default `minimal` tier, a `project.yaml` with no `modes` block,
   the skill does not apply), except the three `docs/52-adr/adr-*.md` files
-  carry none of the six headings the Phase 1b scan looks for: `## Status`,
-  `## Decision`, `## GDD Requirements Addressed`, `## Engine Compatibility`,
-  `## ADR Dependencies`, `## Performance Implications`
+  carry no front matter `status:` and none of the five headings the Phase 1b scan looks for:
+  `## 決定`, `## 対応するGDDの要件`, `## エンジンとの互換`,
+  `## 前提のADR`, `## 性能への影響`
 
 **Assertions (4b):**
 - [ ] Skill reports "[N] ADRs found, none carries a scannable section — run `/architecture-decision retrofit [file]` on each" (subcommand first — with the path first, `/architecture-decision` would start authoring a new ADR instead)
 - [ ] Skill does NOT report zero coverage or a design failure — it is a format failure
-- [ ] Rows whose ADR has no `## Status` are `❓ Not assessed`, and the verdict is not PASS — nor FAIL on coverage grounds, since coverage is unknown rather than absent
+- [ ] Rows whose ADR has no front matter `status:` are `❓ Not assessed`, and the verdict is not PASS — nor FAIL on coverage grounds, since coverage is unknown rather than absent
 
 ---
 

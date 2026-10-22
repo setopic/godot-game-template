@@ -16,10 +16,10 @@
 
 **ADR Governing Implementation**: [ADR-NNNN: title]
 **ADR Decision Summary**: [1-2 sentence summary of what the ADR decided]
-**ADR Version**: [the ADR's `## Last Verified` date, else its `## Date`, else `unversioned`]
+**ADR Version**: [the ADR's `## 最終確認日` date, else its `## 日付`, else `unversioned`]
 
 **Engine**: [name + version] | **Risk**: [LOW / MEDIUM / HIGH]
-**Engine Notes**: [from ADR Engine Compatibility section — post-cutoff APIs, verification required]
+**Engine Notes**: [from ADR エンジンとの互換 section — post-cutoff APIs, verification required]
 
 **Control Manifest Rules (this layer)**:
 - Required: [relevant required pattern]
@@ -40,7 +40,7 @@
 
 ## Implementation Notes
 
-*Derived from ADR-NNNN Implementation Guidelines:*
+*Derived from ADR-NNNN 実装の指針:*
 
 [Specific, actionable guidance from the ADR. Do not paraphrase in ways that
 change meaning. This is what the programmer reads instead of the ADR.]

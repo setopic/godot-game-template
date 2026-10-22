@@ -75,7 +75,7 @@ Fixture defaults.
 - Both systems have Approved GDDs in `design/gdd/`, each with a `## Summary`
 - `docs/architecture/architecture.md` has a module for each system
 - Accepted ADRs cover every TR-ID for both systems in `docs/architecture/tr-registry.yaml`;
-  the first system has two governing ADRs whose Engine Compatibility rates
+  the first system has two governing ADRs whose エンジンとの互換 rates
   Knowledge Risk LOW and HIGH
 - `docs/architecture/control-manifest.md` exists
 - No `production/epics/` directory
@@ -85,8 +85,8 @@ Fixture defaults.
 **Expected behavior:**
 1. Globs `design/gdd/*.md` (excluding systems-index and other non-system docs)
    to establish N, then Greps `^## Summary` to scope the Foundation systems
-2. Reads the 2 in-scope GDDs, `architecture.md`, the Decision / GDD Requirements
-   Addressed / Engine Compatibility sections of the in-scope ADRs, the TR
+2. Reads the 2 in-scope GDDs, `architecture.md`, the Decision / 対応するGDDの
+   要件 / エンジンとの互換 sections of the in-scope ADRs, the TR
    registry and the manifest header; reports "Loaded 2 GDDs, [M] ADRs, engine: …"
 3. For each system: presents the epic block and asks "Shall I create Epic: [name]?"
 4. Notes "PR-EPIC skipped — Lean mode."

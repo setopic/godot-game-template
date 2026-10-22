@@ -126,10 +126,10 @@ Read no GDD, control manifest, TR registry or ADR at `minimal`. Go to Phase 3.
    bash .claude/scripts/adr-status.sh ADR-0001 ADR-0003 ...
    ```
    Each row gives the status, layer, `version` (the story's ADR Version stamp),
-   `depends_on`, and missing sections. Then read only `Summary`, `Decision` (its
-   Implementation Guidelines inside) and `Engine Compatibility` of each, with
-   `md-section.sh extract`. Engine Notes is a story field taken from Engine
-   Compatibility, not an ADR section. An ADR with none of these sections predates
+   `depends_on`, and missing sections. Then read only `要約`, `決定` (its
+   実装の指針 inside) and `エンジンとの互換` of each, with
+   `md-section.sh extract`. Engine Notes is a story field taken from
+   エンジンとの互換, not an ADR section. An ADR with none of these sections predates
    the template: read it once, and flag it for `/architecture-decision retrofit
    [file]`.
 
@@ -177,21 +177,24 @@ UI last. For each story:
   Requirements table. Only when no entry matches, write `TR-[system]-???` and say
   so.
 - **ADR:** the one that governs how to build it (the requirements table names it).
-  - `Accepted`: embed it.
-  - `Proposed`: `Status: Blocked`, with "BLOCKED: ADR-NNNN is Proposed — accept it
+  The status is `adr-status.sh`'s status column, the front matter's `status:`
+  (game-template, PDR-0006).
+  - `stable` (Accepted): embed it.
+  - `draft` or `review` (Proposed): `Status: Blocked`, with "BLOCKED: ADR-NNNN is Proposed — accept it
     with `/architecture-decision accept ADR-NNNN` once decided".
-  - `Deprecated` or `Superseded`: `Status: Blocked`, with "BLOCKED: ADR-NNNN is
-    [status] — point the story at [successor] (edit its ADR field;
+  - `deprecated` (Deprecated, or Superseded when its `superseded_by` column names
+    the successor): `Status: Blocked`, with "BLOCKED: ADR-NNNN is
+    [Deprecated|Superseded] — point the story at [successor] (edit its ADR field;
     `/create-stories` never rewrites an existing story) before implementing".
-  - An `Accepted` ADR whose `depends_on` names an ADR that is not Accepted: Blocked
+  - A `stable` ADR whose `depends_on` names an ADR that is not `stable`: Blocked
     the same way, naming that ADR.
   - Several apply: list them all, the most direct first.
   - None applies: `ADR: N/A — [reason]`, e.g. "pure data configuration". Never
     blank: blank means unchecked.
-- **ADR Version:** the story's **ADR Version** is the ADR's `## Last Verified`
-  date, else its `## Date`, else `unversioned` (the `version` column). `/dev-story`
+- **ADR Version:** the story's **ADR Version** is the ADR's `## 最終確認日`
+  date, else its `## 日付`, else `unversioned` (the `version` column). `/dev-story`
   trusts the story's ADR summary while this still matches the ADR.
-- **Engine risk:** from the ADR's Engine Compatibility (its knowledge risk).
+- **Engine risk:** from the ADR's エンジンとの互換 (its knowledge risk).
 - **Estimate:** propose a t-shirt size from the criteria and the files the story
   touches: `S` (a few hours), `M` (about a day) or `L` (several days). It is a
   proposal: Phase 6 shows it and the user can change it. `/story-readiness` fails

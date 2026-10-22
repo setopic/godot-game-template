@@ -22,7 +22,7 @@ For each gap, produce a plan entry with:
 This is always the first item if present. Show the exact values that need changing
 and the exact replacement text. Offer to fix this immediately before writing the plan.
 
-**Special case — ADRs missing Status field:**
+**Special case — ADRs missing the front matter `status:`:**
 For each affected ADR, the fix is:
 `/architecture-decision retrofit docs/52-adr/adr-[NNNN]-[slug].md` (a TDR: `docs/51-tdr/tdr-[NNNN]-[slug].md`)
 List each ADR as a separate checkable item.
@@ -32,7 +32,7 @@ For each affected GDD, list which sections are missing and the fix:
 `/design-system retrofit design/gdd/[filename].md`
 
 **Infrastructure bootstrap ordering** — always present in this sequence:
-1. Fix ADR formats first (registry depends on reading ADR Status fields)
+1. Fix ADR formats first (registry depends on reading ADR `status:` fields)
 2. Run `/architecture-review` → bootstraps `tr-registry.yaml`
 3. Run `/create-control-manifest` → creates manifest with version stamp
 4. Run `/sprint-plan update` → creates `sprint-status.yaml`

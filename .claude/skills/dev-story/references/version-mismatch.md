@@ -4,7 +4,7 @@ Read only when Phase 2 found a version mismatch.
 
 ## The ADR
 
-The ADR's `version` (from `adr-status.sh`: its Last Verified date, else its Date,
+The ADR's `version` (from `adr-status.sh`: its 最終確認日 date, else its 日付,
 else `unversioned`) differs from the story's `ADR Version`, or the ADR is
 `unversioned` while the story names a date. Its decision may have changed.
 
@@ -12,8 +12,8 @@ Ask: "Story was written against ADR v[story date]. The ADR is now v[current].
 How do you want to go on?" Options:
 
 - **Re-read the changed ADR and refresh the story (Recommended).** Read the ADR's
-  Decision, Engine Compatibility and ADR Dependencies sections with
-  `bash .claude/scripts/md-section.sh extract <adr> "Decision"` and the same for
+  決定, エンジンとの互換 and 前提のADR sections with
+  `bash .claude/scripts/md-section.sh extract <adr> "決定"` and the same for
   the other two. Then edit the story: `ADR Version` becomes the ADR's `version`
   (never today's date, or the next run mismatches again), and the ADR Decision
   Summary and `## Implementation Notes` are replaced with the guidance you read.

@@ -12,8 +12,29 @@ related:
 
 # Godotの版を4.7.2にする
 
-- 日付: 2026-10-22
-- 状態: stable
+## 日付
+
+2026-10-22
+
+## 最終確認日
+
+なし
+
+## 決めた人
+
+なし
+
+## 要約
+
+なし
+
+## エンジンとの互換
+
+なし
+
+## 前提のADR
+
+なし
 
 ## 背景
 
@@ -37,11 +58,11 @@ CCGS（Claude-Code-Game-Studios）の`docs/engine-reference/godot/VERSION.md`は
 
 Godotの版を4.7.2にする。
 
-## 理由
+### 理由
 
 CCGSの前提（4.7）と同じ系列なので、`docs/engine-reference/godot/`を合わせ直さずに使える。4.7系の中では、保守版の修正をすべて取り込んだ版である。GdUnit4の対応表には載っていないが、保守版なので動く見込みである。動くかは、CIを作る作業（setopic/game-template#5）で確かめる。
 
-## 却下した案
+## 検討した案
 
 | 案 | 却下理由 |
 | --- | --- |
@@ -52,9 +73,31 @@ CCGSの前提（4.7）と同じ系列なので、`docs/engine-reference/godot/`�
 
 作品は、Godotの4.7.2で開く。CCGSの`/setup-engine`には、Godotの4.7を選ぶ。
 
-## 見直しの条件
+## リスク
+
+なし
+
+## 対応するGDDの要件
+
+なし
+
+## 性能への影響
+
+なし
+
+## 移行の手順
+
+なし
+
+## 確かめ方
+
+### 見直しの条件
 
 GdUnit4が4.7.2で動かないと、setopic/game-template#5で分かったとき。4.8が安定版になり、CCGSの`docs/engine-reference/godot/`が4.8に移ったとき。
+
+## 関連
+
+なし
 
 ---
 

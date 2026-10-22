@@ -69,15 +69,16 @@ project value. Say it in your first reply: `Tier: workflow [value]`. That value,
 | Input | `full` | `standard` | `minimal` |
 |---|---|---|---|
 | TR registry `docs/architecture/tr-registry.yaml` | missing: **stop**, "Run `/architecture-review` to bootstrap it" | optional | not expected |
-| The ADR the story names | missing, `Proposed`, `Deprecated` or `Superseded`: **stop** | the same, only when the story names one | the same, only when the story names one |
+| The ADR the story names | missing, `draft`/`review` (Proposed) or `deprecated` (Deprecated, Superseded): **stop** | the same, only when the story names one | the same, only when the story names one |
 | Control manifest `docs/architecture/control-manifest.md` | missing: warn, go on | missing: warn, go on | not expected |
 
 A story whose ADR field reads `N/A — [reason]` names none.
 
 **The ADR.** `bash .claude/scripts/adr-status.sh <ADR id>` gives its status and
-`version`. Stop messages: `Proposed` — "ADR-NNNN is still Proposed. Accept it with
-`/architecture-decision accept ADR-NNNN` before implementing." `Deprecated` or
-`Superseded` — "ADR-NNNN is [status]; point the story at [successor] (edit its ADR
+`version`; the status is the front matter's `status:` (game-template, PDR-0006).
+Stop messages: `draft` or `review` — "ADR-NNNN is still Proposed. Accept it with
+`/architecture-decision accept ADR-NNNN` before implementing." `deprecated` —
+"ADR-NNNN is [Deprecated, or Superseded by the `superseded_by` column]; point the story at [successor] (edit its ADR
 field; `/create-stories` never rewrites an existing story) before implementing."
 `NOT_FOUND` — "ADR file not found. Run `/architecture-decision`, or correct the
 story's ADR field."

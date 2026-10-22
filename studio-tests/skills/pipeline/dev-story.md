@@ -5,11 +5,12 @@
 `/dev-story` implements one story. It finds the story (argument, else the active
 story in `production/session-state/active.md`), resolves the workflow tier for the
 story's system, verifies required inputs per tier (TR registry, governing ADR,
-control manifest), reads the ADR's `## Status`, `## Last Verified` and `## Date` in
-one grep — a `Proposed`, `Deprecated` or `Superseded` status blocks the story at
+control manifest), reads the ADR's front matter `status:`, `## 最終確認日` and `## 日付` in
+one `adr-status.sh` call — a Proposed, Deprecated or Superseded status (`draft`,
+`review` or `deprecated`) blocks the story at
 every tier, while a story whose ADR field reads `N/A` references none — and checks ADR
 freshness by comparing the story's `ADR Version` with the ADR's current version
-(`Last Verified`, else `Date`, else `unversioned` — the rule `/create-stories`
+(`最終確認日`, else `日付`, else `unversioned` — the rule `/create-stories`
 stamps with). It checks the story's `Manifest Version` and its dependencies, asks
 to mark the story `In Progress`, and routes implementation to a programmer agent
 plus the project's engine specialist. It does not write source code itself, and
@@ -71,7 +72,7 @@ Fixture defaults.
   `modes.workflow: full`, `qa.level: standard`
 - `production/epics/combat/story-001-damage-calc.md`: `Status: Ready`, Layer Core,
   Type Logic, `Requirement: TR-combat-001`, `ADR Governing Implementation: ADR-0003`,
-  an `ADR Version` equal to ADR-0003's `## Last Verified` date, a `Manifest Version`
+  an `ADR Version` equal to ADR-0003's `## 最終確認日` date, a `Manifest Version`
   equal to the manifest header date, Dependencies None, Test Evidence
   `tests/unit/combat/combat_damage_calc_test.gd`
 - `docs/architecture/tr-registry.yaml` has `TR-combat-001`; ADR-0003 exists and is
@@ -82,8 +83,8 @@ Fixture defaults.
 
 **Expected behavior:**
 1. Reads the story and greps `id: TR-combat-001` from the registry
-2. Greps ADR-0003's `^## (Status|Last Verified|Date)` — Status is Accepted and its
-   current version (the `Last Verified` date) matches the story, so the ADR is not read
+2. Runs `adr-status.sh ADR-0003` — its status is `stable` (Accepted) and its
+   current version (the `最終確認日` date) matches the story, so the ADR is not read
 3. Greps `^## Core Layer Rules` from the manifest; Manifest Version matches, no ask
 4. Asks "May I mark this story In Progress?", naming the story file (and not the
    absent `sprint-status.yaml`); on yes sets the story's `Status:` to `In Progress`
@@ -99,7 +100,7 @@ Fixture defaults.
 8. Overwrites the `<!-- CHECKPOINT -->` block in `active.md`
 
 **Assertions:**
-- [ ] ADR-0003 is not read in full when its `Last Verified` matches the story's `ADR Version`
+- [ ] ADR-0003 is not read in full when its `最終確認日` matches the story's `ADR Version`
 - [ ] The In Progress ask names the story file; `Status:` becomes `In Progress` only after it and before any agent is spawned, and the sprint-status-absent line is printed
 - [ ] Primary is `gameplay-programmer`; secondary comes from `specialists.code`, not the roster table
 - [ ] The ADR guidance is passed inline, not as the ADR path
@@ -115,7 +116,7 @@ Fixture defaults.
 **Fixture:**
 - `project.yaml`: `modes.workflow: standard`
 - Story file with `Status: Ready` and `ADR Governing Implementation: ADR-0005`
-- `docs/52-adr/adr-0005-*.md` exists with `## Status` Proposed
+- `docs/52-adr/adr-0005-*.md` exists with front matter `status: draft` (Proposed)
 
 **Input:** `/dev-story production/epics/[epic-slug]/story-[NNN]-[slug].md`
 
@@ -127,7 +128,7 @@ Fixture defaults.
 5. A partial report is produced; the story file's `Status:` is not changed
 
 **Assertions:**
-- [ ] The Proposed status is read from ADR-0005's `## Status` section, not inferred
+- [ ] The Proposed status is read from ADR-0005's front matter `status:`, not inferred
 - [ ] No programmer or engine-specialist agent is spawned
 - [ ] Output names ADR-0005 and recommends `/architecture-decision`
 - [ ] The story header stays `Status: Ready`, and no "May I mark this story In Progress?" ask is shown
@@ -143,21 +144,21 @@ The `full` column of the file-check table has its own STOP rule, so the
 **Fixture:**
 - `project.yaml`: `modes.workflow: full`
 - Story file with `Status: Ready`, `ADR Governing Implementation: ADR-0005` and an
-  `ADR Version` older than ADR-0005's `## Last Verified` date
-- `docs/52-adr/adr-0005-*.md` exists with `## Status` Proposed;
+  `ADR Version` older than ADR-0005's `## 最終確認日` date
+- `docs/52-adr/adr-0005-*.md` exists with front matter `status: draft` (Proposed);
   `docs/architecture/tr-registry.yaml` and the control manifest exist
 
 **Input:** `/dev-story production/epics/[epic-slug]/story-[NNN]-[slug].md`
 
 **Expected behavior:**
-1. Skill greps ADR-0005's `^## (Status|Last Verified|Date)` and reads `Proposed`
+1. Skill runs `adr-status.sh ADR-0005` and reads `draft` (Proposed)
 2. It stops before the freshness comparison: "ADR [path] is still Proposed. Accept
    it with `/architecture-decision accept ADR-0005` before implementing."
 3. Story is set BLOCKED in session state; no programmer agent is spawned
 
 **Assertions:**
 - [ ] The stop happens at `full`
-- [ ] The Status decides before the freshness check: no ADR-version mismatch prompt is shown although the versions differ, and the ADR is not read beyond the one Grep
+- [ ] The Status decides before the freshness check: no ADR-version mismatch prompt is shown although the versions differ, and the ADR is not read beyond the one `adr-status.sh` call
 - [ ] No programmer or engine-specialist agent is spawned, and the story stays `Status: Ready`
 
 ---
@@ -168,25 +169,25 @@ The `full` column of the file-check table has its own STOP rule, so the
 - `project.yaml`: `engine.name: Godot`, `modes.workflow: full`
 - Story file with `Status: Ready`, Type Logic, `Requirement: TR-combat-002`,
   `ADR Governing Implementation: ADR-0004`, an `ADR Version` older than ADR-0004's
-  `## Last Verified` date, a `Manifest Version` equal to the manifest header date,
+  `## 最終確認日` date, a `Manifest Version` equal to the manifest header date,
   Dependencies None
 - `docs/architecture/tr-registry.yaml` has `TR-combat-002`; ADR-0004 exists with
-  `## Status` Accepted and is under 50KB; `docs/architecture/control-manifest.md`
+  front matter `status: stable` (Accepted) and is under 50KB; `docs/architecture/control-manifest.md`
   exists
 - User picks `[A]` at the prompt
 
 **Input:** `/dev-story production/epics/[epic-slug]/story-[NNN]-[slug].md`
 
 **Expected behavior:**
-1. `Grep "^## (Status|Last Verified|Date)"` on ADR-0004 reads Accepted and a
-   `Last Verified` date different from the story's `ADR Version`
+1. `adr-status.sh ADR-0004` reads `stable` (Accepted) and a
+   `最終確認日` date different from the story's `ADR Version`
 2. `AskUserQuestion`: "Story was written against ADR v[story-date]. The ADR is now
    v[current-date]. Its decision may have changed. How do you want to proceed?"
    with `[A] Re-read the changed ADR sections…` (naming the refresh of this story's
    ADR summary and ADR Version) / `[B] Implement from the story's summary…` /
    `[C] Stop…`
 3. On [A]: checks the size with `wc -c`; under ~50KB, reads the ADR with one `Read`
-4. Sets the story's `ADR Version` to ADR-0004's `Last Verified` date and replaces
+4. Sets the story's `ADR Version` to ADR-0004's `最終確認日` date and replaces
    its ADR Decision Summary and Implementation Notes with the re-read guidance
 5. Spawns the programmer with that guidance inline
 
@@ -194,21 +195,21 @@ The `full` column of the file-check table has its own STOP rule, so the
 - [ ] The mismatch prompt is shown before any agent is spawned
 - [ ] All three options ([A] re-read / [B] accept drift / [C] stop) are offered, and [A] names the story edit it makes
 - [ ] On [A] the size is checked and a sub-50KB ADR is read in a single `Read`
-- [ ] The story's `ADR Version` becomes ADR-0004's `Last Verified` date — not today's date — before the programmer is spawned
+- [ ] The story's `ADR Version` becomes ADR-0004's `最終確認日` date — not today's date — before the programmer is spawned
 - [ ] The programmer brief carries the freshly read Decision guidance inline, not the summary the story held before [A]
 
 **Fixture (Date fallback):**
-- As above, but ADR-0004 has no `## Last Verified` section; its `## Date` equals the
+- As above, but ADR-0004 has no `## 最終確認日` section; its `## 日付` equals the
   story's `ADR Version` (the value `/create-stories` stamped from it)
 
 **Expected behavior (Date fallback):**
-1. The same Grep finds no `Last Verified`, so the ADR's current version is its `## Date`
+1. The same call finds no `最終確認日` (its `last_verified` column is `-`), so the ADR's current version is its `## 日付`
 2. That matches the story's `ADR Version`: the story is trusted, no prompt is shown,
    and the ADR is not read
 
 **Assertions (Date fallback):**
-- [ ] No mismatch prompt is shown — an ADR stamped from its `## Date` is not treated as stale for lacking `## Last Verified`
-- [ ] ADR-0004 is not read beyond the one Grep
+- [ ] No mismatch prompt is shown — an ADR stamped from its `## 日付` is not treated as stale for lacking `## 最終確認日`
+- [ ] ADR-0004 is not read beyond the one `adr-status.sh` call
 
 ---
 
@@ -431,7 +432,7 @@ The `full` column of the file-check table has its own STOP rule, so the
 **Assertions:**
 - [ ] No STOP and no BLOCKED for the `N/A` ADR field at `full`
 - [ ] No ADR file is looked up for `N/A`
-- [ ] Variant — the story names `ADR-0006`, whose `## Status` reads `Superseded by ADR-0009`: the story is BLOCKED at every tier, naming ADR-0009 and saying to edit its ADR field (`/create-stories` never rewrites an existing story)
+- [ ] Variant — the story names `ADR-0006`, whose front matter `status: deprecated` (Superseded: ADR-0009 names it in its `supersedes`): the story is BLOCKED at every tier, naming ADR-0009 and saying to edit its ADR field (`/create-stories` never rewrites an existing story)
 
 ---
 

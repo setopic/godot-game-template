@@ -14,151 +14,64 @@
 - Write approval
 - Update Architecture Registry, and the registry append logic
 
-Following this format:
+Following the template `docs/00-meta/templates/tdr.md` (a TDR) or
+`docs/00-meta/templates/adr.md` (an ADR). The two have the same sections.
 
-```markdown
-# [TDR|ADR]-[NNNN]: [Title]
+> **game-template (PDR-0006): a TDR or ADR is a graph node.** Its sections are
+> CCGS's ADR template sections in Japanese, one for one: 日付 (Date), 最終確認日
+> (Last Verified), 決めた人 (Decision Makers), 要約 (Summary), エンジンとの互換
+> (Engine Compatibility), 前提のADR (ADR Dependencies), 背景 (Context), 決定
+> (Decision), 検討した案 (Alternatives Considered), 影響 (Consequences), リスク
+> (Risks), 対応するGDDの要件 (GDD Requirements Addressed), 性能への影響
+> (Performance Implications), 移行の手順 (Migration Plan), 確かめ方 (Validation
+> Criteria), 関連 (Related). There is no `## Status`: the status is the front
+> matter's `status:`, and a new record is always `draft` (Proposed). Rows and
+> subsections are Japanese too: the エンジンとの互換 table's rows are **エンジン**,
+> **分野** (Domain), **層** (Layer), **知識のリスク** (Knowledge Risk),
+> **参照した資料**, **学習の範囲より後のAPI**, **確かめること**; the 前提のADR
+> table's are **前提** (Depends On), **可能にするもの** (Enables),
+> **止めているもの** (Blocks), **順序の注意** (Ordering Note); 背景 holds
+> `### 解決したい問題`, `### いまの状態`, `### 制約`, `### 要件`; 決定 holds
+> `### 構成の図`, `### 主なインタフェース` (Key Interfaces), `### 実装の指針`
+> (Implementation Guidelines); 検討した案 holds `### 案1: [名前]`; 影響 holds
+> `### 良い影響`, `### 悪い影響`, `### どちらでもない影響`. A section with
+> nothing to say is 「なし」, never left out: `python -m tools.graph check`
+> reports a missing one (`G014`).
 
-## Status
-[Proposed | Accepted | Deprecated | Superseded by ADR-XXXX]
+Draft every section of the template in the conversation. On the write approval
+below, create the file with the graph tool — never with Write, and never by
+creating the directory yourself:
 
-## Date
-[Date of decision]
-
-## Last Verified
-[YYYY-MM-DD — when this ADR was last confirmed accurate against the current
-engine version and design. Update this date when you re-read and confirm it is
-still correct, even if nothing changed.]
-
-## Decision Makers
-[Who was involved in this decision]
-
-## Summary
-[2 sentences: what problem this ADR solves, and what was decided. Written for
-tiered context loading — a skill scanning 20 ADRs uses this to decide whether to
-read the full decision. Be specific: name the system, the problem, and the
-chosen approach.]
-
-## Engine Compatibility
-
-| Field | Value |
-|-------|-------|
-| **Engine** | [e.g. Godot 4.7] |
-| **Domain** | [Physics / Rendering / UI / Audio / Navigation / Animation / Networking / Core / Input] |
-| **Layer** | [Foundation / Core / Feature / Presentation] |
-| **Knowledge Risk** | [LOW / MEDIUM / HIGH — from VERSION.md] |
-| **References Consulted** | [List engine-reference docs read, e.g. `docs/engine-reference/godot/modules/physics.md`] |
-| **Post-Cutoff APIs Used** | [Any APIs from post-LLM-cutoff versions this decision depends on, or "None"] |
-| **Verification Required** | [Specific behaviours to test before shipping, or "None"] |
-
-## ADR Dependencies
-
-| Field | Value |
-|-------|-------|
-| **Depends On** | [ADR-NNNN (must be Accepted before this can be implemented), or "None"] |
-| **Enables** | [ADR-NNNN (this ADR unlocks that decision), or "None"] |
-| **Blocks** | [Epic/Story name — cannot start until this ADR is Accepted, or "None"] |
-| **Ordering Note** | [Any sequencing constraint that isn't captured above] |
-
-## Context
-
-### Problem Statement
-[What problem are we solving? Why does this decision need to be made now?]
-
-### Constraints
-- [Technical constraints]
-- [Timeline constraints]
-- [Resource constraints]
-- [Compatibility requirements]
-
-### Requirements
-- [Must support X]
-- [Must perform within Y budget]
-- [Must integrate with Z]
-
-## Decision
-
-[The specific technical decision made, described in enough detail for someone
-to implement it.]
-
-### Architecture Diagram
-[ASCII diagram or description of the system architecture this creates]
-
-### Key Interfaces
-[API contracts or interface definitions this decision creates]
-
-### Implementation Guidelines
-[Specific guidance for the programmer implementing this decision — the rules a
-`/create-control-manifest` or `/dev-story` run should follow. State mandates as
-"must / must never" so they extract cleanly.]
-
-## Alternatives Considered
-
-### Alternative 1: [Name]
-- **Description**: [How this would work]
-- **Pros**: [Advantages]
-- **Cons**: [Disadvantages]
-- **Rejection Reason**: [Why this was not chosen]
-
-### Alternative 2: [Name]
-- **Description**: [How this would work]
-- **Pros**: [Advantages]
-- **Cons**: [Disadvantages]
-- **Rejection Reason**: [Why this was not chosen]
-
-## Consequences
-
-### Positive
-- [Good outcomes of this decision]
-
-### Negative
-- [Trade-offs and costs accepted]
-
-## Risks
-- [Things that could go wrong]
-- [Mitigation for each risk]
-
-## GDD Requirements Addressed
-
-| GDD System | Requirement | How This ADR Addresses It |
-|------------|-------------|--------------------------|
-| [system-name].md | [specific rule, formula, or performance constraint from that GDD] | [how this decision satisfies it] |
-
-## Performance Implications
-- **CPU**: [Expected impact]
-- **Memory**: [Expected impact]
-- **Load Time**: [Expected impact]
-- **Network**: [Expected impact, if applicable]
-
-## Migration Plan
-[If this changes existing code, how do we get from here to there?]
-
-## Validation Criteria
-[How will we know this decision was correct? What metrics or tests?]
-
-## Related
-- [Links to related ADRs — note if supersedes, contradicts, or depends on]
-- [Links to related design documents]
+```bash
+python -m tools.graph new --type tdr --id TDR-NNNN --title "[Title]" --slug [slug] --status draft
+python -m tools.graph new --type adr --id ADR-NNNN --title "[Title]" --slug [slug] --status draft
 ```
 
-**Always write the Layer row.** An ADR with no Layer row counts as critical
+It copies the template, numbers nothing (the id is Step 2's), and lists the
+record in its folder's `index.md`. Then fill the sections with Edit. Every TDR
+or ADR named on the `**前提**` row also goes into the front matter's
+`depends_on`; a record this one replaces goes into `supersedes` (and that
+record's `status:` becomes `deprecated`, as `/propagate-design-change` does).
+Then run `python -m tools.graph sync` and `python -m tools.graph check`.
+
+**Always write the 層 row.** An ADR with no 層 row counts as critical
 (Foundation) wherever it is read, so at `standard` its advisory items become
 blockers. The value is the ADR's own layer, how early in the build it must
 exist: the layer `docs/architecture/architecture.md`'s layer map gives the
 system this decision governs. With no layer map, or no system in it, ask the
 user, with the four values as options. Never take it from an epic that
-references the ADR, and never reuse a `Domain` value (the template's note under
-Engine Compatibility says why).
+references the ADR, and never reuse a **分野** value (the template's note under
+エンジンとの互換 says why).
 
 5.5. **Engine Specialist Validation** — Before saving, spawn the **primary engine specialist** via `Agent` to validate the drafted ADR:
    - Resolve the primary specialist: `<engine>-specialist` derived from `engine.name` in `project.yaml` (Godot→`godot-specialist`, Unity→`unity-specialist`, Unreal→`unreal-specialist`); if `engine.name` is absent or empty, read the Primary line of the `## Engine Specialists` section in `.claude/docs/technical-preferences.md`
    - If no engine is configured (neither source yields an engine), skip this step **Record ``Engine validation: NOT ASSESSED — no engine configured (`engine.name` unset in `project.yaml`)`` in this run's output.** A skipped check that says nothing is indistinguishable from a check that passed; the reader cannot tell engine guidance was never sought.
-   - Spawn `subagent_type: [primary specialist]` with: the ADR's Engine Compatibility section, Decision section, Key Interfaces, and the engine reference docs path. Ask them to:
+   - Spawn `subagent_type: [primary specialist]` with: the ADR's エンジンとの互換 section, 決定 section, 主なインタフェース, and the engine reference docs path. Ask them to:
      1. Confirm the proposed approach is idiomatic for the pinned engine version
      2. Flag any APIs or patterns that are deprecated or changed post-training-cutoff
      3. Identify engine-specific risks or gotchas not captured in the current ADR draft
-   - If the specialist identifies a **blocking issue** (wrong API, deprecated approach, engine version incompatibility): revise the Decision and Engine Compatibility sections accordingly, then confirm the changes with the user before proceeding
-   - If the specialist finds **minor notes** only: incorporate them into the ADR's Risks subsection
+   - If the specialist identifies a **blocking issue** (wrong API, deprecated approach, engine version incompatibility): revise the 決定 and エンジンとの互換 sections accordingly, then confirm the changes with the user before proceeding
+   - If the specialist finds **minor notes** only: incorporate them into the ADR's リスク section
 
 **Review mode check** — apply before spawning TD-ADR:
 - `solo` → skip. Note: "TD-ADR skipped — Solo mode." Proceed to Step 5.7 (GDD sync check).
@@ -168,13 +81,13 @@ Engine Compatibility says why).
 5.6. **Technical Director Strategic Review** — After the engine specialist validation, spawn `technical-director` via `Agent` using gate **TD-ADR** (`.claude/docs/director-gates/td-adr.md`):
    - Pass: the ADR file path (or draft content), engine version, domain, any existing ADRs in the same domain
    - The TD validates architectural coherence (is this decision consistent with the whole system?) — distinct from the engine specialist's API-level check
-   - On CONCERNS: show them to the user verbatim and ask with the standard options from `director-gates.md` — `Revise flagged items` / `Accept and proceed` / `Discuss further`. Revise the flagged Decision or Alternatives sections only on `Revise flagged items`.
-   - On REJECT: show the blockers verbatim and revise the Decision or Alternatives sections before proceeding.
+   - On CONCERNS: show them to the user verbatim and ask with the standard options from `director-gates.md` — `Revise flagged items` / `Accept and proceed` / `Discuss further`. Revise the flagged 決定 or 検討した案 sections only on `Revise flagged items`.
+   - On REJECT: show the blockers verbatim and revise the 決定 or 検討した案 sections before proceeding.
    - A revised draft still reaches the user through the write approval below; nothing is written before it. A `NOT ASSESSED` answer is not an approval — name the missing input (`director-gates.md`).
 
 5.7. **GDD Sync Check** — Before presenting the write approval, scan all GDDs
-referenced in the "GDD Requirements Addressed" section for naming inconsistencies
-with the ADR's Key Interfaces and Decision sections (renamed signals, API methods,
+referenced in the "対応するGDDの要件" section for naming inconsistencies
+with the ADR's 主なインタフェース and 決定 sections (renamed signals, API methods,
 or data types). If any are found, surface them as a **prominent warning block**
 immediately before the write approval — not as a footnote:
 
@@ -195,7 +108,7 @@ branch and render like a clean result.
   `GDD sync: checked [N] referenced GDD(s), no naming inconsistencies.`
   A silent pass is indistinguishable from a check that never ran, and this one
   guards against developers implementing the wrong interface from a stale GDD.
-- **Could not check** — the ADR has no `GDD Requirements Addressed` section, it
+- **Could not check** — the ADR has no `対応するGDDの要件` section, it
   names no GDDs, or a named GDD does not exist on disk. Print:
   `GDD sync: NOT ASSESSED — [which reason, and which files]`
   Do **not** treat an ADR that references no GDDs as one whose GDDs are
@@ -216,7 +129,8 @@ If no GDD sync issues:
   - [A] Write ADR to `docs/51-tdr/tdr-[NNNN]-[slug].md` (a TDR) or `docs/52-adr/adr-[NNNN]-[slug].md` (an ADR), as Step 2 chose
   - [B] Not yet — I need to review further
 
-If yes to any write option, write the file, creating the directory if needed.
+If yes to any write option, create the file with `python -m tools.graph new` as
+above, fill it, and run `python -m tools.graph check`.
 For option [A] with GDD update: also update the GDD file(s) to use the new names.
 
 6. **Update Architecture Registry**
@@ -226,7 +140,7 @@ Scan the written ADR for new architectural stances that should be registered:
 - Interface contracts it defines (signal signatures, method APIs)
 - Performance budget it claims
 - API choices it makes explicitly
-- Patterns it bans (Consequences → Negative or explicit "do not use X")
+- Patterns it bans (影響 → 悪い影響, or an explicit "do not use X")
 
 Present candidates:
 ```

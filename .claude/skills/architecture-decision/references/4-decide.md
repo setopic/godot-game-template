@@ -19,11 +19,12 @@ a **confirm/adjust** prompt using `AskUserQuestion` — not open-ended questions
   assertion from a guess. This field is load-bearing — `/architecture-review`
   flags unaccepted dependencies, `/dev-story` reads it, and the acceptance route
   in Phase 0 **refuses to accept an ADR whose dependencies are not themselves
-  Accepted**. A dependency list that defaulted to empty makes that check pass
+  Accepted** (`status: stable`). A dependency list that defaulted to empty makes that check pass
   while examining nothing. `UNKNOWN` must be resolved during the confirm/adjust
   prompt; it is a prompt state, never a value written to the file
 - **GDD linkage**: Extract which GDD systems the title directly relates to
-- **Status**: Always `Proposed` for new ADRs — never ask the user what the status is
+- **Status**: Always `Proposed` for new ADRs — the front matter's `status: draft`
+  (game-template, PDR-0006: there is no `## Status` section) — never ask the user what the status is
 
 **Scope of assumptions tab**: Assumptions cover only: problem framing, alternative approaches, upstream dependencies, GDD linkage, and status. Schema design questions (e.g., "How should spawn timing work?", "Should data be inline or external?") are NOT assumptions — they are design decisions belonging to a separate step after the assumptions are confirmed. Do not include schema design questions in the assumptions AskUserQuestion widget.
 
@@ -41,7 +42,7 @@ Alternatives I'll consider:
   C) [option from common patterns]
 GDD systems driving this: [list derived from context]
 Dependencies: [upstream ADRs if any, otherwise "None"]
-Status: Proposed
+Status: Proposed (status: draft)
 
 [A] Proceed — draft with these assumptions
 [B] Change the alternatives list
@@ -63,11 +64,12 @@ Decision: [specific unresolved point]
 [C] Different approach — I'll describe it
 ```
 
-**ADR Dependencies** — derive from existing ADRs, then confirm:
-- Does this decision depend on any other ADR not yet Accepted?
+**前提のADR** — derive from existing ADRs, then confirm:
+- Does this decision depend on any other ADR not yet Accepted (`status: stable`)?
 - Does it unlock or unblock any other ADR or epic?
 - Does it block any specific epic from starting?
 
-Record answers in the **ADR Dependencies** section. Write "None" for each field if no constraints apply.
+Record answers in the **前提のADR** section, and every TDR or ADR on its
+`**前提**` row in the front matter's `depends_on` too. Write 「なし」 for each field if no constraints apply.
 
 ---

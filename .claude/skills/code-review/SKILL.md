@@ -89,7 +89,7 @@ If no ADR references found, note: "No ADR references found — ADR compliance ch
 For each referenced ADR, load **only the sections this check needs — never an unbounded full read.** A substantial ADR exceeds the 25k-token `Read` cap, and a capped read's only recovery is paging the remainder — the most expensive way to read a file. Use the same pattern as `/dev-story` and `/create-stories`:
 
 1. **Map the headings** (cheap — line numbers only): `Grep pattern="^## " path="[adr-file]" output_mode="content" -n`
-2. **Bounded-read only `## Decision` and `## Consequences`**, using the line numbers to set `Read(offset, limit)` spans that end where the next heading begins. If the heading map is empty (a nonstandard ADR predating the template), fall back to one full `Read`; if that truncates at the cap, grep for the decision/consequence content directly rather than paging the remainder.
+2. **Bounded-read only `## 決定` and `## 影響`** (game-template, PDR-0006: the ADR sections are Japanese), using the line numbers to set `Read(offset, limit)` spans that end where the next heading begins. If the heading map is empty (a nonstandard ADR predating the template), fall back to one full `Read`; if that truncates at the cap, grep for the decision/consequence content directly rather than paging the remainder.
 
 A referenced ADR whose file is missing, or that cannot be read, makes ADR
 Compliance `NOT ASSESSED — [ADR] could not be read`: name it. No reference at

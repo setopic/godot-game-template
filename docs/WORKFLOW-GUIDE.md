@@ -545,10 +545,14 @@ For each significant technical decision:
 - All options with pros/cons and engine compatibility
 - Chosen option with rationale
 - Consequences (positive, negative, risks)
-- Dependencies (Depends On, Enables, Blocks, Ordering Note)
-- GDD Requirements Addressed (linked by TR-ID)
+- 前提のADR (前提, 可能にするもの, 止めているもの, 順序の注意: Depends On, Enables, Blocks, Ordering Note)
+- 対応するGDDの要件 (linked by TR-ID)
 
-ADRs go through a lifecycle: Proposed > Accepted > Superseded/Deprecated.
+ADRs go through a lifecycle: Proposed > Accepted > Superseded/Deprecated. In
+game-template (PDR-0006) the record is a graph node created with
+`python -m tools.graph new`, its sections are Japanese
+(`docs/00-meta/templates/adr.md`), and the lifecycle is its front matter
+`status:`: `draft` > `stable` > `deprecated`.
 
 **Minimum 3 Foundation-layer ADRs are required** before the gate check.
 

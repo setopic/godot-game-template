@@ -3,14 +3,14 @@
 > Part of `/architecture-review`. `SKILL.md` names when to read this file; the settings it
 > resolved and the rules under its later headings still apply here.
 
-## Phase 5: Engine Compatibility Cross-Check
+## Phase 5: エンジンとの互換 Cross-Check
 
 **In this file:**
 
 - Version Consistency
 - Post-Cutoff API Consistency
 - Deprecated API Check
-- Missing Engine Compatibility Sections
+- Missing エンジンとの互換 Sections
 - Engine Specialist Consultation
 
 Across all ADRs, check for engine consistency:
@@ -20,7 +20,7 @@ Across all ADRs, check for engine consistency:
 - If any ADR was written for an older engine version, flag it as potentially stale
 
 ### Post-Cutoff API Consistency
-- Collect all "Post-Cutoff APIs Used" fields from all ADRs
+- Collect all "学習の範囲より後のAPI" fields from all ADRs
 - For each, verify against the relevant module reference doc
 - Check that no two ADRs make contradictory assumptions about the same post-cutoff API
 
@@ -28,15 +28,15 @@ Across all ADRs, check for engine consistency:
 - Grep all ADRs for API names listed in `deprecated-apis.md`
 - Flag any ADR referencing a deprecated API
 
-### Missing Engine Compatibility Sections
-- List all ADRs that are missing the Engine Compatibility section entirely
+### Missing エンジンとの互換 Sections
+- List all ADRs that are missing the エンジンとの互換 section entirely
 - These are blind spots — their engine assumptions are unknown
 
 Output format:
 ```
 ### Engine Audit Results
 Engine: [name + version]
-ADRs with Engine Compatibility section: X / Y total
+ADRs with エンジンとの互換 section: X / Y total
 
 Deprecated API References:
   - ADR-0002: uses [deprecated API] — deprecated since [version]
@@ -55,7 +55,7 @@ Post-Cutoff API Conflicts:
 After completing the engine audit above, spawn the **primary engine specialist** via `Agent` for a domain-expert second opinion:
 - Resolve the primary specialist: `<engine>-specialist` derived from `engine.name` in `project.yaml` (Godot→`godot-specialist`, Unity→`unity-specialist`, Unreal→`unreal-specialist`); if `engine.name` is absent or empty, read the Primary line of the `## Engine Specialists` section in `.claude/docs/technical-preferences.md`
 - If no engine is configured (neither source yields an engine), skip this consultation **Record ``Engine validation: NOT ASSESSED — no engine configured (`engine.name` unset in `project.yaml`)`` in this run's output.** A skipped check that says nothing is indistinguishable from a check that passed; the reader cannot tell engine guidance was never sought.
-- Spawn `subagent_type: [primary specialist]` with: all ADRs that contain engine-specific decisions or `Post-Cutoff APIs Used` fields, the engine reference docs, and the Phase 5 audit findings. Ask them to:
+- Spawn `subagent_type: [primary specialist]` with: all ADRs that contain engine-specific decisions or `学習の範囲より後のAPI` fields, the engine reference docs, and the Phase 5 audit findings. Ask them to:
   1. Confirm or challenge each audit finding — specialists may know of engine nuances not captured in the reference docs
   2. Identify engine-specific anti-patterns in the ADRs that the audit may have missed (e.g., using the wrong Godot node type, Unity component coupling, Unreal subsystem misuse)
   3. Flag ADRs that make assumptions about engine behaviour that differ from the actual pinned version

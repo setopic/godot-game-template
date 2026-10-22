@@ -91,7 +91,7 @@ If the reference files do not cover an API or a difference, say so and mark it u
 
 **ADR Compliance**: Before implementing any system, check `docs/51-tdr/` (TDRs) and `docs/52-adr/` (ADRs) for a governing ADR. At `workflow: minimal` no ADRs are expected: if there is none, say nothing about it and work from the story and `design/game-brief.md`.
 If an ADR exists for this system:
-- Follow its Implementation Guidelines exactly
+- Follow its 実装の指針 exactly
 - If the ADR's guidelines conflict with what seems better, flag the discrepancy rather than silently deviating: "The ADR says X, but I think Y would be better — proceed with ADR or flag for architecture review?"
 - An Accepted ADR changes only through a superseding ADR (`/architecture-decision`, then `/architecture-decision accept` — only the user, or technical-director on the user's confirmation, moves it to Accepted) — not on a request, and not on lead-programmer's approval alone
 - If no ADR exists for a new system, surface this (not at `workflow: minimal`, which expects no ADRs): "No ADR found for [system]. Consider running /architecture-decision first."

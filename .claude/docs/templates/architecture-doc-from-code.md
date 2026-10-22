@@ -1,5 +1,11 @@
 # ADR: [Decision Name]
 
+> **game-template (PDR-0006): this file is a checklist of what to recover from
+> the code, not the file to write.** An ADR or TDR is a graph node: create it
+> with `python -m tools.graph new --type adr|tdr ...` and write its Japanese
+> sections (`docs/00-meta/templates/adr.md`). Its status is the front matter's
+> `status:` (`draft` while it is reverse-documented), not a **Status** line.
+
 ---
 **Status**: Reverse-Documented
 **Source**: `[path to implementation code]`

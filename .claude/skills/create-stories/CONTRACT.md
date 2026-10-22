@@ -12,7 +12,7 @@ and `/story-readiness` + `/dev-story`.
 |------|---------------------------|-----------|
 | `production/epics/[epic-slug]/EPIC.md` | `Layer:`, `GDD:` path, `Architecture Module:`, `## Governing ADRs` table, `## GDD Requirements` table with TR-IDs | Yes |
 | `design/gdd/[filename].md` | The sections required at the system's tier (all 8 at `full`; the 5 required + conditional Formulas at `standard`), especially `## Acceptance Criteria`, `## Formulas`, `## Edge Cases` | Yes |
-| `docs/51-tdr/tdr-NNNN-[slug].md` or `docs/52-adr/adr-NNNN-[slug].md` (all governing ADRs) | `## Status`, `## Summary`, `## Decision` (incl. `### Implementation Guidelines`), `## Engine Compatibility`, `## Last Verified` / `## Date`, the `**Depends On**` row (read through `adr-status.sh`) | Yes |
+| `docs/51-tdr/tdr-NNNN-[slug].md` or `docs/52-adr/adr-NNNN-[slug].md` (all governing ADRs) | front matter `status:`, `## 要約`, `## 決定` (incl. `### 実装の指針`), `## エンジンとの互換`, `## 最終確認日` / `## 日付`, the `**前提**` row and `depends_on` (read through `adr-status.sh`) | Yes |
 | `docs/architecture/control-manifest.md` | Layer rules (required patterns, forbidden patterns, guardrails), `Manifest Version:` date in header | Yes |
 | `docs/architecture/tr-registry.yaml` | All TR-IDs for the epic's system, with stable `id` values | Yes |
 
@@ -43,7 +43,7 @@ and `/story-readiness` + `/dev-story`.
 ### Output Guarantees
 - Every story file contains a `TR-[system]-NNN` reference in its `## Context` section (or `TR-[system]-???` with a warning if the registry has no match) — at `minimal`, `Brief MVP feature N` instead
 - Every story file contains an `ADR Governing Implementation:` line referencing at least one ADR, or an explicit `ADR: N/A — [reason]` line
-- Every story file has a `Status:` field — either `Ready` or `Blocked` (if the governing ADR is `Proposed`, `Deprecated` or `Superseded`, or an ADR it depends on is not `Accepted`)
+- Every story file has a `Status:` field — either `Ready` or `Blocked` (if the governing ADR is Proposed, Deprecated or Superseded, or an ADR it depends on is not Accepted). An ADR's status is its front matter `status:` (game-template, PDR-0006): Accepted is `stable`, Proposed is `draft` or `review`, Deprecated and Superseded are `deprecated`
 - Every story file has a `Type:` field — one of: Logic, Integration, Visual/Feel, UI, Config/Data
 - Every story file has a `Manifest Version:` field matching the date from `docs/architecture/control-manifest.md`'s header at time of writing — at `minimal`, `N/A (minimal — no control manifest)`
 - Every story file has a `## Test Evidence` section stating the expected evidence location for its type
@@ -64,7 +64,7 @@ and `/story-readiness` + `/dev-story`.
 - Never invent acceptance criteria — all criteria must come from the GDD (from `design/game-brief.md` at `minimal`)
 - Never invent implementation notes — all guidance must come from the referenced ADR
 - Never write story files without presenting the full story list for approval first
-- Never mark a story `Status: Ready` if its governing ADR has `Status: Proposed`, `Deprecated` or `Superseded`
+- Never mark a story `Status: Ready` if its governing ADR has `status: draft`, `review` or `deprecated` (Proposed, Deprecated or Superseded)
 - Never omit the `Manifest Version:` field — downstream readiness checks depend on it
 - Never reuse a story number (NNN) that already exists in the epic directory
 
@@ -74,7 +74,7 @@ and `/story-readiness` + `/dev-story`.
 It will read:
 - Each `story-NNN-[slug].md` file — specifically: `Status:`, `Type:`, `Manifest Version:` (header), `TR-[system]-NNN` (in `## Context`), `ADR Governing Implementation:` line, `## Acceptance Criteria` section, `## Test Evidence` section, `## Dependencies` section
 - `docs/architecture/control-manifest.md` — to compare its `Manifest Version:` against the story's embedded version
-- The referenced ADR file — to verify its `Status:` field is still `Accepted`
+- The referenced ADR file — to verify its front matter `status:` is still `stable` (Accepted)
 
 It assumes:
 - `Manifest Version:` in the story header is a date string that can be compared against the manifest's current `Manifest Version:` date

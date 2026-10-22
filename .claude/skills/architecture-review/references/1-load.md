@@ -81,12 +81,13 @@ without those lines was written before they existed and covers nothing.
   existed. Proceed with the full review; this run's report will carry the
   first stamps.
 
-Before reading any full document, use Grep to extract `## Summary` sections
-from all GDDs and ADRs:
+Before reading any full document, use Grep to extract the `## Summary` sections
+of all GDDs and the `## 要約` sections of all TDRs and ADRs (game-template,
+PDR-0006: their sections are Japanese):
 
 ```
 Grep pattern="## Summary" glob="design/gdd/*.md" output_mode="content" -A 4
-Grep pattern="## Summary" glob="docs/{51-tdr/tdr,52-adr/adr}-*.md" output_mode="content" -A 3
+Grep pattern="## 要約" glob="docs/{51-tdr/tdr,52-adr/adr}-*.md" output_mode="content" -A 3
 ```
 
 **Fail open on a missing Summary.** Establish the denominator: glob
@@ -100,7 +101,7 @@ ADRs reference the same system (Grep ADRs for the system name), then load only
 those ADRs' sections per Phase 1b. Skip unrelated GDDs entirely.
 
 For `engine` mode: load ADR sections only — GDDs are not needed for engine checks.
-In practice this is the `## Engine Compatibility` scan alone.
+In practice this is the `## エンジンとの互換` scan alone.
 
 For `coverage` or `full` mode: proceed to Phase 1b for the full in-scope set.
 **This is a section load, not a full-file load** — see below for why, and for the
@@ -141,11 +142,13 @@ cross-references material outside itself, or when a GDD matched zero sections
 ### Architecture Documents
 
 Phases 3–5 need the traceability table, the decision itself, engine claims, and
-the dependency edges — not Context, Consequences, Alternatives, Migration Plan or
-Validation Criteria, which explain *why* a decision was made.
+the dependency edges — not 背景, 影響, 検討した案, 移行の手順 or
+確かめ方, which explain *why* a decision was made. The status is the front
+matter's `status:` (game-template, PDR-0006), read for every TDR and ADR at once:
 
 ```
-Grep pattern="^## (Status|Decision|GDD Requirements Addressed|Engine Compatibility|ADR Dependencies|Performance Implications)" glob="docs/{51-tdr/tdr,52-adr/adr}-*.md" output_mode="content" -A 30
+Bash: bash .claude/scripts/adr-status.sh
+Grep pattern="^## (決定|対応するGDDの要件|エンジンとの互換|前提のADR|性能への影響)" glob="docs/{51-tdr/tdr,52-adr/adr}-*.md" output_mode="content" -A 30
 ```
 
 Interpret against **N_adr**, and distinguish the two zero-match cases — they are
@@ -154,7 +157,7 @@ not the same finding:
 | Result | Meaning | Action |
 |---|---|---|
 | N_adr matches | Normal. | Proceed on the scanned sections. |
-| Some ADRs match, some do not | Those ADRs are missing sections. | Record each as a **structural gap** in the Phase 7 report — a missing `## GDD Requirements Addressed` is itself a traceability finding. |
+| Some ADRs match, some do not | Those ADRs are missing sections. | Record each as a **structural gap** in the Phase 7 report — a missing `## 対応するGDDの要件` is itself a traceability finding. |
 | **0 matches, N_adr > 0** | **Malformed ADRs**, not "no architecture". | "[N_adr] ADRs found, none carries a scannable section — run `/architecture-decision retrofit [file]` on each." Do **not** report zero coverage; that would read as a design failure when it is a format failure. |
 
 Escalate to a full read of one ADR only when judging a conflict needs its
@@ -167,8 +170,8 @@ reasoning (Phase 4) — that is a per-ADR decision, not a blanket load.
 - `docs/engine-reference/[engine]/breaking-changes.md`
 - `docs/engine-reference/[engine]/deprecated-apis.md`
 - **Only the module docs the in-scope ADRs actually name** — take the union of
-  each ADR's `References Consulted` and `Post-Cutoff APIs Used` fields (already
-  captured by the `## Engine Compatibility` scan above) and read those files.
+  each ADR's `参照した資料` and `学習の範囲より後のAPI` fields (already
+  captured by the `## エンジンとの互換` scan above) and read those files.
   Reading the whole `modules/` directory loads engine subsystems the project may
   not use at all. If no ADR names any module, read none and note it: Phase 5
   cannot cross-check engine claims that were never made.

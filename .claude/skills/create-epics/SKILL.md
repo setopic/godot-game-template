@@ -98,8 +98,8 @@ per group of MVP features that ship together. Every epic names its slug, since
    - each GDD's Overview and Acceptance Criteria
      (`bash .claude/scripts/md-section.sh extract design/gdd/<file>.md "Overview"`);
    - `bash .claude/scripts/adr-status.sh` for every ADR's status, layer and missing
-     sections; then the GDD Requirements Addressed, Decision and Engine
-     Compatibility sections of the ADRs that cover in-scope systems;
+     sections; then the 対応するGDDの要件, 決定 and エンジンとの互換
+     sections of the ADRs that cover in-scope systems;
    - `docs/architecture/tr-registry.yaml`: the entries whose `system:` is an
      in-scope system;
    - the control manifest's `Manifest Version` line (read if present at `standard`,
@@ -124,7 +124,7 @@ module from `architecture.md` (at `minimal`, the brief's feature group).
 
 **Requirement coverage** (not at `minimal`). Each TR-ID of the system is:
 
-- **covered** when an **Accepted** ADR addresses it;
+- **covered** when an **Accepted** ADR (front matter `status: stable`) addresses it;
 - **untraced** otherwise. A requirement whose only ADR is `Proposed` (or any other
   status) is untraced, never covered: its row reads `❌ No ADR (ADR-NNNN Proposed)`,
   so `/create-stories` still sees that ADR and blocks its story.
@@ -136,7 +136,7 @@ Foundation-layer requirements at `standard`; any other untraced requirement at
 
 ```
 ## Epic: [System Name]
-**Layer**: [Foundation | Core | Feature | Presentation]
+**層**: [Foundation | Core | Feature | Presentation]
 **GDD**: design/gdd/[file].md   (at minimal: design/game-brief.md, MVP features [list])
 **Architecture Module**: [module]
 **Governing ADRs**: [Accepted ADRs, or "none"]
@@ -194,7 +194,7 @@ whole at every density.
 ```markdown
 # Epic: [System Name]
 
-> **Layer**: [Foundation | Core | Feature | Presentation]
+> **層**: [Foundation | Core | Feature | Presentation]
 > **GDD**: design/gdd/[file].md
 > **Architecture Module**: [module]
 > **Status**: Ready

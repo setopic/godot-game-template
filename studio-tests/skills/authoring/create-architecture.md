@@ -85,7 +85,7 @@ Fixture defaults.
 - `docs/engine-reference/godot/` has `VERSION.md`, `breaking-changes.md`, `deprecated-apis.md`, `current-best-practices.md` and `modules/`
 - `design/gdd/game-concept.md` and `design/gdd/systems-index.md` exist with real content
 - `design/gdd/combat.md` and `design/gdd/inventory.md` follow the GDD template
-- `docs/52-adr/adr-0001-event-bus.md` exists (`Status: Accepted`)
+- `docs/52-adr/adr-0001-event-bus.md` exists (`status: stable` (Accepted))
 - No `docs/architecture/architecture.md`
 - TD-ARCHITECTURE returns APPROVE; LP-FEASIBILITY returns FEASIBLE
 
@@ -94,7 +94,7 @@ Fixture defaults.
 **Expected behavior:**
 1. Phase 0a reads the four engine docs and only the `modules/` docs matching domains in the systems index
 2. Phase 0b Greps the requirement-bearing sections of each GDD (Detailed Rules/Design, Formulas, Dependencies, Tuning Knobs, Acceptance Criteria) and presents the Technical Requirements Baseline with IDs such as `TR-combat-001 (provisional)` (no TR registry yet)
-3. Phase 0c builds the ADR inventory from `## Status`/`## Summary` and `**Domain**` Greps, not full reads
+3. Phase 0c builds the ADR inventory from front matter `status:`, `## 要約` and `**分野**` Greps, not full reads
 4. Phase 0d shows the Engine Knowledge Gap Inventory and asks `[A] Proceed — flag HIGH RISK domains…` / `[B] Let me check the engine reference first…` / `[C] Show me which domains are HIGH RISK and why`
 5. Phases 1–4: each proposal (layer map, ownership map, each data-flow scenario, API boundaries) is shown and approved before the next, and each approval is recorded in `production/session-state/active.md` — nothing is written to the architecture document before Phase 7
 6. Phase 7: a one-paragraph summary, then "All sections approved. May I write the master architecture document?" with `[A] Yes — write…` / `[B] Show me the full draft inline first…` / `[C] Not yet…`
@@ -220,9 +220,9 @@ Fixture defaults.
 ### Case 5: ADR Audit — Proposed ADRs and uncovered requirements
 
 **Fixture:**
-- Same as Case 1, plus `docs/52-adr/adr-0002-save-format.md` with `Status: Proposed`
+- Same as Case 1, plus `docs/52-adr/adr-0002-save-format.md` with `status: draft` (Proposed)
 - Also `design/gdd/crafting.md`, written before the GDD template, with none of the scanned section headings
-- Baseline requirement `TR-combat-002` (combo state machine) is not covered by any ADR's GDD Requirements Addressed section or decision text
+- Baseline requirement `TR-combat-002` (combo state machine) is not covered by any ADR's 対応するGDDの要件 section or decision text
 
 **Input:** `/create-architecture`
 

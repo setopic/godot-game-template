@@ -44,7 +44,7 @@ For each gap:
 [GDD assumptions that conflict with verified engine behaviour — from Phase 5b]
 [Or: "None — all GDD assumptions consistent with verified engine behaviour"]
 
-### Engine Compatibility Issues
+### エンジンとの互換 Issues
 [List all engine issues from Phase 5]
 
 ### Architecture Document Coverage
@@ -69,7 +69,7 @@ FAIL: Critical gaps (Foundation/Core layer requirements uncovered),
 - **The requirement source is missing** — no `tr-registry.yaml` and no GDD
   requirements to trace *from*. A review with no left-hand column cannot report
   coverage; it can only report that it had nothing to compare.
-- **An ADR is unreadable or has no `## Status`**, so its rows are `❓` and their
+- **An ADR is unreadable or has no front matter `status:`**, so its rows are `❓` and their
   coverage is unknown rather than absent.
 - **Phase 6 could not run** — no `docs/architecture/architecture.md`. It must
   appear as a named `NOT ASSESSED` **line item** in the report rather than as

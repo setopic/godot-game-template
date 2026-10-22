@@ -11,10 +11,10 @@ Phases 1-4 AND the Technical Requirements Baseline from Phase 0b.
 ### ADR Quality Check
 
 For each ADR:
-- [ ] Does it have an Engine Compatibility section?
+- [ ] Does it have an エンジンとの互換 section?
 - [ ] Is the engine version recorded?
 - [ ] Are post-cutoff APIs flagged?
-- [ ] Does it have a "GDD Requirements Addressed" section?
+- [ ] Does it have a "対応するGDDの要件" section?
 - [ ] Does it conflict with the layer/ownership decisions made in this session?
 - [ ] Is it still valid for the pinned engine version?
 
@@ -25,7 +25,7 @@ For each ADR:
 ### Traceability Coverage Check
 
 Map every requirement from the Technical Requirements Baseline to existing ADRs.
-For each requirement, check if any ADR's "GDD Requirements Addressed" section
+For each requirement, check if any ADR's "対応するGDDの要件" section
 or decision text covers it:
 
 | Req ID | Requirement | ADR Coverage | Status |
