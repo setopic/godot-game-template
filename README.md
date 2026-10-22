@@ -131,14 +131,17 @@ graph LR
     ADR-0003["ADR-0003<br/>graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む"]
     ADR-0004["ADR-0004<br/>ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す"]
     ADR-0005["ADR-0005<br/>言語をGDScriptにする"]
+    ADR-0006["ADR-0006<br/>ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない"]
   end
   ADR-0001 -.->|decides| META-01
   ADR-0001 -.->|decides| ARCH-01
   ADR-0002 -.-|related| ADR-0003
   ADR-0003 -.-|related| ADR-0004
+  ADR-0003 -.-|related| ADR-0006
   ADR-0003 -.->|decides| UC-02
   ADR-0004 -.->|decides| UC-02
   ADR-0005 -.->|decides| UC-02
+  ADR-0006 -.->|decides| UC-02
   ARCH-02 -->|refines| ARCH-01
   CON-01 -->|depends_on| UC-01
   CON-01 -->|depends_on| DOM-01

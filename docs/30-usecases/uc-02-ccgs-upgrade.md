@@ -72,6 +72,8 @@ CCGSは、[ADR-0003](../50-adr/adr-0003-ccgs-import.md)のとおり、選んだ�
    | `.gitignore` | `.gitignore` | CCGSで増えた行のうち、要るものを足す |
    | `docs/architecture/`、`docs/registry/`、`design/registry/` | 同じパス | 作品が書き足すファイルである。この層では手を入れていないので、CCGSのもので上書きしてよい |
 
+   `docs/architecture/`は、`/architecture-decision`がCCGSの書式でADRを書く場所で、graphの検証から外してある（[ADR-0006](../50-adr/adr-0006-adr-location.md)）。graphのADRは`docs/50-adr/`にあり、CCGSの更新では写さない。
+
 6. 写さないファイルが入っていないことを確かめる。CCGSの`README.md`、`CONTRIBUTING.md`、ルートの`CLAUDE.md`、`SECURITY.md`、`.github/`の下のファイルは入れない（[ADR-0003](../50-adr/adr-0003-ccgs-import.md)）。
 
    ```bash
@@ -103,6 +105,7 @@ CCGSは、[ADR-0003](../50-adr/adr-0003-ccgs-import.md)のとおり、選んだ�
 | --- | --- | --- |
 | `fatal: refusing to merge unrelated histories` | `git merge ccgs/main`を使った | mergeを取り消し、手順4の`git checkout`で写す |
 | `check`が`docs/`のCCGSの文書で`G001`を出す | CCGSの`docs/`の文書は、フロントマターを持たない | `graph.toml`の`exclude`に、そのパスが入っているかを確かめる（[ADR-0003](../50-adr/adr-0003-ccgs-import.md)） |
+| `/architecture-decision`のADRを`docs/50-adr/`に移したくなる | ADRの置き場が2か所あり、どちらに書くかで迷った | 作品のゲームの技術の決定は`docs/architecture/`に、テンプレートと開発の進め方の決定は`docs/50-adr/`に書く（[ADR-0006](../50-adr/adr-0006-adr-location.md)） |
 | セッションの初めに、CCGSの読み込んだ文書の中身が出てこない | `.claude/rules/ccgs-studio.md`の`@`のパスが、ルートからの相対になっている | `@../docs/`、`@../../docs/`の形に直す |
 | graph側の`.claude/skills/`（`grill`、`lean`、`yomiyasu`）が変わった | CCGSが同じ名前のスキルを配り始めた | `git checkout HEAD -- .claude/skills/<名前>`で戻し、どちらを残すかを決める |
 
@@ -132,5 +135,6 @@ CCGSは、[ADR-0003](../50-adr/adr-0003-ccgs-import.md)のとおり、選んだ�
 - (decides) [ADR-0003 graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む](../50-adr/adr-0003-ccgs-import.md)
 - (decides) [ADR-0004 ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す](../50-adr/adr-0004-claude-md-split.md)
 - (decides) [ADR-0005 言語をGDScriptにする](../50-adr/adr-0005-gdscript.md)
+- (decides) [ADR-0006 ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない](../50-adr/adr-0006-adr-location.md)
 
 <!-- graph:auto:end -->

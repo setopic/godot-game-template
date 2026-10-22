@@ -10,6 +10,7 @@ supersedes: []
 related:
   - ADR-0002
   - ADR-0004
+  - ADR-0006
 ---
 
 # graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む
@@ -104,6 +105,7 @@ CCGSが、履歴を共通にして取り込める形（graph側に合わせた`m
 
 - [ADR-0002 Godotの版を4.7.2にする](./adr-0002-godot-version.md)
 - [ADR-0004 ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す](./adr-0004-claude-md-split.md)
+- [ADR-0006 ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない](./adr-0006-adr-location.md)
 
 `decides`: この決定が影響を与えるノード（ADR用）
 
@@ -113,5 +115,6 @@ CCGSが、履歴を共通にして取り込める形（graph側に合わせた`m
 
 - (related) [ADR-0002 Godotの版を4.7.2にする](./adr-0002-godot-version.md)
 - (related) [ADR-0004 ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す](./adr-0004-claude-md-split.md)
+- (related) [ADR-0006 ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない](./adr-0006-adr-location.md)
 
 <!-- graph:auto:end -->
