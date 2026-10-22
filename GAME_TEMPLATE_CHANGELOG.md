@@ -6,6 +6,18 @@
 
 現在の版は、`tools/graph/layers/game-template.toml`の`version`に書く。版の付け方と見出しの書き方は、[PROJECT_TEMPLATE_CHANGELOG.md](PROJECT_TEMPLATE_CHANGELOG.md)の「版の付け方」に合わせる。
 
+## 0.5.1（2026-10-23）
+
+### 追加
+
+CCGSの取り込み方と、決定の記録の分け方の決定を、PDR-0006に書いた（#16）。CCGSは丸ごと取り込み、CCGSのファイルも必要なら直す。CCGSの更新は、上書きで写すのではなく、更新の中身を読んで取り入れる。決定の記録は、PDR・TDR・ADR・DDRの4つの種別に分け、番号は種別ごとに0001から振る。TDRとADRの節はCCGSのADRの雛形の節を日本語にし、状態はフロントマターの`status`だけに持つ。
+
+PDR-0006は、PDR-0002（CCGSの取り込み方）とPDR-0004（ADRの置き場）を置き換えた。2つの`status`を`deprecated`にし、UC-02と`graph.toml`の注記の参照をPDR-0006に直した。`graph.toml`の`exclude`の注記は、0.4.0の振り直しでPDR-0003を指していたが、PDR-0006に直した。
+
+### 取り込む側の作業
+
+自分の文書がPDR-0002かPDR-0004を指していれば、取り込んだあとに`check`が`G020`を出す。PDR-0006の決定の節で、引き継ぐものと改めるものを確かめ、PDR-0006に差し替える。
+
 ## 0.5.0（2026-10-23）
 
 ### 追加

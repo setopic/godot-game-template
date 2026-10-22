@@ -2,7 +2,7 @@
 id: PDR-0004
 type: pdr
 title: ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない
-status: stable
+status: deprecated
 tags: [template]
 decides:
   - UC-02
@@ -14,7 +14,7 @@ related:
 # ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない
 
 - 日付: 2026-10-22
-- 状態: stable
+- 状態: deprecated（[PDR-0006](./pdr-0006-ccgs-whole-import-dr-types.md)が置き換えた）
 
 ## 背景
 
@@ -93,5 +93,6 @@ CCGSが、ADRの置き場や書式を設定で変えられるようにしたと�
 このノードを参照しているノード
 
 - (related) [PDR-0002 graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む](./pdr-0002-ccgs-import.md)
+- (supersedes) [PDR-0006 CCGSを丸ごと取り込み、決定の記録を4つの種別に分ける](./pdr-0006-ccgs-whole-import-dr-types.md)
 
 <!-- graph:auto:end -->

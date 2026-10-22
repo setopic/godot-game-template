@@ -133,6 +133,7 @@ graph LR
     PDR-0003["PDR-0003<br/>ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す"]
     PDR-0004["PDR-0004<br/>ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない"]
     PDR-0005["PDR-0005<br/>CCGSのsession-start.shとsetup-engineを、rulesのファイルから読み込みの行を探す形に直す"]
+    PDR-0006["PDR-0006<br/>CCGSを丸ごと取り込み、決定の記録を4つの種別に分ける"]
   end
   subgraph tdr["ゲームの外の技術の決定"]
     TDR-0001["TDR-0001<br/>Godotの版を4.7.2にする"]
@@ -159,11 +160,15 @@ graph LR
   PDR-0003 -.->|decides| UC-02
   PDR-0004 -.->|decides| UC-02
   PDR-0005 -.->|decides| UC-02
+  PDR-0006 ==>|supersedes| PDR-0002
+  PDR-0006 ==>|supersedes| PDR-0004
+  PDR-0006 -.->|decides| UC-02
   TDR-0002 -.->|decides| UC-02
   UC-01 -->|depends_on| DOM-01
   classDef draft stroke-dasharray: 4\,3;
   classDef deprecated opacity:0.5;
   class CON-01 draft;
+  class PDR-0002,PDR-0004 deprecated;
 ```
 
 <!-- graph:diagram:end -->

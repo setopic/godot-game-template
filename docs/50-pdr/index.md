@@ -22,6 +22,7 @@ tags: [index]
 - [PDR-0003 ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す](./pdr-0003-claude-md-split.md)
 - [PDR-0004 ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない](./pdr-0004-adr-location.md)
 - [PDR-0005 CCGSのsession-start.shとsetup-engineを、rulesのファイルから読み込みの行を探す形に直す](./pdr-0005-engine-import-in-rules.md)
+- [PDR-0006 CCGSを丸ごと取り込み、決定の記録を4つの種別に分ける](./pdr-0006-ccgs-whole-import-dr-types.md)
 <!-- graph:children:end -->
 
 ## 追加するとき

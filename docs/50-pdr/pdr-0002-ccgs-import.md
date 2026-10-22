@@ -2,7 +2,7 @@
 id: PDR-0002
 type: pdr
 title: graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む
-status: review
+status: deprecated
 tags: [template]
 decides:
   - UC-02
@@ -16,7 +16,7 @@ related:
 # graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む
 
 - 日付: 2026-10-22
-- 状態: review
+- 状態: deprecated（[PDR-0006](./pdr-0006-ccgs-whole-import-dr-types.md)が置き換えた）
 
 ## 背景
 
@@ -116,5 +116,6 @@ CCGSが、履歴を共通にして取り込める形（graph側に合わせた`m
 - (related) [PDR-0003 ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す](./pdr-0003-claude-md-split.md)
 - (related) [PDR-0004 ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない](./pdr-0004-adr-location.md)
 - (related) [TDR-0001 Godotの版を4.7.2にする](../51-tdr/tdr-0001-godot-version.md)
+- (supersedes) [PDR-0006 CCGSを丸ごと取り込み、決定の記録を4つの種別に分ける](./pdr-0006-ccgs-whole-import-dr-types.md)
 
 <!-- graph:auto:end -->
