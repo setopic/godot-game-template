@@ -19,7 +19,7 @@ related: []
 | 完了したときに得られる状態 | CCGSの新しい版のファイルが、game-templateに入っている。graph側のファイルと、この層で手を入れたファイルは残っている |
 | 影響 | 作業はブランチで行うので、mainは止まらない。作品へは、game-templateをマージした後に`make update`で届く |
 
-CCGSは、[PDR-0002](../50-pdr/pdr-0002-ccgs-import.md)のとおり、選んだパスだけを`git checkout`で写して取り込む（CCGSの`UPGRADING.md`のStrategy A2）。履歴が共通でないので、`git merge`は使わない。
+CCGSは、[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)のとおり、選んだパスだけを`git checkout`で写して取り込む（CCGSの`UPGRADING.md`のStrategy A2）。履歴が共通でないので、`git merge`は使わない。
 
 ## 事前条件
 
@@ -74,9 +74,9 @@ CCGSは、[PDR-0002](../50-pdr/pdr-0002-ccgs-import.md)のとおり、選んだ�
    | `.gitignore` | `.gitignore` | CCGSで増えた行のうち、要るものを足す |
    | `docs/architecture/`、`docs/registry/`、`design/registry/` | 同じパス | 作品が書き足すファイルである。この層では手を入れていないので、CCGSのもので上書きしてよい |
 
-   `docs/architecture/`は、`/architecture-decision`がCCGSの書式でADRを書く場所で、graphの検証から外してある（[PDR-0004](../50-pdr/pdr-0004-adr-location.md)）。graphの決定の記録（PDR・TDR・ADR）は`docs/50-pdr/`・`docs/51-tdr/`・`docs/52-adr/`にあり、CCGSの更新では写さない。
+   `docs/architecture/`は、`/architecture-decision`がCCGSの書式でADRを書く場所で、graphの検証から外してある（[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)）。graphの決定の記録（PDR・TDR・ADR）は`docs/50-pdr/`・`docs/51-tdr/`・`docs/52-adr/`にあり、CCGSの更新では写さない。
 
-6. 写さないファイルが入っていないことを確かめる。CCGSの`README.md`、`CONTRIBUTING.md`、ルートの`CLAUDE.md`、`SECURITY.md`、`.github/`の下のファイルは入れない（[PDR-0002](../50-pdr/pdr-0002-ccgs-import.md)）。
+6. 写さないファイルが入っていないことを確かめる。CCGSの`README.md`、`CONTRIBUTING.md`、ルートの`CLAUDE.md`、`SECURITY.md`、`.github/`の下のファイルは入れない（[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)）。
 
    ```bash
    git status --short
@@ -106,8 +106,8 @@ CCGSは、[PDR-0002](../50-pdr/pdr-0002-ccgs-import.md)のとおり、選んだ�
 | 症状 | 原因 | 対処 |
 | --- | --- | --- |
 | `fatal: refusing to merge unrelated histories` | `git merge ccgs/main`を使った | mergeを取り消し、手順4の`git checkout`で写す |
-| `check`が`docs/`のCCGSの文書で`G001`を出す | CCGSの`docs/`の文書は、フロントマターを持たない | `graph.toml`の`exclude`に、そのパスが入っているかを確かめる（[PDR-0002](../50-pdr/pdr-0002-ccgs-import.md)） |
-| `/architecture-decision`のADRを`docs/50-pdr/`に移したくなる | ADRの置き場が2か所あり、どちらに書くかで迷った | 作品のゲームの技術の決定は`docs/architecture/`に、テンプレートと開発の進め方の決定は`docs/50-pdr/`に書く（[PDR-0004](../50-pdr/pdr-0004-adr-location.md)） |
+| `check`が`docs/`のCCGSの文書で`G001`を出す | CCGSの`docs/`の文書は、フロントマターを持たない | `graph.toml`の`exclude`に、そのパスが入っているかを確かめる（[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)） |
+| `/architecture-decision`のADRを`docs/50-pdr/`に移したくなる | ADRの置き場が2か所あり、どちらに書くかで迷った | 作品のゲームの技術の決定は`docs/architecture/`に、テンプレートと開発の進め方の決定は`docs/50-pdr/`に書く（[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)） |
 | セッションの初めに、CCGSの読み込んだ文書の中身が出てこない | `.claude/rules/ccgs-studio.md`の`@`のパスが、ルートからの相対になっている | `@../docs/`、`@../../docs/`の形に直す |
 | `project.yaml`の`engine.name`と読み込みの行が違っても、セッションの初めに`ENGINE REFERENCE MISMATCH`が出ない | 手順4の3行目で`session-start.sh`を戻し忘れ、CCGSのもの（ルートの`CLAUDE.md`しか探さない）になっている | 手順5の表のとおり、`game-template (PDR-0005)`の注記の付いた箇所を入れ直す |
 | graph側の`.claude/skills/`（`grill`、`lean`、`yomiyasu`）が変わった | CCGSが同じ名前のスキルを配り始めた | `git checkout HEAD -- .claude/skills/<名前>`で戻し、どちらを残すかを決める |
@@ -139,6 +139,7 @@ CCGSは、[PDR-0002](../50-pdr/pdr-0002-ccgs-import.md)のとおり、選んだ�
 - (decides) [PDR-0003 ルートのCLAUDE.mdはgraphのままにし、CCGSの内容はrulesへ移す](../50-pdr/pdr-0003-claude-md-split.md)
 - (decides) [PDR-0004 ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない](../50-pdr/pdr-0004-adr-location.md)
 - (decides) [PDR-0005 CCGSのsession-start.shとsetup-engineを、rulesのファイルから読み込みの行を探す形に直す](../50-pdr/pdr-0005-engine-import-in-rules.md)
+- (decides) [PDR-0006 CCGSを丸ごと取り込み、決定の記録を4つの種別に分ける](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)
 - (decides) [TDR-0002 言語をGDScriptにする](../51-tdr/tdr-0002-gdscript.md)
 
 <!-- graph:auto:end -->
