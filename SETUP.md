@@ -49,13 +49,13 @@ python --version
 ## 2. 参加した人がすること
 
 1. 上の「1. 前提ツール」を入れる。
-2. 素材（画像・音・モデル・フォント）はGit LFSに入っている。取り出す前に、1度だけ`git lfs install`を回してから、作品のリポジトリをcloneする。Windowsでは、cloneの前に`git config --global core.longpaths true`も1度回す。`.claude/`の下に名前の長いファイルがあり、深いフォルダの下にcloneすると「Filename too long」で取り出しに失敗するからである。
-3. `.godot/`はGitに入れないので、cloneした直後に`godot --headless --import`を1度回す。`project.godot`がまだ無い作品では要らない。
-4. `gh auth login`を回す。`make ci PR=<番号>`がPRの題と本文を読むのに使う。
+2. `gh auth login`を回す。作品のリポジトリが非公開なら、HTTPSでcloneするのに、この認証が要る。`make ci PR=<番号>`がPRの題と本文を読むのにも使う。
+3. 素材（画像・音・モデル・フォント）はGit LFSに入っている。取り出す前に、1度だけ`git lfs install`を回してから、作品のリポジトリをcloneする。Windowsでは、cloneの前に`git config --global core.longpaths true`も1度回す。`.claude/`の下に名前の長いファイルがあり、深いフォルダの下にcloneすると「Filename too long」で取り出しに失敗するからである。
+4. `.godot/`はGitに入れないので、cloneした直後に`godot --headless --import`を1度回す。`project.godot`がまだ無い作品では要らない。
 5. Claude Codeを、リポジトリの根で起動する。CCGSのフックと、書く前に確認する設定は、根で起動したときにだけ読み込まれる。参加した人は`/start`を回さない。`/start`は、作品の段階などを決めて`project.yaml`に保存するもので、作品を作った人が下の「3. 作品を作った人が1回だけすること」の3で1度だけ回す。また`/start`は、エンジンが決まっていると`project.godot`を作る手順を案内するが、`project.godot`を作るのはテンプレートの管理者である（下の「3」の5）。次に何をするかは、`/help`で分かる。
 6. `make ci`が通ることを確かめる（下の「4. Godotのテスト」）。
 
-`project.godot`か`addons/gdUnit4/`がまだ無い作品では、作品を作った人が下の「3. 作品を作った人が1回だけすること」の7までを済ませるまで、シーン・スクリプト・テストの作業を始めない。そのあいだの`make ci`は、`project.godotが無いので、Godotの段を飛ばす`と出して文書の検査だけを回すので、通ってもテストは回っていない。作品を作った人が7まで済ませたら、`git pull`してから、上の3と6を回し直す。
+`project.godot`か`addons/gdUnit4/`がまだ無い作品では、作品を作った人が下の「3. 作品を作った人が1回だけすること」の7までを済ませるまで、シーン・スクリプト・テストの作業を始めない。そのあいだの`make ci`は、`project.godotが無いので、Godotの段を飛ばす`と出して文書の検査だけを回すので、通ってもテストは回っていない。作品を作った人が7まで済ませたら、`git pull`してから、上の4と6を回し直す。
 
 `*.blend`・`*.psd`・`*.kra`・`*.aseprite`は差分をマージできないので、編集の前にロックし、pushしたら外す。
 
@@ -70,7 +70,7 @@ git lfs unlock <パス>
 
 作品のリポジトリは、GitHubの"Use this template"で作る。[META-08](docs/00-meta/template-upgrade.md)の初回の手順は、"Use this template"で作ったリポジトリを前提にしている。`git clone`で作ると、`origin`がこのテンプレートを指したまま残る。CCGSの案内の`docs/WORKFLOW-GUIDE.md`は`git clone`を勧めているが、作品を起こすときはこの節に従う。
 
-作ったあとは、上の「2. 参加した人がすること」の1・2・4を行い、Claude Codeをリポジトリの根で起動してから、次の順に進める。各手順の中身は、リンク先にある。この節の「PR」は、1人でmainへ直接pushする作品（[META-05](docs/00-meta/dev-flow.md)の「5. PRを出すか、mainへ直接出すか」）では、その変更だけを入れたコミットに読み替える。
+作ったあとは、上の「2. 参加した人がすること」の1〜3を行い、Claude Codeをリポジトリの根で起動してから、次の順に進める。各手順の中身は、リンク先にある。この節の「PR」は、1人でmainへ直接pushする作品（[META-05](docs/00-meta/dev-flow.md)の「5. PRを出すか、mainへ直接出すか」）では、その変更だけを入れたコミットに読み替える。
 
 1. テンプレートと繋ぐ。[META-08](docs/00-meta/template-upgrade.md)の「1. 最初に一度だけ」を行う。upstreamのURLとラベルの作り方は、この層の値に置き換える（根の`README.md`の「テンプレートの更新を取り込む」の表）。"Use this template"で作った直後は、共通ファイルがテンプレートと同じなので、META-08の手順1（共通ファイルの上書き）は要らない。手順2から行う。
 2. サンプルノードを消し、表紙を書き換える。根の`README.md`の下の段にある「自分のプロジェクトに合わせる」に従い、`python -m tools.graph reset-samples --yes`もここで回す。`README.md`を作品の説明に書き換えるときも、この文書へのリンクは残す。そのあと`make all`を回す。`check`が参照切れ（`G004`）を挙げたら、それを直してから回し直す。
