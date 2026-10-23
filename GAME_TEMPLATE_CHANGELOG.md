@@ -6,6 +6,57 @@
 
 現在の版は、`tools/graph/layers/game-template.toml`の`version`に書く。版の付け方と見出しの書き方は、[PROJECT_TEMPLATE_CHANGELOG.md](PROJECT_TEMPLATE_CHANGELOG.md)の「版の付け方」に合わせる。
 
+## 上流と共通のファイルを書き換えたもの
+
+この層は、下の層と共通のファイル（[META-08](docs/00-meta/template-upgrade.md)の「共通ファイル」）のうち、次のものを書き換えている。上流がこれらのファイルを変えると、`make update`で競合することがある。
+
+| ファイル | この層での書き換え | 取り込みでの扱い |
+| --- | --- | --- |
+| `docs/00-meta/templates/adr.md` | 中身を、この層のADR（ゲームの中の構成の決定）の雛形に差し替えた（0.7.0、0.9.0） | 下の「adr.mdを取り込むとき」の手順で、この層の内容を残す |
+| `.gitattributes` | PDR-0001の`merge=ours`の行のパスを変え（0.4.0）、末尾にこの層の行を足した | 競合した部分だけを解き、この層の行と上流の行の両方を残す |
+
+`docs/00-meta/templates/`の`tdr.md`・`pdr.md`・`ddr.md`は、この層が新しく足したファイルで、上流には無い。上流が同じ名前のファイルを足さない限り、競合しない。`docs/00-meta/dev-flow.md`もこの層で書き足しているが、`merge=ours`なので競合しない。
+
+`adr.md`を`merge=ours`にしないのは、この層の直しが派生に届かなくなるからである（#25）。種別ごとの雛形を層の側に置くしくみは、上流にまだ無い。そのため、`graph.toml`の`adr`の種別の雛形を自分のものにするには、上流と共通の`adr.md`を書き換えるしかない。
+
+### adr.mdを取り込むとき
+
+上流が`adr.md`を変えた版を取り込むと、`make update`がこのファイルで競合して止まる。この層の内容を残し、上流の差分を読んで、要るものだけを手で取り入れる。
+
+1. 上流の変更を読む。`MERGE_HEAD`は取り込もうとしている上流の版で、`git merge-base HEAD MERGE_HEAD`は前に取り込んだ上流の版である。どの版で変わったかは、`git log --oneline HEAD..MERGE_HEAD -- docs/00-meta/templates/adr.md`と、`python -m tools.graph upgrade`が出す変更履歴で分かる。
+
+   ```bash
+   git diff $(git merge-base HEAD MERGE_HEAD) MERGE_HEAD -- docs/00-meta/templates/adr.md
+   ```
+
+2. ファイルを、この層の内容に戻す。
+
+   ```bash
+   git checkout --ours docs/00-meta/templates/adr.md
+   ```
+
+3. 1で読んだ変更のうち、この層の雛形にも要るもの（フロントマターのキーや、記入の案内の決まりの変更など）を、この層の節の形に合わせて手で書き足す。上流の既定のADRの節にだけ関わる変更は入れない
+4. `git add docs/00-meta/templates/adr.md`を回し、ほかの競合も解いてから`git commit`する。メッセージは、`make update`が用意したものが使われる（META-08）
+5. 取り入れた変更と見送った変更を、取り込みのPRの本文に書く
+
+競合せずに取り込みが終わることもある。上流の変更がこの層の書き換えと重ならない行だけなら、gitが両方を混ぜてマージコミットを作る。そのため、`make update`のあとは競合しなくても、次のコマンドで上流から入った行を確かめる。何も出なければ、上流は`adr.md`を変えていない。要らない行が入っていたら、取り込みのブランチで消す。
+
+```bash
+git diff HEAD^1 HEAD -- docs/00-meta/templates/adr.md
+```
+
+この手順は、game-templateが下の層（`graph-project-template`）を取り込むときのものである。game-templateから作った派生には、game-templateが解いたあとの`adr.md`が届く。派生が`adr.md`を自分の雛形に差し替えていれば、派生の取り込みでも同じ競合が起きる。そのときは、上の手順の「この層」を自分のリポジトリに、「上流」をgame-templateに読み替えて解く。何を取り入れるかは、その版の「取り込む側の作業」を見て決める。
+
+## 0.9.1（2026-10-23）
+
+### 変更
+
+上流と共通の`docs/00-meta/templates/adr.md`が`make update`で競合したときの手順を、このファイルの「上流と共通のファイルを書き換えたもの」に書いた（#25）。この層は0.7.0で、このファイルをこの層のADRの雛形に差し替えた。差し替えはそのままにし、上流がこのファイルを変えたら、この層の内容を残して、上流の差分から要るものだけを取り入れる。同じく書き換えている`.gitattributes`も、同じ表に挙げた。META-08と`docs/00-meta/`は下の層と共通のファイルなので、手順はこの層のファイルに置いた。種別ごとの雛形を層の側に置くしくみは、上流の`graph-doc-template`にissueで求める。
+
+### 取り込む側の作業
+
+無い。`adr.md`を自分の雛形に差し替えている派生は、「上流と共通のファイルを書き換えたもの」の手順で取り込む。
+
 ## 0.9.0（2026-10-23）
 
 ### 変更
