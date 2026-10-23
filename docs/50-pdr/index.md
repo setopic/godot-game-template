@@ -30,6 +30,7 @@ tags: [index]
 - [PDR-0011 CCGSの.gitignoreは、エンジンの節を除いてこの層の節に写す](./pdr-0011-ccgs-gitignore.md)
 - [PDR-0012 複数人で開発するときは、持ち主の承認を必須にする](./pdr-0012-codeowners-review-required.md)
 - [PDR-0013 CODEOWNERSの雛形には、既定の持ち主を置かない](./pdr-0013-codeowners-no-default-owner.md)
+- [PDR-0014 この層の共通ファイルを、作品が書き換えないものに限る](./pdr-0014-game-template-common-files.md)
 <!-- graph:children:end -->
 
 ## 追加するとき
