@@ -15,7 +15,11 @@ Then read silently before presenting anything else.
 - `design/gdd/game-concept.md` (or, at the minimal tier, `design/game-brief.md`) — concept exists?
 - `design/gdd/systems-index.md` — systems index exists?
 - Count GDD files: `design/gdd/*.md` (excluding game-concept.md and systems-index.md)
-- Count ADR files: `docs/51-tdr/tdr-*.md` and `docs/52-adr/adr-*.md`
+- Count ADR files: `docs/52-adr/adr-*.md`, leaving out any whose front matter
+  `tags` names `template`. game-template (PDR-0006, ADR-0001): the template ships
+  TDRs (`docs/51-tdr/tdr-*.md`) for the engine it pins, and those ADRs too, so
+  neither says how far the project has got. Count TDRs apart; they do not move
+  the phase
 - Count story files: `production/epics/**/*.md` (excluding EPIC.md)
 - `project.yaml` (`engine.name`) / `.claude/docs/technical-preferences.md` — engine configured?
 - `docs/engine-reference/` — engine reference docs present?
@@ -23,7 +27,8 @@ Then read silently before presenting anything else.
 
 ### Infer phase (if no project.stage / stage.txt)
 Use the same heuristic as `/project-stage-detect`:
-- 10+ source files in the code root → Production
+- 10+ source files in the code root (not counting `src/qa/`, which the
+  template ships: game-template, PDR-0016) → Production
 - Stories in `production/epics/` → Pre-Production
 - ADRs exist → Technical Setup
 - systems-index.md exists → Systems Design

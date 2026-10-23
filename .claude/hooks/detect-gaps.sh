@@ -84,9 +84,14 @@ fi
 # Tested directly rather than through resolve_code_root: this check runs before
 # the config helper is guaranteed to be sourced, and "is there any code at all"
 # does not need the engine to be known.
+#
+# game-template (PDR-0016): src/qa/ is left out, as project-state.sh leaves it
+# out of source_files. The template ships it to every game as a common file, so
+# it is not code the project wrote. Pruned here by hand because project-state.sh
+# needs the code root, and this check runs without one.
 for _root in src Assets Source; do
   [ -d "$_root" ] || continue
-  SRC_CHECK=$(find "$_root" -type f \( -name "*.gd" -o -name "*.cs" -o -name "*.cpp" -o -name "*.c" -o -name "*.h" -o -name "*.hpp" -o -name "*.rs" -o -name "*.py" -o -name "*.js" -o -name "*.ts" \) 2>/dev/null | head -1)
+  SRC_CHECK=$(find "$_root" -path src/qa -prune -o -type f \( -name "*.gd" -o -name "*.cs" -o -name "*.cpp" -o -name "*.c" -o -name "*.h" -o -name "*.hpp" -o -name "*.rs" -o -name "*.py" -o -name "*.js" -o -name "*.ts" \) -print 2>/dev/null | head -1)
   if [ -n "$SRC_CHECK" ]; then
     FRESH_PROJECT=false
     break
@@ -193,12 +198,28 @@ if [ "$DOC_CHECKS" = true ] && [ -z "$CODE_ROOT" ]; then
   fi
 fi
 
-# --- Check 1: Substantial codebase but sparse design docs ---
-if [ -n "$CODE_ROOT" ] && [ -d "$CODE_ROOT" ]; then
-  # Count source files (cross-platform, handles Windows paths)
-  SRC_FILES=$(find "$CODE_ROOT" -type f \( -name "*.gd" -o -name "*.cs" -o -name "*.cpp" -o -name "*.c" -o -name "*.h" -o -name "*.hpp" -o -name "*.rs" -o -name "*.py" -o -name "*.js" -o -name "*.ts" \) 2>/dev/null | wc -l)
+# --- Read the source-file and ADR counts from project-state.sh -------------
+#
+# game-template (PDR-0016, ADR-0001): checks 1, 3, 5 and 6 take the counts
+# project-state.sh prints as source_files and adr, so this hook, /start and
+# /help count the same files. Both counts leave out what the template ships to
+# every game -- src/qa/, and an ADR whose front matter `tags` names `template`
+# -- because it says nothing about how far the project has got. Read from the
+# helper, not counted again here, so that rule is written in one place.
+PS_ROWS=""
+if [ -f .claude/scripts/project-state.sh ]; then
+  PS_ROWS=$(bash .claude/scripts/project-state.sh --root . 2>/dev/null)
 else
-  SRC_FILES=0
+  echo "ℹ️  NOT CHECKED: the helper .claude/scripts/project-state.sh is missing, so checks 1, 3, 5 and 6 counted no source files or ADRs."
+fi
+ps_row() { printf '%s\n' "$PS_ROWS" | awk -F'\t' -v k="$1" '$1 == k { print $2; exit }'; }
+
+# --- Check 1: Substantial codebase but sparse design docs ---
+SRC_FILES=0
+if [ -n "$CODE_ROOT" ] && [ -d "$CODE_ROOT" ]; then
+  # `unknown` (no code root) or a missing row stays 0, as before.
+  _PS_SRC=$(ps_row source_files)
+  case "$_PS_SRC" in ''|*[!0-9]*) ;; *) SRC_FILES="$_PS_SRC" ;; esac
 fi
 
 # Only the GDDs at the top of design/gdd/ count, as in the commit check: copies
@@ -259,13 +280,18 @@ if [ "$DOC_CHECKS" = true ] && [ -n "$CODE_ROOT" ] && { [ -d "$CODE_ROOT/core" ]
     echo "⚠️  GAP: Core engine/systems exist but no docs/52-adr/ directory"
     echo "    Suggested action: run /architecture-decision (it creates the ADR with python -m tools.graph new)"
   else
-    ADR_COUNT=$(find docs/52-adr -maxdepth 1 -type f -name "adr-*.md" 2>/dev/null | wc -l)
-    ADR_COUNT=$(echo "$ADR_COUNT" | tr -d ' ')
+    # project-state.sh's adr: ADRs tagged `template` are not counted.
+    ADR_COUNT=$(ps_row adr)
 
-    if [ "$ADR_COUNT" -lt 3 ]; then
-      echo "⚠️  GAP: Core systems exist but only $ADR_COUNT ADR(s) documented"
-      echo "    Suggested action: /reverse-document architecture $CODE_ROOT/core/[system]"
-    fi
+    case "$ADR_COUNT" in
+      ''|*[!0-9]*) ;;
+      *)
+        if [ "$ADR_COUNT" -lt 3 ]; then
+          echo "⚠️  GAP: Core systems exist but only $ADR_COUNT ADR(s) documented (ADRs the template ships are not counted)"
+          echo "    Suggested action: /reverse-document architecture $CODE_ROOT/core/[system]"
+        fi
+        ;;
+    esac
   fi
 fi
 

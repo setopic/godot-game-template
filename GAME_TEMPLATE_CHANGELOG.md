@@ -17,6 +17,22 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`もこの層で書き足しているが、`merge=ours`なので競合しない。
 
+## 0.22.4（2026-10-23）
+
+### 変更
+
+0.22.1で`.claude/scripts/project-state.sh`を直したのと同じ考え方を、段階を推すほかの3か所に当てた（#57）。この層の配るADR（フロントマターの`tags`に`template`を持つもの。いまはADR-0001）と、この層の共通ファイルである`src/qa/`を、作品の進み具合に数えない。
+
+`.claude/hooks/detect-gaps.sh`は、check 1・3・5と段階の食い違いの警告で使うソースのファイルとADRの数を、`project-state.sh`の`source_files`と`adr`から読むようにした。同じ判定を2か所に書かないためである。これまでは、作ったばかりの作品でも`src/qa/`とADR-0001を数えていた。作品かどうかを見る冒頭の判定は、コードの置き場を決める前に走るので`project-state.sh`を使えない。そこでは`src/qa/`を`find`の`-prune`で外した。`project-state.sh`が無いときは、そのことを1行出し、数は0として扱う。
+
+`/project-stage-detect`の`SKILL.md`は、ソースのファイルを数える指示に`src/qa/`を除く断りを、ADRを数える指示に`template`のタグを持つADRを除く断りを足した。`/adopt`の`references/1-detect.md`は、TDRとADRをまとめて数えていた。これをADRだけにし、`template`のタグを持つADRも除いた。TDRは別に数え、段階の推定には使わない。この層がエンジンのTDRを配るからである。段階を推す基準のソースのファイルからも、`src/qa/`を除いた。
+
+この版で直したCCGSのファイルは、UC-02の手順3で、CCGSの更新のときに「手で合わせる」に出る。
+
+### 取り込む側の作業
+
+無い。`.claude/`は取り込みで届く。
+
 ## 0.22.3（2026-10-23）
 
 ### 変更
