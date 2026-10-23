@@ -178,6 +178,7 @@ CCGSが、ADRの置き場や書式を設定で変えられるようにしたと�
 このノードを参照しているノード
 
 - (depends_on) [PDR-0007 TDRとADRの最終確認日をフロントマターに持つ](./pdr-0007-last-verified-front-matter.md)
+- (depends_on) [PDR-0008 GDDと設計の文書はgraphの検証の外に置く](./pdr-0008-design-docs-outside-graph.md)
 - (depends_on) [UC-02 CCGSの更新を取り込む](../30-usecases/uc-02-ccgs-upgrade.md)
 
 <!-- graph:auto:end -->
