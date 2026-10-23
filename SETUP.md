@@ -72,7 +72,7 @@ git lfs unlock <パス>
 
 作ったあとは、上の「2. 参加した人がすること」の1〜3を行い、Claude Codeをリポジトリの根で起動してから、次の順に進める。各手順の中身は、リンク先にある。この節の「PR」は、1人でmainへ直接pushする作品（[META-05](docs/00-meta/dev-flow.md)の「5. PRを出すか、mainへ直接出すか」）では、その変更だけを入れたコミットに読み替える。
 
-1. テンプレートと繋ぐ。[META-08](docs/00-meta/template-upgrade.md)の「1. 最初に一度だけ」を行う。upstreamのURLとラベルの作り方は、この層の値に置き換える（根の`README.md`の「テンプレートの更新を取り込む」の表）。"Use this template"で作った直後は、共通ファイルがテンプレートと同じなので、META-08の手順1（共通ファイルの上書き）は要らない。手順2から行う。
+1. テンプレートと繋ぐ。[META-08](docs/00-meta/template-upgrade.md)の「1. 最初に一度だけ」を行う。upstreamのURLとラベルの作り方は、この層の値に置き換える（根の`README.md`の「テンプレートの更新を取り込む」の表）。"Use this template"で作った直後は、共通ファイルがテンプレートと同じなので、META-08の手順1（共通ファイルの上書き）は要らない。手順2から行う。手順3の`make update UPDATE_ARGS=--allow-unrelated-histories`で競合が出たら、作ってから繋ぐまでのあいだにテンプレートが更新されている。作品はまだそのファイルを書き換えていないので、競合したファイルはテンプレートの側を取る。`git diff --name-only --diff-filter=U | xargs git checkout --theirs --`を回し、`git add -A`のあと`git commit --no-edit`でマージを終える。
 2. サンプルノードを消し、表紙を書き換える。根の`README.md`の下の段にある「自分のプロジェクトに合わせる」に従い、`python -m tools.graph reset-samples --yes`もここで回す。`README.md`を作品の説明に書き換えるときも、この文書へのリンクは残す。そのあと`make all`を回す。`check`が参照切れ（`G004`）を挙げたら、それを直してから回し直す。
 3. 最初のセッションで`/start`を回す。`/start`は`project.yaml`を書き換えることがあり、`project.yaml`は`merge=ours`ではない。1の取り込みより前に回すと、取り込みで`project.yaml`が競合するおそれがあるので、ここで回す。`/start`が`project.yaml`に保存するかを聞いたら、「Save them」を選ぶ。`project.yaml`はテンプレートの管理者が持つファイルで、作品を作った人はその管理者だからである（下の段落）。書き換わった`project.yaml`と`production/stage.txt`は、その変更だけのPRにする。
 4. GdUnit4を入れ、`addons/gdUnit4/`だけのPRを出す（下の「4. Godotのテスト」）。
