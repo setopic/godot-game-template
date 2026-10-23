@@ -17,6 +17,18 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`もこの層で書き足しているが、`merge=ours`なので競合しない。
 
+## 0.17.0（2026-10-23）
+
+### 変更
+
+複数人で開発するときは、mainの保護で「Require review from Code Owners」を有効にし、持ち主のパスを変えるPRは持ち主の承認を必須にすると決めた（#38）。META-05の「mainを保護する」の表に設定を足した。PRを出した人は自分のPRを承認できないので、役割が1人だけなら、`CODEOWNERS`のその行に代わりの持ち主を並べる。このやり方を、META-05の「持ち主を決める」と`.github/CODEOWNERS.example`の冒頭の注記に書いた。理由と却下した案は、PDR-0012に書いた。
+
+1人で開発する作品には当たらない。
+
+### 取り込む側の作業
+
+`docs/00-meta/dev-flow.md`は`merge=ours`なので、取り込んでもMETA-05の変更は届かない。複数人で開発するなら、この層のMETA-05の「mainを保護する」と「持ち主を決める」から手で写し、mainの保護に設定を足す。
+
 ## 0.16.0（2026-10-23）
 
 ### 変更

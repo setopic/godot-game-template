@@ -28,6 +28,7 @@ tags: [index]
 - [PDR-0009 CODEOWNERSは雛形として配り、作品が担当者を入れる](./pdr-0009-codeowners-example.md)
 - [PDR-0010 開発の段階はCCGSの7段階をそのまま使う](./pdr-0010-ccgs-seven-stages.md)
 - [PDR-0011 CCGSの.gitignoreは、エンジンの節を除いてこの層の節に写す](./pdr-0011-ccgs-gitignore.md)
+- [PDR-0012 複数人で開発するときは、持ち主の承認を必須にする](./pdr-0012-codeowners-review-required.md)
 <!-- graph:children:end -->
 
 ## 追加するとき
