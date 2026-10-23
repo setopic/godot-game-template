@@ -21,15 +21,20 @@
 
 ### 追加
 
-`README.md`のこの層の説明に、3つの節を足した。作品を起こしてから最初のテストが通るまでの手順が、READMEとMETA-08とスキルの資料に散らばっていたからである。
+開発環境を用意する手順を、根の`SETUP.md`にまとめた。作品を起こしてから最初のテストが通るまでの手順が、README・META-08・スキルの資料に散らばっていて、作品に参加した人がすることだけを抜き出した一覧も無かったからである。`SETUP.md`はこの層の共通ファイルにした。`README.md`は`merge=ours`で、作品が作品の説明に書き換えるので、READMEに書くと作品の参加者に届かない。`docs/`の下はグラフのノードとして扱われるので、根に置いた。
 
-- 「新しいゲームを起こす」に、"Use this template"で作ってから`make ci`が通るまでの順番を、各手順へのリンクで並べた。`project.godot`は`/setup-engine`の7.5の手順だけで作り、`/setup-engine`の全体は回さない。`addons/gdUnit4/`は`project.godot`より先に入れる。`project.godot`ができた時点で、`godot-ci.sh`が`tests/unit/qa/`のテストを回そうとして落ちるからである。
-- 「前提ツール（Windows）」に、bash・git-lfs・gh・make・jqの入れ方と、`godot`という名前でPATHに通すための2つのファイルを書いた。`make ci`は`engine.path`を読まないので、その旨を「Godotで開く前に」にも足した。
-- 「Godotのテスト」に、GdUnit4の入れ方、手元での回し方（`commands.test`と`make ci`）、自分のテストの置き場（`tests/unit/<system>/`。PDR-0016）を書いた。
+`SETUP.md`には、次の4つの節を置いた。
+
+- 「1. 前提ツール」に、GodotとPythonに加えて、Windowsで要るbash・git-lfs・gh・make・jqの入れ方と、`godot`という名前でPATHに通すための2つのファイルを書いた。`make ci`は`engine.path`を読まないので、PATHに通す。
+- 「2. 参加した人がすること」に、clone・`--import`・`gh auth login`・Claude Codeの起動・`make ci`の順番を書いた。
+- 「3. 作品を作った人が1回だけすること」に、"Use this template"で作ってから`make ci`が通るまでの順番を、各手順へのリンクで並べた。`project.godot`は`/setup-engine`の7.5の手順だけで作り、`/setup-engine`の全体は回さない。`addons/gdUnit4/`は`project.godot`より先に入れる。`project.godot`ができた時点で、`godot-ci.sh`が`tests/unit/qa/`のテストを回そうとして落ちるからである。
+- 「4. Godotのテスト」に、GdUnit4の入れ方、手元での回し方（`commands.test`と`make ci`）、自分のテストの置き場（`tests/unit/<system>/`。PDR-0016）を書いた。
+
+`README.md`の「Godotで開く前に」は`SETUP.md`に移し、代わりに「開発環境を用意する」の節から`SETUP.md`を指した。共通ファイルの表にも`SETUP.md`を足した。
 
 ### 取り込む側の作業
 
-なし。`README.md`は`merge=ours`なので、作品が書き換えていればこの追加は届かない。作品のREADMEは作品の説明なので、手で足さなくてよい。
+`SETUP.md`は取り込みで届く。作品の`README.md`が作品の説明に書き換えてあるなら、`SETUP.md`へのリンクを手で足す。`README.md`は`merge=ours`なので、この層の「開発環境を用意する」の節は、作品が書き換えていれば届かない。
 
 ## 0.22.7（2026-10-23）
 

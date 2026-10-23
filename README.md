@@ -25,102 +25,9 @@ Godot 4.7.2とGDScriptでゲームを作るためのプロジェクトテンプ�
 
 Claude Codeは、リポジトリの根で起動する。CCGSのフックと、書く前に確認する設定は、根で起動したときにだけ読み込まれる。最初のセッションでは`/start`を回す。いまの状態に合わせて、次に何をするかを案内する。
 
-## 新しいゲームを起こす
+## 開発環境を用意する
 
-作品のリポジトリは、GitHubの"Use this template"で作る。[META-08](docs/00-meta/template-upgrade.md)の初回の手順は、"Use this template"で作ったリポジトリを前提にしている。`git clone`で作ると、`origin`がこのテンプレートを指したまま残る。CCGSの案内の`docs/WORKFLOW-GUIDE.md`は`git clone`を勧めているが、作品を起こすときはこの節に従う。
-
-作ったあとは、次の順に進める。各手順の中身は、リンク先にある。
-
-1. 前提ツールを入れる（下の「Godotで開く前に」と「前提ツール（Windows）」）。
-2. `git lfs install`を回してから、作品のリポジトリをcloneする（「Godotで開く前に」）。
-3. テンプレートと繋ぐ。[META-08](docs/00-meta/template-upgrade.md)の「1. 最初に一度だけ」を行う。upstreamのURLとラベルの作り方は、この層の値に置き換える（下の「テンプレートの更新を取り込む」の表）。
-4. サンプルノードを消し、表紙を書き換える。下の段の「自分のプロジェクトに合わせる」に従い、`python -m tools.graph reset-samples --yes`もここで回す。
-5. Claude Codeをリポジトリの根で起動し、`/start`を回す（上の「使い始める」）。
-6. GdUnit4を入れ、`addons/gdUnit4/`だけのPRを出す（下の「Godotのテスト」）。
-7. `project.godot`を作る。`/setup-engine`は回さず、その7.5（[7.5-scaffold.md](.claude/skills/setup-engine/references/7.5-scaffold.md)）の手順だけを行う。7.5が使う`project.yaml`の`engine.rendering`は、先に`/settings`で決める。
-8. 7のPRで、`EvidenceCapture`のautoloadの登録（[ADR-0001](docs/52-adr/adr-0001-evidence-capture-autoload.md)）と、GdUnit4のプラグインの有効化も行う。
-9. `godot --headless --import`を1度回し、`make ci`が通ることを確かめる（下の「Godotのテスト」）。
-
-6より7を後にするのは、`project.godot`ができた時点で、CIが`tests/unit/qa/`のテストを回そうとするからである。`addons/gdUnit4/`が無いと、`.github/scripts/godot-ci.sh`がそこで落とす。
-
-`/setup-engine`の全体を回さないのは、1〜7が共通ファイルを書き換えるからである（下の「テンプレートの更新を取り込む」の最後の段落）。エンジンと版は、このテンプレートで決めてある。7と8は、テンプレートの管理者が`project.godot`だけを変えるPRで行う（[META-05](docs/00-meta/dev-flow.md)の「シーンと`project.godot`」）。
-
-## Godotで開く前に
-
-次の2つを入れる。
-
-- Godot 4.7.2の標準版（.NETでない版）。[GitHubのreleases](https://github.com/godotengine/godot/releases)の4.7.2-stableか、公式サイトから入れる。版の理由は[TDR-0001](docs/51-tdr/tdr-0001-godot-version.md)にある。`project.yaml`の`commands`はPATHの`godot`を呼ぶので、PATHに通す。通せないときは、`/settings`で`engine.path`にエディタのパスを設定する。ただし`make ci`は`engine.path`を読まないので、`make ci`を回すならPATHに通す（Windowsでは下の「前提ツール（Windows）」）。
-- Python 3.12以上。`python -m tools.graph check`と`make ci`が使う。
-
-次のコマンドで、入ったことを確かめる。
-
-```bash
-godot --version
-python --version
-```
-
-`godot --version`は`4.7.2.stable`で始まる。
-
-素材（画像・音・モデル・フォント）はGit LFSに入れる。取り出す前に、1度だけ次を回す。
-
-```bash
-git lfs install
-```
-
-`*.blend`・`*.psd`・`*.kra`・`*.aseprite`は差分をマージできないので、編集の前にロックし、pushしたら外す。
-
-```bash
-git lfs lock <パス>
-git lfs unlock <パス>
-```
-
-`.godot/`はGitに入れないので、取り出した直後は`godot --headless --import`を1度回す。どのファイルをLFSに入れ、どのフォルダをGodotに読み込ませないかは、[TDR-0003](docs/51-tdr/tdr-0003-godot-git-settings.md)にある。
-
-## 前提ツール（Windows）
-
-Windowsでは、上の2つに加えて次のものを入れる。bash・jq・Pythonの入れ方は、[setup-requirements.md](.claude/docs/setup-requirements.md)にある。
-
-| ツール | 使うもの | 入れ方 |
-| --- | --- | --- |
-| Git for Windowsのbash | `.claude/hooks/`のフック、`make ci`のGodotの段（`scripts/local_ci.py`） | [setup-requirements.md](.claude/docs/setup-requirements.md)の「Platform Notes」 |
-| git-lfs | 素材の取り出し（上の`git lfs install`） | Git for Windowsに含まれる |
-| gh | ラベルの作成（`gh label clone`）、`make ci PR=<番号>` | `winget install GitHub.cli`のあと、`gh auth login` |
-| make | `make ci`・`make update`・`make readme` | `winget install ezwinports.make` |
-| jq | `.claude/hooks/`のフックの多く。無くても動くが、そのフックの検査が抜ける | [setup-requirements.md](.claude/docs/setup-requirements.md)の「Installing jq」 |
-
-Godotの実行ファイルは`Godot_v4.7.2-stable_win64.exe`という名前なので、そのままでは`godot`として呼べない。`make ci`はPATHにある`godot`という名前だけを探し、`engine.path`の設定は読まない。そのため、Godotを置いたフォルダに次の2つのファイルを作り、そのフォルダをPATHに足す。`godot`はbashから、`godot.cmd`はPowerShellとPythonから呼ぶためのものである。どちらも、ウィンドウを開かずに標準出力へ書く`_console.exe`のほうを呼ぶ。
-
-```sh
-#!/bin/sh
-exec "$(dirname "$0")/Godot_v4.7.2-stable_win64_console.exe" "$@"
-```
-
-```bat
-@"%~dp0Godot_v4.7.2-stable_win64_console.exe" %*
-```
-
-上が`godot`（拡張子なし）、下が`godot.cmd`の中身である。PowerShellとbashの両方で`godot --version`が`4.7.2.stable`で始まれば、通っている。
-
-## Godotのテスト
-
-テストは、[GdUnit4](https://github.com/godot-gdunit-labs/gdUnit4)で書いて回す。このテンプレートは`addons/gdUnit4/`を配っていないので、作品ごとに入れる。Godot 4.7.2で動くことを確かめた版は6.2.2である（[current-best-practices.md](docs/engine-reference/godot/current-best-practices.md)）。
-
-1. [GdUnit4のreleases](https://github.com/godot-gdunit-labs/gdUnit4/releases)から版を選び、中の`addons/gdUnit4/`をリポジトリの根の`addons/gdUnit4/`に置く。`gdUnit4`のUは大文字である。
-2. `addons/gdUnit4/bin/GdUnitCmdTool.gd`があることを確かめ、`addons/gdUnit4/`だけのPRを出す。
-3. プラグインの有効化（Project Settings → Plugins → GdUnit4）は`project.godot`を書き換えるので、上の「新しいゲームを起こす」の8で、`project.godot`だけのPRに入れる。
-
-エディタのAsset Storeから入れる手順は、[3-directories.md](.claude/skills/test-setup/references/3-directories.md)の「Installing GdUnit4」にある。ただしAsset Storeは`project.godot`のある状態で開くので、上の順番では使えない。
-
-手元では、次のどちらかで回す。
-
-| 回し方 | 何を回すか |
-| --- | --- |
-| `project.yaml`の`commands.test` | GdUnit4のテストだけ。`tests/`の下を全部回す |
-| `make ci` | `graph-check.yml`と`app-check.yml`（書き出しを除く）と同じ検査。GdUnit4のテストも含む（[META-05](docs/00-meta/dev-flow.md)） |
-
-`make ci PR=<番号>`のように番号を渡すと、PRのときにしか走らない検査も回す。`project.godot`が無いあいだは、`make ci`はGodotの段を飛ばす。
-
-自分のテストは、`tests/unit/<system>/`に置く（統合のテストは`tests/integration/<system>/`）。`tests/unit/qa/`はこの層の共通ファイルなので、そこには足さない（[PDR-0016](docs/50-pdr/pdr-0016-tests-unit-qa-common-file.md)）。テストの名前の付け方は、`.claude/rules/test-standards.md`にある。
+前提ツールの入れ方、作品に参加した人がすること、作品を作った人が1回だけすること、Godotのテストの入れ方と回し方は、[SETUP.md](SETUP.md)にある。作品の`README.md`を作品の説明に書き換えるときも、この文書へのリンクは残す。`README.md`は`merge=ours`なので、作品が書き換えたあとはテンプレートの直しが届かない。`SETUP.md`は共通ファイルなので、取り込むたびに新しくなる。
 
 ## テンプレートの更新を取り込む
 
@@ -137,7 +44,7 @@ exec "$(dirname "$0")/Godot_v4.7.2-stable_win64_console.exe" "$@"
 
 | 共通ファイル（作品は書き換えない） | 作品のもの（作品が書き換えてよい） |
 | --- | --- |
-| `.claude/`（`.claude/docs/technical-preferences.md`を除く）、`studio-tests/`、`docs/engine-reference/`、CCGSの案内の文書（`docs/CLAUDE.md`、`docs/WORKFLOW-GUIDE.md`、`docs/COLLABORATIVE-DESIGN-PRINCIPLE.md`、`docs/skill-flow-diagrams.md`、`docs/migration-guide-v1.1.md`）、`design/CLAUDE.md`、`src/CLAUDE.md`、`src/qa/`、`tests/unit/qa/`、`scripts/`、各フォルダの`.gdignore`、`.github/CODEOWNERS.example`、`GAME_TEMPLATE_CHANGELOG.md`、`LICENSE-CCGS`、`UPGRADING.md`、`CHANGELOG.md` | `project.yaml`、`.claude/docs/technical-preferences.md`、`docs/architecture/`、`docs/registry/`、`design/registry/`、`graph.toml`、`graph.mk`、`docs/templates/`、ノード本体 |
+| `.claude/`（`.claude/docs/technical-preferences.md`を除く）、`studio-tests/`、`docs/engine-reference/`、`SETUP.md`、CCGSの案内の文書（`docs/CLAUDE.md`、`docs/WORKFLOW-GUIDE.md`、`docs/COLLABORATIVE-DESIGN-PRINCIPLE.md`、`docs/skill-flow-diagrams.md`、`docs/migration-guide-v1.1.md`）、`design/CLAUDE.md`、`src/CLAUDE.md`、`src/qa/`、`tests/unit/qa/`、`scripts/`、各フォルダの`.gdignore`、`.github/CODEOWNERS.example`、`GAME_TEMPLATE_CHANGELOG.md`、`LICENSE-CCGS`、`UPGRADING.md`、`CHANGELOG.md` | `project.yaml`、`.claude/docs/technical-preferences.md`、`docs/architecture/`、`docs/registry/`、`design/registry/`、`graph.toml`、`graph.mk`、`docs/templates/`、ノード本体 |
 
 作品のもののうち、`project.yaml`・`graph.toml`・`graph.mk`・`docs/templates/`は`merge=ours`ではないので、この層の変更が取り込みで届く。競合したら、作品の変更とこの層の変更の両方を残して手で解く。`graph.toml`と`graph.mk`に作品が足すものは、末尾の「ここから下は作品が足すもの」の下に書く（[PDR-0015](docs/50-pdr/pdr-0015-no-merge-ours-project-files.md)）。
 
