@@ -66,6 +66,29 @@ _update_check_newer() {
   return 1
 }
 
+# game-template (META-08, UC-02): a game made from game-template gets a CCGS
+# release only after game-template has taken it in, through `make update`. The
+# notice would send the game's people to merge CCGS directly, past merge=ours
+# and this layer's edits, so it stays off there. It stays on in game-template
+# itself, where it starts UC-02. The layer declaration's `repository` matches
+# `origin` only in game-template itself; a game without an origin yet counts
+# as a game. 0 for a game made from game-template.
+_update_check_game_project() {
+  local decl="$1/tools/graph/layers/game-template.toml" repo origin
+  [ -f "$decl" ] || return 1
+  repo=$(sed -n 's/^repository[[:space:]]*=[[:space:]]*"\([^"]*\)".*/\1/p' "$decl" 2>/dev/null)
+  [ -n "$repo" ] || return 1
+  origin=$(git -C "$1" remote get-url origin 2>/dev/null)
+  [ "$(_update_check_slug "$origin")" != "$(_update_check_slug "$repo")" ]
+}
+
+# owner/repo of a GitHub URL, https or ssh, with or without .git.
+_update_check_slug() {
+  local u="${1%/}" repo
+  u="${u%.git}"; repo="${u##*[/:]}"; u="${u%[/:]*}"
+  printf '%s/%s' "${u##*[/:]}" "$repo"
+}
+
 # 0 unless updates.check is false. project.local.yaml first (it is a personal
 # setting), then project.yaml. A value other than true or false is skipped, as
 # resolve_setting skips it, and the session-start schema check names it.
@@ -73,6 +96,7 @@ _update_check_newer() {
 _update_check_enabled() {
   local f v root="${_YH_ROOT:-.}"
   [ -n "${CI:-}" ] && return 1
+  _update_check_game_project "$root" && return 1
   for f in "$root/project.local.yaml" "$root/project.yaml"; do
     [ -f "$f" ] || continue
     v=$(awk '

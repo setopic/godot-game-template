@@ -2221,6 +2221,12 @@ for you only)
 > updates.check=false"*. Nothing is downloaded or changed; upgrading stays your
 > call (`UPGRADING.md`).
 
+> game-template (META-08, UC-02): in a game made from game-template the line
+> never shows. A CCGS release reaches the game only after game-template has
+> taken it in, and then through `make update`, not `UPGRADING.md`. It shows in
+> game-template itself, where `origin` matches `repository` in
+> `tools/graph/layers/game-template.toml`, as the trigger for UC-02.
+
 > **Priority chain:** `updates.check` in `project.local.yaml` → `project.yaml` →
 > default **`true`**. A value other than `true` or `false` is skipped and named
 > in the session-start schema errors. The check is also off whenever the `CI`
