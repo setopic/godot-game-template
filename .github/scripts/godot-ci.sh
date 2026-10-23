@@ -34,7 +34,7 @@ detect() {
   if [ "$project" = true ]; then
     # テストがあるのにGdUnit4が無いなら、テストを回せないまま通ってしまうので落とす。
     if [ "$tests" = true ] && [ "$gdunit" = false ]; then
-      echo "::error title=app-check::tests/にGDScriptのテストがあるのに、addons/gdUnit4/が無い。/test-setupでGdUnit4を入れる" >&2
+      echo "::error title=app-check::tests/にGDScriptのテストがあるのに、addons/gdUnit4/が無い。SETUP.mdの「4. Godotのテスト」に従って、GdUnit4のreleasesからaddons/gdUnit4/を置く" >&2
       return 1
     fi
     [ "$gdunit" = false ] && echo "::notice title=app-check::addons/gdUnit4/もGDScriptのテストも無いので、テストの段を飛ばす" >&2

@@ -17,6 +17,16 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`と`PROJECT_CHANGELOG.md`の雛形（0.22.7）もこの層で書き足している。どちらも`merge=ours`なので、この層と上流の両方が変えたときはこの層の側が残り、競合しない。そのときは上流の変更が入らないので、上流の変更履歴の「取り込む側の作業」を見て手で合わせる。
 
+## 0.23.14（2026-10-24）
+
+### 変更
+
+`.github/scripts/godot-ci.sh`が、`tests/`にGDScriptのテストがあるのに`addons/gdUnit4/`が無いときに出すエラー文を直した（#90）。これまでは「/test-setupでGdUnit4を入れる」と案内していたが、`SETUP.md`は`/test-setup`を使わず、「4. Godotのテスト」でGdUnit4のreleasesから`addons/gdUnit4/`を手で置かせる。エラー文も、その手順を指すようにした。
+
+### 取り込む側の作業
+
+なし。
+
 ## 0.23.13（2026-10-24）
 
 ### 変更
