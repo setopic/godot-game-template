@@ -26,6 +26,7 @@ tags: [index]
 - [PDR-0007 TDRとADRの最終確認日をフロントマターに持つ](./pdr-0007-last-verified-front-matter.md)
 - [PDR-0008 GDDと設計の文書はgraphの検証の外に置く](./pdr-0008-design-docs-outside-graph.md)
 - [PDR-0009 CODEOWNERSは雛形として配り、作品が担当者を入れる](./pdr-0009-codeowners-example.md)
+- [PDR-0010 開発の段階はCCGSの7段階をそのまま使う](./pdr-0010-ccgs-seven-stages.md)
 <!-- graph:children:end -->
 
 ## 追加するとき

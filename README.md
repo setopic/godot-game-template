@@ -135,6 +135,7 @@ graph LR
   subgraph architecture["アーキテクチャ"]
     ARCH-01["ARCH-01<br/>システム全体構成"]
     ARCH-02["ARCH-02<br/>ワーカーの実行モデル"]
+    ARCH-03["ARCH-03<br/>CCGSの7段階に沿った開発の流れ"]
   end
   subgraph domain["ドメイン"]
     DOM-01["DOM-01<br/>予約"]
@@ -158,6 +159,7 @@ graph LR
     PDR-0006["PDR-0006<br/>CCGSを丸ごと取り込み、決定の記録を4つの種別に分ける"]
     PDR-0007["PDR-0007<br/>TDRとADRの最終確認日をフロントマターに持つ"]
     PDR-0008["PDR-0008<br/>GDDと設計の文書はgraphの検証の外に置く"]
+    PDR-0010["PDR-0010<br/>開発の段階はCCGSの7段階をそのまま使う"]
   end
   subgraph tdr["ゲームの外の技術の決定"]
     TDR-0001["TDR-0001<br/>Godotの版を4.7.2にする"]
@@ -194,6 +196,7 @@ graph LR
   PDR-0006 -.->|decides| UC-02
   PDR-0007 -->|depends_on| PDR-0006
   PDR-0008 -->|depends_on| PDR-0006
+  PDR-0010 -.->|decides| ARCH-03
   TDR-0002 -.->|decides| UC-02
   TDR-0003 -->|depends_on| TDR-0001
   TDR-0004 -->|depends_on| TDR-0001

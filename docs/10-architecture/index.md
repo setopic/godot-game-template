@@ -18,6 +18,7 @@ tags: [index]
 <!-- graph:children:start -->
 - [ARCH-01 システム全体構成](./arch-01-sample-system-overview.md)
 - [ARCH-02 ワーカーの実行モデル](./arch-02-sample-worker-execution-model.md)
+- [ARCH-03 CCGSの7段階に沿った開発の流れ](./arch-03-dev-stages.md)
 <!-- graph:children:end -->
 
 ## 追加するとき

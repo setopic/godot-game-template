@@ -69,6 +69,9 @@ Every task follows: **Question -> Options -> Decision -> Draft -> Approval**
 - No commits without user instruction
 - A skipped or dismissed question is not an answer: act on nothing, re-ask in
   plain text and wait
+- game-template (ARCH-03): stop and ask at the calls only a person can make:
+  whether the game is fun, store registration, accepting terms, setting the
+  price, and whether to publish. Never make these calls or act on them yourself
 - Started outside this file's folder? Warn first: hooks, deny rules and the
   ask-first mode load only when Claude Code starts here
 
