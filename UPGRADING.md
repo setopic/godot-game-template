@@ -3,6 +3,14 @@
 This guide covers upgrading your existing game project repo from one version
 of the template to the next.
 
+> **game-template (META-08, UC-02).** A game made from game-template does not
+> follow this guide. It takes updates, CCGS's among them, from game-template
+> with `make update`, as `docs/00-meta/template-upgrade.md` (META-08) describes.
+> Merging CCGS or `template/main` directly bypasses the `merge=ours` driver and
+> game-template's changes to CCGS files. This file stays as CCGS's record of what
+> changed between its versions, which the template maintainer reads when taking a
+> CCGS release into game-template (`docs/30-usecases/uc-02-ccgs-upgrade.md`).
+
 **Find your current version** — use the first of these that applies:
 
 - **Cloned the template, or merged it:** `git describe --tags --abbrev=0` prints

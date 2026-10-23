@@ -25,36 +25,9 @@ Godot 4.7.2とGDScriptでゲームを作るためのプロジェクトテンプ�
 
 Claude Codeは、リポジトリの根で起動する。CCGSのフックと、書く前に確認する設定は、根で起動したときにだけ読み込まれる。最初のセッションでは`/start`を回す。いまの状態に合わせて、次に何をするかを案内する。
 
-## Godotで開く前に
+## 開発環境を用意する
 
-次の2つを入れる。
-
-- Godot 4.7.2の標準版（.NETでない版）。[GitHubのreleases](https://github.com/godotengine/godot/releases)の4.7.2-stableか、公式サイトから入れる。版の理由は[TDR-0001](docs/51-tdr/tdr-0001-godot-version.md)にある。`project.yaml`の`commands`はPATHの`godot`を呼ぶので、PATHに通す。通せないときは、`/settings`で`engine.path`にエディタのパスを設定する。
-- Python 3.12以上。`python -m tools.graph check`と`make ci`が使う。
-
-次のコマンドで、入ったことを確かめる。
-
-```bash
-godot --version
-python --version
-```
-
-`godot --version`は`4.7.2.stable`で始まる。
-
-素材（画像・音・モデル・フォント）はGit LFSに入れる。取り出す前に、1度だけ次を回す。
-
-```bash
-git lfs install
-```
-
-`*.blend`・`*.psd`・`*.kra`・`*.aseprite`は差分をマージできないので、編集の前にロックし、pushしたら外す。
-
-```bash
-git lfs lock <パス>
-git lfs unlock <パス>
-```
-
-`.godot/`はGitに入れないので、取り出した直後は`godot --headless --import`を1度回す。どのファイルをLFSに入れ、どのフォルダをGodotに読み込ませないかは、[TDR-0003](docs/51-tdr/tdr-0003-godot-git-settings.md)にある。
+前提ツールの入れ方、作品に参加した人がすること、作品を作った人が1回だけすること、Godotのテストの入れ方と回し方は、[SETUP.md](SETUP.md)にある。作品の`README.md`を作品の説明に書き換えるときも、この文書へのリンクは残す。`README.md`は`merge=ours`なので、作品が書き換えたあとはテンプレートの直しが届かない。`SETUP.md`は共通ファイルなので、取り込むたびに新しくなる。
 
 ## テンプレートの更新を取り込む
 
@@ -71,7 +44,7 @@ git lfs unlock <パス>
 
 | 共通ファイル（作品は書き換えない） | 作品のもの（作品が書き換えてよい） |
 | --- | --- |
-| `.claude/`（`.claude/docs/technical-preferences.md`を除く）、`studio-tests/`、`docs/engine-reference/`、CCGSの案内の文書（`docs/CLAUDE.md`、`docs/WORKFLOW-GUIDE.md`、`docs/COLLABORATIVE-DESIGN-PRINCIPLE.md`、`docs/skill-flow-diagrams.md`、`docs/migration-guide-v1.1.md`）、`design/CLAUDE.md`、`src/CLAUDE.md`、`src/qa/`、`tests/unit/qa/`、`scripts/`、各フォルダの`.gdignore`、`.github/CODEOWNERS.example`、`GAME_TEMPLATE_CHANGELOG.md`、`LICENSE-CCGS`、`UPGRADING.md`、`CHANGELOG.md` | `project.yaml`、`.claude/docs/technical-preferences.md`、`docs/architecture/`、`docs/registry/`、`design/registry/`、`graph.toml`、`graph.mk`、`docs/templates/`、ノード本体 |
+| `.claude/`（`.claude/docs/technical-preferences.md`を除く）、`studio-tests/`、`docs/engine-reference/`、`SETUP.md`、CCGSの案内の文書（`docs/CLAUDE.md`、`docs/WORKFLOW-GUIDE.md`、`docs/COLLABORATIVE-DESIGN-PRINCIPLE.md`、`docs/skill-flow-diagrams.md`、`docs/migration-guide-v1.1.md`）、`design/CLAUDE.md`、`src/CLAUDE.md`、`src/qa/`、`tests/unit/qa/`、`scripts/`、各フォルダの`.gdignore`、`.github/CODEOWNERS.example`、`GAME_TEMPLATE_CHANGELOG.md`、`LICENSE-CCGS`、`UPGRADING.md`、`CHANGELOG.md` | `project.yaml`、`.claude/docs/technical-preferences.md`、`docs/architecture/`、`docs/registry/`、`design/registry/`、`graph.toml`、`graph.mk`、`docs/templates/`、ノード本体 |
 
 作品のもののうち、`project.yaml`・`graph.toml`・`graph.mk`・`docs/templates/`は`merge=ours`ではないので、この層の変更が取り込みで届く。競合したら、作品の変更とこの層の変更の両方を残して手で解く。`graph.toml`と`graph.mk`に作品が足すものは、末尾の「ここから下は作品が足すもの」の下に書く（[PDR-0015](docs/50-pdr/pdr-0015-no-merge-ours-project-files.md)）。
 

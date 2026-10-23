@@ -17,6 +17,31 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`と`PROJECT_CHANGELOG.md`の雛形（0.22.7）もこの層で書き足している。どちらも`merge=ours`なので、この層と上流の両方が変えたときはこの層の側が残り、競合しない。そのときは上流の変更が入らないので、上流の変更履歴の「取り込む側の作業」を見て手で合わせる。
 
+## 0.23.0（2026-10-23）
+
+### 追加
+
+開発環境を用意する手順を、根の`SETUP.md`にまとめた。作品を起こしてから最初のテストが通るまでの手順が、README・META-08・スキルの資料に散らばっていて、作品に参加した人がすることだけを抜き出した一覧も無かったからである。`SETUP.md`はこの層の共通ファイルにした。`README.md`は`merge=ours`で、作品が作品の説明に書き換えるので、READMEに書くと作品の参加者に届かない。`docs/`の下はグラフのノードとして扱われるので、根に置いた。
+
+`SETUP.md`には、次の4つの節を置いた。
+
+- 「1. 前提ツール」に、GodotとPythonに加えて、Windowsで要るbash・git-lfs・gh・make・jqの入れ方と、`godot`という名前でPATHに通すための2つのファイルを書いた。`make ci`は`engine.path`を読まないので、PATHに通す。
+- 「2. 参加した人がすること」に、clone・`--import`・`gh auth login`・Claude Codeの起動・`make ci`の順番を書いた。
+- 「3. 作品を作った人が1回だけすること」に、"Use this template"で作ってから`make ci`が通るまでの順番を、各手順へのリンクで並べた。`project.godot`は`/setup-engine`の7.5の手順だけで作り、`/setup-engine`の全体は回さない。`addons/gdUnit4/`は`project.godot`より先に入れる。`project.godot`ができた時点で、`godot-ci.sh`が`tests/unit/qa/`のテストを回そうとして落ちるからである。
+- 「4. Godotのテスト」に、GdUnit4の入れ方、手元での回し方（`commands.test`と`make ci`）、自分のテストの置き場（`tests/unit/<system>/`。PDR-0016）を書いた。
+
+`README.md`の「Godotで開く前に」は`SETUP.md`に移し、代わりに「開発環境を用意する」の節から`SETUP.md`を指した。共通ファイルの表にも`SETUP.md`を足した。
+
+CCGSから取り込んだ案内の文書のうち、この層の決まりと食い違う箇所に、`game-template (…)`の注記を足した。食い違うときは、この層の日本語の文書に従うことも`SETUP.md`に書いた。CCGSのファイルを直すのはPDR-0006の範囲内で、CCGSを更新するときはUC-02の`git diff`で見分ける。
+
+- `docs/WORKFLOW-GUIDE.md`のQuick Startで、前提ツールの一覧と作品の作り方（"Use this template"）は`SETUP.md`にあると書いた。CCGSの手順は`git clone`だけを書いていて、cloneすると`origin`がテンプレートを指したまま残る。
+- 同じ文書のディレクトリの構成で、`docs/architecture/`をADRの置き場としていたのを直し、`docs/50-pdr/`〜`docs/53-ddr/`を足した。
+- `UPGRADING.md`の冒頭に、作品はこの文書に従わず、META-08の`make update`で取り込むと書いた。CCGSの手順は、CCGSを直接`git merge`するもので、`merge=ours`のドライバも、この層がCCGSのファイルに入れた直しも素通りする。
+
+### 取り込む側の作業
+
+`SETUP.md`は取り込みで届く。作品の`README.md`が作品の説明に書き換えてあるなら、`SETUP.md`へのリンクを手で足す。`README.md`は`merge=ours`なので、この層の「開発環境を用意する」の節は、作品が書き換えていれば届かない。
+
 ## 0.22.7（2026-10-23）
 
 ### 変更

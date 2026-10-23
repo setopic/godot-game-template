@@ -44,12 +44,22 @@ Before you start, make sure you have:
 - **jq** (optional but recommended -- hooks fall back to `grep` if missing)
 - **Python 3** (required -- every skill and hook reads `project.yaml` through it; without it every setting silently falls back to its default)
 
+In game-template (META-08) the full list, with Godot 4.7.2, Python 3.12 or
+later and the Windows tools, is in `SETUP.md` at the repo root. Where this
+guide and game-template's Japanese documents disagree, follow the Japanese ones.
+
 ### Step 1: Clone and Open
 
 ```bash
 git clone <repo-url> my-game
 cd my-game
 ```
+
+In game-template (META-08) a new game is not cloned from the template. Create
+its repository with GitHub's "Use this template": a clone keeps `origin`
+pointing at the template. Then clone the game's own repository as above.
+`SETUP.md` section 3 lists what the person who created the game does once, and
+section 2 what someone joining an existing game does.
 
 ### Step 2: Run /start
 
@@ -124,7 +134,11 @@ design/               # Design documents
   balance/            # Balance spreadsheets and data
   ux/                 # UX specifications
 docs/                 # Technical documentation
-  architecture/       # Architecture Decision Records
+  architecture/       # Architecture overview and control manifest (game-template, PDR-0006)
+  50-pdr/             # Process decision records (game-template, PDR-0006)
+  51-tdr/             # Technology decision records (game-template, PDR-0006)
+  52-adr/             # Architecture Decision Records (game-template, PDR-0006)
+  53-ddr/             # Design decision records (game-template, PDR-0006)
   api/                # API documentation
   postmortems/        # Post-mortems
 tests/                # Test suites
