@@ -101,18 +101,21 @@ GitHub Actionsが動かないとき（支払いの問題でジョブが始まら
 
 ### mainを保護する
 
-mainへの直接のpushをやめ、すべての変更をPRで出す。作品のリポジトリの管理者が、GitHubの設定（SettingsのBranchesかRules）で、mainに次の4つを設定する。設定はテンプレートからは配れないので、作品ごとに行う。
+mainへの直接のpushをやめ、すべての変更をPRで出す。作品のリポジトリの管理者が、GitHubの設定（SettingsのBranchesかRules）で、mainに次の5つを設定する。設定はテンプレートからは配れないので、作品ごとに行う。
 
 | 設定 | 値 |
 | --- | --- |
 | マージの前にPRを必須にする | 有効 |
 | 必要な承認の数 | 1人以上 |
+| 持ち主の承認を必須にする（Require review from Code Owners） | 有効 |
 | 必須のチェック | `graph-check.yml`の`refs`・`names`・`check`と、`app-check.yml`の`godot` |
 | force push | 禁止 |
 
 ### 持ち主を決める
 
 `.github/CODEOWNERS.example`を`.github/CODEOWNERS`に写し、役割の名前を担当者の名前に置き換える。分け方と、雛形にした理由は、[PDR-0009](../50-pdr/pdr-0009-codeowners-example.md)にある。GitHubは、持ち主のパスを変えるPRに、持ち主をレビュアーとして付ける。
+
+mainの保護で持ち主の承認を必須にしているので、持ち主のパスを変えるPRは、その持ち主が承認するまでマージできない。PRを出した人は、自分のPRを承認できない。役割が1人だけなら、その行に代わりの持ち主を並べる。1つの行に並べた持ち主は、どちらか1人の承認で足りる。決めた理由は、[PDR-0012](../50-pdr/pdr-0012-codeowners-review-required.md)にある。
 
 ### 1つのストーリーを、issue1件・ブランチ1本・PR1本にする
 
