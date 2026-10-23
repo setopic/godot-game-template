@@ -295,6 +295,11 @@ close.
    The close answer covers it.
 5. Print a suggested commit: `git add [the changed code and test files] [story path]`
    and `git commit -m "feat: [story title] ([TR-ID])"`.
+   game-template (PDR-0009): also print the two PR-body sections that
+   `docs/00-meta/dev-flow.md` § 複数人で開発するとき asks for, filled in for this
+   story: `## 対応するストーリー` with the story path, and `## スクリーンショットの証拠`
+   with each evidence path from Phase 4 (`なし` when the story needs none). Add
+   them to the PR body when you open the PR.
 
 **On "Don't close yet":** change no story file. List what the user flagged. Never
 fix a failing criterion yourself: report it and ask what to do.
