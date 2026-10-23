@@ -185,4 +185,8 @@ Godotの素材を置かないフォルダには、`.gdignore`を置く。
 
 - [TDR-0001 Godotの版を4.7.2にする](./tdr-0001-godot-version.md)
 
+このノードを参照しているノード
+
+- (depends_on) [TDR-0004 GodotのCIをapp-check.ymlで回す](./tdr-0004-godot-ci.md)
+
 <!-- graph:auto:end -->

@@ -16,6 +16,20 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`もこの層で書き足しているが、`merge=ours`なので競合しない。
 
+## 0.12.0（2026-10-23）
+
+### 変更
+
+GodotのCIを`.github/workflows/app-check.yml`に書き、決めたことをTDR-0004に書いた（#5）。Godotは`chickensoft-games/setup-godot`で4.7.2を入れ、pushとPRのたびに、素材の読み込み・スクリプトの読み込みの確認・GdUnit4のテストを回す。読み込みは、終了コードが0でも、ログに`ERROR`の行があれば失敗にする。mainへのpushのときだけ、WindowsとWebに書き出して成果物に置く。判定は`.github/scripts/godot-ci.sh`に切り出した。`project.godot`が無いリポジトリ（game-template自身）では、Godotの段を飛ばして成功にする。
+
+CCGSの`/test-setup`の`references/4-ci.md`に、Godotでは`tests.yml`を作らないという注記を足した。
+
+GitHub Actionsが支払いの問題で動かないので、game-templateではこのworkflowを回していない。書式はactionlintとshellcheckで、判定の部分は偽のログで確かめた。
+
+### 取り込む側の作業
+
+`app-check.yml`は`merge=ours`なので、取り込んでもこの版の`app-check.yml`は届かない。Godotの検査を使うなら、この層の`app-check.yml`を手で写す。`.github/scripts/godot-ci.sh`は取り込みで届く。
+
 ## 0.11.0（2026-10-23）
 
 ### 変更

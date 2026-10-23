@@ -4,35 +4,130 @@
 #
 # このファイルは .gitattributes の merge=ours で守られており、
 # **プロジェクト側が書き換えてよい。** テンプレートの更新で上書きされない。
+#
+# game-templateでは、Godotのプロジェクトを検査する（TDR-0004）。
+# project.godotが無いリポジトリ（game-template自身）では、Godotの段を飛ばして成功にする。
+# 判定とログの検査は .github/scripts/godot-ci.sh にある。
+#
+# actionの版は、タグではなくコミットのshaで固定する。行末の注記が、そのshaのタグである。
 name: app-check
 
 on:
   push:
   pull_request:
 
+env:
+  # TDR-0001の版。setup-godotは、メジャー・マイナー・パッチの3つを書いた版を求める。
+  GODOT_VERSION: "4.7.2"
+
 jobs:
-  app:
+  godot:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      # LFSのファイルは、キャッシュから戻してから足りない分だけを落とすので、ここでは取らない。
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          lfs: false
 
-      # ここから下はプロジェクトごとに書き換える。
-      # 実装が無いうちは、最後のステップが警告を出す。警告ではCIは落ちない。
+      - name: Godotのプロジェクトがあるかを調べる
+        id: detect
+        run: bash .github/scripts/godot-ci.sh detect >> "$GITHUB_OUTPUT"
 
-      # --- Python の例 ---
-      # - uses: actions/setup-python@v7
-      #   with:
-      #     python-version: "3.12"
-      # - run: pip install -r requirements.txt
-      # - run: python -m pytest
+      - name: LFSのファイルの一覧を作る
+        if: steps.detect.outputs.project == 'true'
+        run: git lfs ls-files --long | cut -d ' ' -f1 | sort > .lfs-assets-id
 
-      # --- TypeScript / Node の例 ---
-      # - uses: actions/setup-node@v4
-      #   with:
-      #     node-version: "22"
-      # - run: npm ci
-      # - run: npm test
+      - name: LFSのファイルをキャッシュから戻す
+        if: steps.detect.outputs.project == 'true'
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .git/lfs
+          key: lfs-${{ hashFiles('.lfs-assets-id') }}
+          restore-keys: lfs-
 
-      # 検査を書いたら、このステップを消す。
-      - name: 実装の検査は未設定
-        run: echo "::warning title=app-check::実装の検査が未設定である。app-check.ymlにプロジェクトの検査を書く"
+      - name: LFSのファイルを取る
+        if: steps.detect.outputs.project == 'true'
+        run: |
+          git lfs pull
+          rm -f .lfs-assets-id
+
+      - name: 読み込んだ素材をキャッシュから戻す
+        if: steps.detect.outputs.project == 'true'
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .godot/imported
+          key: godot-imported-${{ env.GODOT_VERSION }}-${{ hashFiles('**/*.import') }}
+          restore-keys: godot-imported-${{ env.GODOT_VERSION }}-
+
+      # 書き出しの雛形は大きいので、書き出すとき（mainへのpush）だけ入れる。
+      - name: Godotを入れる
+        if: steps.detect.outputs.project == 'true'
+        uses: chickensoft-games/setup-godot@ac93246ea68518a384c1c280a496e5989341f2f6 # v2.4.3
+        with:
+          version: ${{ env.GODOT_VERSION }}
+          use-dotnet: false
+          include-templates: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.detect.outputs.presets == 'true' }}
+
+      # 取り出した直後は.godot/が無いので、class_nameのスクリプトが読めない（TDR-0003のリスク）。
+      - name: 素材を読み込む
+        if: steps.detect.outputs.project == 'true'
+        env:
+          GODOT_CI_RETRY_SEGV: "1"
+        run: bash .github/scripts/godot-ci.sh checked .ci/import.log -- godot --headless --path . --import
+
+      # --importは、スクリプトの構文の誤りがあっても0で終わる（current-best-practices.md）。
+      - name: スクリプトを読み込めるかを確かめる
+        if: steps.detect.outputs.project == 'true'
+        run: |
+          mapfile -t scripts < <(find src tests -name '*.gd' 2>/dev/null | sort | sed 's|^|res://|')
+          if [ "${#scripts[@]}" -eq 0 ]; then
+            echo "::notice title=app-check::src/とtests/にGDScriptが無いので、読み込みの確認を飛ばす"
+            exit 0
+          fi
+          bash .github/scripts/godot-ci.sh checked .ci/parse.log -- \
+            godot --headless --path . -s res://.claude/scripts/godot-parse-check.gd -- "${scripts[@]}"
+
+      - name: GdUnit4のテストを回す
+        if: steps.detect.outputs.project == 'true' && steps.detect.outputs.gdunit == 'true'
+        run: |
+          bash .github/scripts/godot-ci.sh gdunit .ci/gdunit.log -- \
+            godot --headless -s -d --remote-debug tcp://127.0.0.1:0 res://addons/gdUnit4/bin/GdUnitCmdTool.gd -a res://tests --ignoreHeadlessMode
+
+      # reports/にはJUnitの形式（results.xml）とHTMLの報告が入る。
+      - name: テストの結果を残す
+        if: always() && steps.detect.outputs.gdunit == 'true'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: test-results
+          path: |
+            reports/
+            .ci/
+          if-no-files-found: warn
+
+      - name: WindowsとWebに書き出す
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.detect.outputs.project == 'true' && steps.detect.outputs.presets == 'true'
+        run: |
+          found=0
+          while IFS=$'\t' read -r name kind; do
+            found=1
+            dir="build/$kind/$(printf '%s' "$name" | tr -c 'A-Za-z0-9._-' '_')"
+            case "$kind" in
+              windows) out="$dir/game.exe" ;;
+              web) out="$dir/index.html" ;;
+            esac
+            mkdir -p "$dir"
+            # 標準入力は、whileが読んでいる書き出しの設定の一覧なので、Godotに渡さない。
+            bash .github/scripts/godot-ci.sh checked ".ci/export-$kind.log" -- \
+              godot --headless --path . --export-release "$name" "$out" < /dev/null
+          done < <(bash .github/scripts/godot-ci.sh presets)
+          if [ "$found" -eq 0 ]; then
+            echo "::warning title=app-check::export_presets.cfgに、WindowsとWebの書き出しの設定が無い"
+          fi
+
+      - name: 書き出したものを残す
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.detect.outputs.presets == 'true'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: build
+          path: build/
+          if-no-files-found: warn
