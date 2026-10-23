@@ -111,4 +111,6 @@ git lfs unlock <パス>
 
 `make ci PR=<番号>`のように番号を渡すと、PRのときにしか走らない検査も回す。`project.godot`が無いあいだは、`make ci`はGodotの段を飛ばす。
 
+Windowsでは、`make ci`をGit Bashで回す。Godotの段は`bash`を呼ぶので、PowerShellで回すと、Git for Windowsの`bin`をPATHに足していない限り、`bashがPATHに無いので、Godotの段を回せない`と出て失敗する。`project.godot`が無いあいだは、Godotの段を飛ばすので、PowerShellでも通る。全部の段が通ると、最後の行に`local_ci: すべて通った`と出る。途中の段が落ちると、`local_ci: 失敗した（終了コード…）`などと出て、終了コードが0でなくなる。
+
 自分のテストは、`tests/unit/<system>/`に置く（統合のテストは`tests/integration/<system>/`）。`tests/unit/qa/`はこの層の共通ファイルなので、そこには足さない（[PDR-0016](docs/50-pdr/pdr-0016-tests-unit-qa-common-file.md)）。テストの名前の付け方は、[test-standards.md](.claude/rules/test-standards.md)にある。
