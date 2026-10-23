@@ -17,6 +17,16 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`もこの層で書き足しているが、`merge=ours`なので競合しない。
 
+## 0.18.0（2026-10-23）
+
+### 変更
+
+`.github/CODEOWNERS.example`に、`*`の行（既定の持ち主）を置かないと決めた（#39）。どの行にも当たらないパス（`tests/`、`production/`など）を変えるPRは、mainの保護の「承認1人以上」により、誰か1人が承認すればマージできる。このことを`CODEOWNERS.example`の冒頭の注記に書いた。理由と却下した案は、PDR-0013に書いた。
+
+### 取り込む側の作業
+
+無い。`.github/CODEOWNERS`を写したあとなら、注記だけを写してもよい。
+
 ## 0.17.0（2026-10-23）
 
 ### 変更

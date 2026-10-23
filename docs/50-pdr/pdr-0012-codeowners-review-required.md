@@ -66,4 +66,8 @@ PDR-0009が持ち主を決めたのは、DDRや`project.godot`のように、決
 
 - [PDR-0009 CODEOWNERSは雛形として配り、作品が担当者を入れる](./pdr-0009-codeowners-example.md)
 
+このノードを参照しているノード
+
+- (depends_on) [PDR-0013 CODEOWNERSの雛形には、既定の持ち主を置かない](./pdr-0013-codeowners-no-default-owner.md)
+
 <!-- graph:auto:end -->

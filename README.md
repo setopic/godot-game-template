@@ -163,6 +163,7 @@ graph LR
     PDR-0010["PDR-0010<br/>開発の段階はCCGSの7段階をそのまま使う"]
     PDR-0011["PDR-0011<br/>CCGSの.gitignoreは、エンジンの節を除いてこの層の節に写す"]
     PDR-0012["PDR-0012<br/>複数人で開発するときは、持ち主の承認を必須にする"]
+    PDR-0013["PDR-0013<br/>CODEOWNERSの雛形には、既定の持ち主を置かない"]
   end
   subgraph tdr["ゲームの外の技術の決定"]
     TDR-0001["TDR-0001<br/>Godotの版を4.7.2にする"]
@@ -203,6 +204,7 @@ graph LR
   PDR-0011 -->|depends_on| PDR-0006
   PDR-0011 -.->|decides| UC-02
   PDR-0012 -->|depends_on| PDR-0009
+  PDR-0013 -->|depends_on| PDR-0012
   TDR-0002 -.->|decides| UC-02
   TDR-0003 -->|depends_on| TDR-0001
   TDR-0004 -->|depends_on| TDR-0001
