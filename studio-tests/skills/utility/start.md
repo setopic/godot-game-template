@@ -168,15 +168,15 @@ Fixture defaults.
 2. Path B names `/brainstorm a small weekend puzzler` as the immediate step
 3. The card infers rigor `minimal` from "weekend" and "small"
 4. After the Phase 6 path, the skill adds once that `origin` still points at the
-   CCGS template repo, suggests `git remote rename origin template` then
-   `git remote add origin <your repo URL>`, and says to skip `UPGRADING.md`'s own
-   `git remote add template` step since that remote now exists
-5. The commands are suggested only; no git command is run
+   template repo, and points to `SETUP.md` section 3 and section 1 of
+   `docs/00-meta/template-upgrade.md` (game-template, META-08: not to
+   `UPGRADING.md` or `git merge template/main`)
+5. The steps are suggested only; no git command is run
 
 **Assertions:**
 - [ ] The template-origin note appears exactly once, after the path
-- [ ] Both suggested commands are given as written above
-- [ ] The note says to skip `UPGRADING.md`'s `git remote add template` step after the rename, and why
+- [ ] The note names `SETUP.md` section 3 and section 1 of `docs/00-meta/template-upgrade.md`
+- [ ] The note names neither `UPGRADING.md` nor `git merge template/main`
 - [ ] No git command is executed
 - [ ] The card's rigor is `minimal`, with the user's words as the reason
 
