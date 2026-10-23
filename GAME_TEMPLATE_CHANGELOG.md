@@ -17,6 +17,23 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`と`PROJECT_CHANGELOG.md`の雛形（0.22.7）もこの層で書き足している。どちらも`merge=ours`なので、この層と上流の両方が変えたときはこの層の側が残り、競合しない。そのときは上流の変更が入らないので、上流の変更履歴の「取り込む側の作業」を見て手で合わせる。
 
+## 0.23.3（2026-10-24）
+
+### 変更
+
+何も知らないエージェント（Sonnet）に、`SETUP.md`だけを手がかりに作品への参加と作品の作成の手順を組み立てさせたところ、迷う箇所と誤りが見つかったので直した。
+
+- `SETUP.md`の前提ツールの表で、jqが無いと「フックの検査が抜ける」と書いていたのは誤りだった。`setup-requirements.md`のとおり、無ければフックは`grep`で代わりに読む。
+- `SETUP.md`の前提ツールに、GitとClaude Codeを足した。入れ方は`setup-requirements.md`にしか無かった。
+- Windowsでは、cloneの前に`git config --global core.longpaths true`を回すと書いた。`.claude/`の下に名前の長いファイルがあり、深いフォルダの下にcloneすると取り出しに失敗する。
+- 作品を作った人の手順に、"Use this template"で作った直後はMETA-08の手順1（共通ファイルの上書き）が要らないことと、1人でmainへ直接pushする作品では「PR」をその変更だけのコミットに読み替えることを書いた。
+- GdUnit4のプラグインを、エディタを使わずに有効にするときに`project.godot`へ書く節を足した。
+- `/start`は、エンジンが決まっていても、道筋の最初に`/setup-engine`を挙げていた。この層ではエンジンは決めてあり、`/setup-engine`の全体を回すと共通ファイルを書き換える。エンジンが決まっているときは、その一歩を`SETUP.md`の「3」に沿った`project.godot`の作成に置き換えるようにした（`game-template (SETUP.md, TDR-0001)`の注記）。`studio-tests/`の`/start`の仕様にも、この場合を足した。
+
+### 取り込む側の作業
+
+なし。
+
 ## 0.23.2（2026-10-24）
 
 ### 変更
