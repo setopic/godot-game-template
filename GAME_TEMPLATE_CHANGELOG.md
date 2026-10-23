@@ -15,7 +15,23 @@
 | `.gitattributes` | PDR-0001の`merge=ours`の行のパスを変え（0.4.0）、末尾にこの層の行を足した | 競合した部分だけを解き、この層の行と上流の行の両方を残す |
 | `.gitignore` | 末尾に、この層のGodotの節（0.11.0）とCCGSの節（0.16.0）を足した | 競合した部分だけを解き、この層の節と上流の行の両方を残す |
 
-`docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`もこの層で書き足している。`merge=ours`なので、この層と上流の両方が変えたときはこの層の側が残り、競合しない。そのときは上流の変更が入らないので、上流の変更履歴の「取り込む側の作業」を見て手で合わせる。
+`docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`と`PROJECT_CHANGELOG.md`の雛形（0.22.7）もこの層で書き足している。どちらも`merge=ours`なので、この層と上流の両方が変えたときはこの層の側が残り、競合しない。そのときは上流の変更が入らないので、上流の変更履歴の「取り込む側の作業」を見て手で合わせる。
+
+## 0.22.7（2026-10-23）
+
+### 変更
+
+この層の変更で古くなっていた3か所を、いまの構成に合わせた。
+
+- `README.md`の「この層が足しているもの」の表にあるARCH-03へのリンクを、いまのファイル名`arch-03-dev-stages.md`に直した。
+- `src/CLAUDE.md`の「Coding Standards」で、決定の記録の置き場を`docs/architecture/`から`docs/51-tdr/`と`docs/52-adr/`に直した（PDR-0006）。`docs/CLAUDE.md`と`design/CLAUDE.md`は直してあり、このファイルだけが残っていた。
+- `docs/00-meta/dev-flow.md`の「リリースと配置」と、`PROJECT_CHANGELOG.md`の雛形の冒頭は、履歴を3つと書いていた。この層の`GAME_TEMPLATE_CHANGELOG.md`と、CCGSの`CHANGELOG.md`を足して、5つにした。
+
+`.gitattributes`の`PROJECT_CHANGELOG.md`の行の注記は直していない。この注記は下の層の文で、`merge=ours`にする理由を述べるために下の層の履歴の名前を挙げている。履歴の数を言い切ってはいないので、このままにした。
+
+### 取り込む側の作業
+
+`docs/00-meta/dev-flow.md`と`PROJECT_CHANGELOG.md`は`merge=ours`なので、作品が書き換えていれば、この修正は届かない。作品の`dev-flow.md`の「リリースと配置」が履歴を3つと書いていたら、上の2行を手で足す。`PROJECT_CHANGELOG.md`は、雛形の説明ごと書き換えていれば何もしなくてよい。
 
 ## 0.22.6（2026-10-23）
 

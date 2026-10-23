@@ -147,16 +147,18 @@ production/qa/evidence/<ストーリーのid>/<日時>-<名前>.png
 
 タグは打っていない。版で参照する必要が出ていないからで、必要になったら打つ。打っていないことを既定値として書いておくのは、打ち忘れているのか、打たない方針なのかを、後から区別するためである。
 
-履歴は3つに分かれていて、持ち主が違う（表の4行目は履歴ではなく、配置の手順の行き先である）。
+履歴は5つに分かれていて、持ち主が違う（表の6行目は履歴ではなく、配置の手順の行き先である）。
 
 | 何を | どこに書くか |
 | --- | --- |
 | 検証ツールの層（`graph-doc-template`）の変更 | `TEMPLATE_CHANGELOG.md`と`tools/graph/version.py`（SemVer） |
 | 統合型の層（`graph-project-template`）の変更 | `PROJECT_TEMPLATE_CHANGELOG.md`と`tools/graph/layers/graph-project-template.toml` |
+| ゲームの層（`game-template`）の変更 | `GAME_TEMPLATE_CHANGELOG.md`と`tools/graph/layers/game-template.toml` |
+| CCGSの変更 | `CHANGELOG.md`（CCGSが書いたもの。`game-template`がCCGSを取り込むときに一緒に入る） |
 | このプロジェクト自身の変更 | `PROJECT_CHANGELOG.md` |
 | 配置の手順 | ユースケース（`usecase-runbook`雛形） |
 
-上の2つはテンプレートの層の履歴で、マージで流れてくる。派生プロジェクトが書くのは、`PROJECT_CHANGELOG.md`だけである。
+上の4つはテンプレートの層とCCGSの履歴で、マージで流れてくる。派生プロジェクトが書くのは、`PROJECT_CHANGELOG.md`だけである。
 
 配置には、自動と手動の両方がある。CIから送るもの（GASへの`clasp`など）と、手順書に沿って人が送るもの（ホストへの配置など）がある。どちらも、文書があることが条件である。手順が文書に無い配置は行わない。
 

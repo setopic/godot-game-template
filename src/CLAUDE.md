@@ -13,7 +13,8 @@ Do not guess at post-cutoff API signatures — look them up first.
 - All public APIs require doc comments
 - Gameplay values must be **data-driven** (external config files), never hardcoded
 - Prefer dependency injection over singletons for testability
-- Architecture decisions go in `docs/architecture/` as ADRs — **how many depends on
+- Architecture decisions go in `docs/51-tdr/` as TDRs and `docs/52-adr/` as ADRs
+  (game-template, PDR-0006; see `docs/CLAUDE.md`) — **how many depends on
   `modes.workflow`**: all at `full`, critical only at `standard`, none required at
   `minimal` (the decision log carries them)
 - Commits must reference the relevant story ID or design document

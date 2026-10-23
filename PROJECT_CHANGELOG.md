@@ -4,15 +4,17 @@
 
 `git merge template/main`を直接使うと、`merge=ours`が使われず、このファイルが雛形と競合することがある。取り込みの手順は[META-08](docs/00-meta/template-upgrade.md)にある。
 
-履歴は3つに分かれており、それぞれ持ち主が違う。
+履歴は5つに分かれており、それぞれ持ち主が違う。
 
 | ファイル | 誰の履歴か | 取り込みで流れてくるか |
 | --- | --- | --- |
 | [TEMPLATE_CHANGELOG.md](TEMPLATE_CHANGELOG.md) | `graph-doc-template`（検証ツール） | 流れてくる |
 | [PROJECT_TEMPLATE_CHANGELOG.md](PROJECT_TEMPLATE_CHANGELOG.md) | `graph-project-template`（統合型の層） | 流れてくる |
+| [GAME_TEMPLATE_CHANGELOG.md](GAME_TEMPLATE_CHANGELOG.md) | `game-template`（ゲームの層） | 流れてくる |
+| [CHANGELOG.md](CHANGELOG.md) | CCGS（`game-template`が取り込んだもの） | 流れてくる |
 | このファイル | このプロジェクト自身 | 流れてこない |
 
-上流の版を上げるときは、このファイルを書き換えない。上流の版は、`tools/graph/version.py`と`tools/graph/layers/graph-project-template.toml`が持つ。
+上流の版を上げるときは、このファイルを書き換えない。上流の版は、`tools/graph/version.py`と`tools/graph/layers/`の下の各層の宣言（`graph-project-template.toml`・`game-template.toml`）が持つ。
 
 ---
 
