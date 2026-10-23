@@ -10,7 +10,7 @@ game-templateから作った作品で、開発を始めるまでの手順であ�
 
 どのOSでも、次の3つを入れる。
 
-- Godot 4.7.2の標準版（.NETでない版）。[GitHubのreleases](https://github.com/godotengine/godot/releases)の4.7.2-stableか、公式サイトから入れる。版の理由は[TDR-0001](docs/51-tdr/tdr-0001-godot-version.md)にある。`project.yaml`の`commands`と`make ci`はPATHの`godot`を呼ぶので、PATHに通す。`/settings`で`engine.path`にエディタのパスを設定する方法もあるが、`make ci`は`engine.path`を読まない。
+- Godot 4.7.2の標準版（.NETでない版）。[GitHubのreleases](https://github.com/godotengine/godot/releases)の4.7.2-stableか、公式サイトから入れる。版の理由は[TDR-0001](docs/51-tdr/tdr-0001-godot-version.md)にある。`project.yaml`の`commands`はPATHの`godot`を呼ぶので、PATHに通す。`/settings`で`engine.path`にエディタのパスを設定する方法もある。`make ci`は、PATHに`godot`が無ければ`engine.path`のエディタを使う。
 - Python 3.12以上。`python -m tools.graph check`と`make ci`が使う。
 - GitとClaude Code。入れ方は、[setup-requirements.md](.claude/docs/setup-requirements.md)の「Required」にある。
 
