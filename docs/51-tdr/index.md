@@ -19,6 +19,7 @@ tags: [index]
 <!-- graph:children:start -->
 - [TDR-0001 Godotの版を4.7.2にする](./tdr-0001-godot-version.md)
 - [TDR-0002 言語をGDScriptにする](./tdr-0002-gdscript.md)
+- [TDR-0003 Godot用のGitの設定をそろえる](./tdr-0003-godot-git-settings.md)
 <!-- graph:children:end -->
 
 ## 追加するとき
