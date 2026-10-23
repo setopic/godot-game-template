@@ -16,6 +16,16 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`もこの層で書き足しているが、`merge=ours`なので競合しない。
 
+## 0.10.1（2026-10-23）
+
+### 変更
+
+CCGSのGDDと設計の文書を、`design/`に置いたままgraphの検証の外に置く決定を、PDR-0008に書いた（#2）。決定の経緯はgraphのノードであるDDR・TDR・ADRが持ち、DDRとGDDは両方から指す（PDR-0006）。`docs_dir = "design"`にして文書を`design/`に移す案、graphが複数の文書のフォルダを検証できるようにする案、#2の本文の種類表でCCGSの文書をノードにする案は採らなかった。`graph.toml`の`exclude`の注記に、`design/`を書かない理由としてPDR-0008を足した。
+
+### 取り込む側の作業
+
+無い。
+
 ## 0.10.0（2026-10-23）
 
 ### 変更

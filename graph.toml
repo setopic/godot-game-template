@@ -3,6 +3,8 @@ extend_default_types = true
 # CCGS（Claude-Code-Game-Studios）から取り込んだ、フロントマターの無いMarkdownを
 # グラフに含めない（PDR-0006）。CCGSのスキルやフックがこれらのパスを決め打ちで
 # 読むので、docs/から動かせない。docs_dirを変えたら、ここも書き直す。
+# design/のGDDと設計の文書は、文書のフォルダ（docs/）の外にあり、graphで検証しない（PDR-0008）。
+# そのため、design/はここに書かない。
 # docs/architecture/には、CCGSのスキルが書くADR以外の文書（architecture.md、control-manifest.md、
 # tr-registry.yamlなど）を置く。TDRはdocs/51-tdr/に、ADRはdocs/52-adr/に置く（PDR-0006）。
 exclude = [
