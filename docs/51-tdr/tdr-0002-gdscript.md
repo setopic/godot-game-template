@@ -107,4 +107,8 @@ C#でしか使えないライブラリが要る作品が出たとき。GDScript�
 
 - [UC-02 CCGSの更新を取り込む](../30-usecases/uc-02-ccgs-upgrade.md)
 
+このノードを参照しているノード
+
+- (depends_on) [ADR-0001 スクリーンショットの証拠を1つのautoloadで撮る](../52-adr/adr-0001-evidence-capture-autoload.md)
+
 <!-- graph:auto:end -->

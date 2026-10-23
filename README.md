@@ -146,6 +146,9 @@ graph LR
   subgraph contract["契約"]
     CON-01["CON-01<br/>予約確定エンドポイント"]
   end
+  subgraph adr["ゲームの中の構成の決定"]
+    ADR-0001["ADR-0001<br/>スクリーンショットの証拠を1つのautoloadで撮る"]
+  end
   subgraph pdr["開発の進め方の決定"]
     PDR-0001["PDR-0001<br/>設計文書をグラフとして管理する"]
     PDR-0002["PDR-0002<br/>graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む"]
@@ -162,6 +165,9 @@ graph LR
     TDR-0003["TDR-0003<br/>Godot用のGitの設定をそろえる"]
     TDR-0004["TDR-0004<br/>GodotのCIをapp-check.ymlで回す"]
   end
+  ADR-0001 -->|depends_on| TDR-0001
+  ADR-0001 -->|depends_on| TDR-0002
+  ADR-0001 -->|depends_on| TDR-0003
   ARCH-02 -->|refines| ARCH-01
   CON-01 -->|depends_on| UC-01
   CON-01 -->|depends_on| DOM-01
