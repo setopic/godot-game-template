@@ -80,7 +80,9 @@ track, and the judgement calls.
 - Count level designs in `design/levels/`
 
 **Source Code** (the code root — `src/` Godot, `Assets/` Unity, `Source/` Unreal; resolve per `.claude/docs/code-root-resolution.md`):
-- Count source files (language-agnostic)
+- Count source files (language-agnostic). game-template (PDR-0016): leave out
+  `src/qa/`. The template ships it to every game as a common file, so it says
+  nothing about how far the project has got
 - Identify major systems (directories with 5+ files)
 - Check for core/, gameplay/, ai/, networking/, ui/ directories
 - Estimate lines of code (rough scale)
@@ -104,7 +106,9 @@ track, and the judgement calls.
 **Architecture Docs** (`docs/architecture/`, `docs/51-tdr/`, `docs/52-adr/`):
 - Count ADRs (Architecture Decision Records, `docs/52-adr/adr-*.md`) and TDRs
   (`docs/51-tdr/tdr-*.md`) apart. Only ADRs show progress: the template ships
-  TDRs for the engine it pins
+  TDRs for the engine it pins. For the same reason, leave out an ADR whose
+  front matter `tags` names `template` (game-template, ADR-0001): the template
+  ships it too
 - Check for overview/index documents
 
 **Tests** (`tests/`):
