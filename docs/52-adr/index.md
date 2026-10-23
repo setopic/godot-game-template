@@ -17,6 +17,7 @@ tags: [index]
 ## ノード一覧
 
 <!-- graph:children:start -->
+- [ADR-0001 スクリーンショットの証拠を1つのautoloadで撮る](./adr-0001-evidence-capture-autoload.md)
 <!-- graph:children:end -->
 
 ## 追加するとき

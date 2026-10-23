@@ -16,6 +16,20 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`もこの層で書き足しているが、`merge=ours`なので競合しない。
 
+## 0.13.0（2026-10-23）
+
+### 変更
+
+スクリーンショットの証拠を撮るautoloadを`src/qa/evidence_capture.gd`に作り、決めたことをADR-0001に書いた（#6）。Claudeは起動の引数（`-- --capture=<名前> --story=<ストーリーのid>`）で、人は遊びながらF12で撮る。どちらも`production/qa/evidence/<ストーリーのid>/<日時>-<名前>.png`に置く。引数で撮るときは既定で10フレーム待ち（`--capture-frames=N`で変える）、撮ったらゲームを終え、終了コードで結果を返す。`--story`が無いときとキーで撮るときは、`production/session-state/active.md`の`**Current task:**`の行からストーリーを読む。書き出したゲームでは動かない。
+
+引数とパスの決まりのGdUnit4のテストを、`tests/unit/qa/qa_evidence_capture_test.gd`に書いた。Godotが無い環境で書いたので、autoloadもテストもまだGodotで回していない。
+
+CCGSの`.claude/docs/run-and-observe.md`のGodotの手順と、`/dev-story`の撮る手順を、このautoloadを使う形に直した。autoloadの登録の仕方（`project.godot`の行）は、`run-and-observe.md`に書いた。
+
+### 取り込む側の作業
+
+Godotのプロジェクトがあるなら、`project.godot`の`[autoload]`に`EvidenceCapture="*res://src/qa/evidence_capture.gd"`を足す。F12をゲームの操作に使っているなら、`src/qa/evidence_capture.gd`の`CAPTURE_KEY`を変える。
+
 ## 0.12.0（2026-10-23）
 
 ### 変更

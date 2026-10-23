@@ -237,7 +237,11 @@ command, the exit code and any error lines:
 can see (every Visual/Feel and UI story, and any other with a surface): launch
 straight into the scene the story touched, capture a screenshot straight into
 `production/qa/evidence/[story-slug]/` (`[story-slug]` is the story file's name
-without `.md`; `mkdir -p` the folder first), stamp it with
+without `.md`; `mkdir -p` the folder first; on Godot, launch with
+`-- --capture=<what-it-shows> --story=[story-slug]` and the capture autoload
+writes the file there and quits, exit 0 when saved; when `project.godot` has no
+`EvidenceCapture=` line, ask "May I register the capture autoload in
+`project.godot`?" first: game-template, ADR-0001), stamp it with
 `bash .claude/scripts/review-receipts.sh hash <each changed file> > production/qa/evidence/[story-slug]/stamp.txt`,
 then open the image and compare it with the criteria. Not waived at `qa.level:
 minimal`. Report exactly one line, plain text starting `Run result:` (no bold:

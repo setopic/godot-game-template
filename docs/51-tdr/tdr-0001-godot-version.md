@@ -107,6 +107,7 @@ GdUnit4が4.7.2で動かないと、setopic/game-template#5で分かったとき
 
 このノードを参照しているノード
 
+- (depends_on) [ADR-0001 スクリーンショットの証拠を1つのautoloadで撮る](../52-adr/adr-0001-evidence-capture-autoload.md)
 - (depends_on) [TDR-0003 Godot用のGitの設定をそろえる](./tdr-0003-godot-git-settings.md)
 - (depends_on) [TDR-0004 GodotのCIをapp-check.ymlで回す](./tdr-0004-godot-ci.md)
 - (related) [PDR-0002 graph-project-templateから作り、CCGSを選んだファイルのcheckoutで取り込む](../50-pdr/pdr-0002-ccgs-import.md)

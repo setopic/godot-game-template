@@ -29,14 +29,19 @@ engine has a native way.
    run will not reach. Stories should be written so their surface is reachable
    from a launch argument (a scene path, a map URL, a `--scene` flag).
 3. **Wait, capture, quit.** Let the engine render real frames — 60 is a safe
-   floor — capture one, and exit. Each engine's mechanism is below.
+   floor — capture one, and exit. Each engine's mechanism is below. (Godot:
+   the capture autoload waits 10 frames by default; pass `--capture-frames=60`
+   when the scene animates in. game-template, ADR-0001.)
 4. **Look.** `Read` the PNG. Compare what is on screen to the acceptance
    criteria. Clipped text, an overflowing panel, a missing element, the wrong
    colour — these are defects, and this is the only step that finds them.
 5. **Retain.** Capture straight into the story's evidence folder, so nothing
    needs copying: `mkdir -p production/qa/evidence/[story-slug]`, then pass
    `production/qa/evidence/[story-slug]/[NN]-[what-it-shows].png` as the capture
-   path (Godot adds its frame number to the name). `[story-slug]` is the story
+   path. Godot names the file itself: pass `--story=[story-slug]` and
+   `--capture=[what-it-shows]`, and it writes
+   `production/qa/evidence/[story-slug]/<YYYYMMDD-HHMMSS>-[what-it-shows].png`
+   (the folder is made for you). `[story-slug]` is the story
    file's name without `.md`: `story-003-light-pickup` for
    `production/epics/core/story-003-light-pickup.md`. Reference the image from
    the evidence doc. A screenshot that was taken and discarded is an
@@ -50,32 +55,53 @@ engine has a native way.
 
 | `engine.name` | Launch | Capture | Output lands in | Never use | Scaffold needed |
 |---|---|---|---|---|---|
-| Godot 4 | `godot --path . --windowed --resolution 1280x720 <scene>.tscn` | `--write-movie <path>.png --quit-after <N>` | beside the given path, `<name>00000000.png` … | `--headless` | **none** |
+| Godot 4 | `godot --path . --windowed --resolution 1280x720 <scene>.tscn` | `-- --capture=<name> --story=<story-slug>` (the capture autoload) | `production/qa/evidence/<story-slug>/<YYYYMMDD-HHMMSS>-<name>.png` | `--headless` | one autoload, shipped in `src/qa/` |
 | Unity 6 | built player `.exe -screen-width 1280 -screen-height 720 -screen-fullscreen 0 --scene <Name>` | `ScreenCapture.CaptureScreenshot(<abs path>)` from a bootstrap script | the absolute path you pass | `-batchmode`, `-nographics` | one MonoBehaviour |
 | Unreal 5 | `MSYS_NO_PATHCONV=1 "<UE root>/Engine/Binaries/Win64/UnrealEditor.exe" "$(pwd -W 2>/dev/null || pwd)/<Game>.uproject" <MapURL> -game -windowed -ResX=1280 -ResY=720` | `HighResShot 1280x720 filename=<abs path>` console command | the path you pass (else `Saved/Screenshots/WindowsEditor/`) | `-nullrhi`, `-unattended` alone | one actor or `-ExecCmds` |
 
-### Godot 4 — zero scaffold
+### Godot 4 — the capture autoload
+
+game-template (ADR-0001) ships `src/qa/evidence_capture.gd`. Claude captures with
+a launch argument, a person playing captures with **F12**, and both get the same
+file name. Register it once per game, in `project.godot` (or Project Settings →
+Globals → Autoload, name `EvidenceCapture`, the script above, Global Variable on):
 
 ```
-godot --path . --windowed --resolution 1280x720 --write-movie shots/shop.png --quit-after 60 res://scenes/shop.tscn
+[autoload]
+
+EvidenceCapture="*res://src/qa/evidence_capture.gd"
 ```
 
-`--write-movie` is Movie Maker mode: with a `.png` target it writes a frame
-sequence and `--quit-after` sets the frame count. Filenames carry **8**
-zero-padded digits — `shop00000000.png` through `shop00000059.png` — so take the
-last; a `shop.wav` lands beside them. `--fixed-fps` is applied automatically. The
-scene path is positional; any `.tscn` can be launched directly, which is how step
-2 is satisfied. The frames are recorded at the project's viewport size
-(`display/window/size/viewport_width` and `_height`, 1152x648 when unset), not at
-`--resolution`, which only sizes the window; the log's `recording movie in
-<W>×<H>` line says which. The capture-on-trigger alternative below saves at the
-window size.
+Claude, from Bash (the arguments after `--` are the autoload's):
 
-Capture-on-trigger alternative, for a state a scene launch cannot reach: an
-autoload that on the wanted condition does
-`await RenderingServer.frame_post_draw`, then
-`get_viewport().get_texture().get_image().save_png(path)`, then
-`get_tree().quit()`.
+```
+timeout 120 godot --path . --windowed --resolution 1280x720 res://scenes/shop.tscn -- --capture=shop --story=story-003-light-pickup
+```
+
+It waits 10 frames (`--capture-frames=N` changes it), waits for that frame to
+finish drawing, saves the viewport to
+`production/qa/evidence/story-003-light-pickup/<YYYYMMDD-HHMMSS>-shop.png`, prints
+`evidence_capture: <path>`, and quits. The exit code is the result: **0** saved,
+**1** nothing saved (no image, as under `--headless`, or the file could not be
+written), **2** bad arguments (a name or story with anything but letters, digits,
+`-` and `_`; `--capture-frames` below 1; no story). Without `--story` it takes the
+story the **Current task:** line of `production/session-state/active.md` names;
+when that line names no story file, the run exits 2. A person presses **F12** while
+playing: the same folder rule, the name `key`, the story from `active.md`, and
+`no-story` when it names none. The game keeps running.
+
+**Check the registration before launching:** `grep -q '^EvidenceCapture=' project.godot`.
+Without it the arguments are ignored and the game never quits, so launch under
+`timeout 120` all the same; exit 124 means the capture did not run.
+
+The scene path is positional; any `.tscn` can be launched directly, which is how
+step 2 is satisfied. The image is the viewport's, at the window size. The
+autoload does nothing in an exported game: it frees itself when the build has no
+`editor` feature, which export templates lack.
+
+Frame sequences, for the "feel" half below, still come from Movie Maker mode:
+`--write-movie shots/shop.png --quit-after 60` writes `shop00000000.png` through
+`shop00000059.png` at the project's viewport size, not at `--resolution`.
 
 ### Unity 6 — one MonoBehaviour
 
@@ -237,6 +263,7 @@ engine on this machine". Absence of a path is not absence of an engine.
 *Commands above were run on Windows with Godot 4.6.1 (gdUnit4 6.1.3) and the
 Godot ones again on 4.7.2 (gdUnit4 6.2.2), Unity
 6000.3.23f1 and Unreal Engine 5.7; the Unreal Linux and macOS notes come from
-Epic's documentation. `docs/engine-reference/<engine>/` is
+Epic's documentation. The Godot capture autoload (game-template, ADR-0001)
+has not been run yet: no Godot editor was available when it was written. `docs/engine-reference/<engine>/` is
 the project's pinned authority; check it before trusting a version-qualified
 claim here.*
