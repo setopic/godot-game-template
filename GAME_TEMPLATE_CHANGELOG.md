@@ -17,6 +17,20 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`と`PROJECT_CHANGELOG.md`の雛形（0.22.7）もこの層で書き足している。どちらも`merge=ours`なので、この層と上流の両方が変えたときはこの層の側が残り、競合しない。そのときは上流の変更が入らないので、上流の変更履歴の「取り込む側の作業」を見て手で合わせる。
 
+## 0.23.0（2026-10-23）
+
+### 追加
+
+`README.md`のこの層の説明に、3つの節を足した。作品を起こしてから最初のテストが通るまでの手順が、READMEとMETA-08とスキルの資料に散らばっていたからである。
+
+- 「新しいゲームを起こす」に、"Use this template"で作ってから`make ci`が通るまでの順番を、各手順へのリンクで並べた。`project.godot`は`/setup-engine`の7.5の手順だけで作り、`/setup-engine`の全体は回さない。`addons/gdUnit4/`は`project.godot`より先に入れる。`project.godot`ができた時点で、`godot-ci.sh`が`tests/unit/qa/`のテストを回そうとして落ちるからである。
+- 「前提ツール（Windows）」に、bash・git-lfs・gh・make・jqの入れ方と、`godot`という名前でPATHに通すための2つのファイルを書いた。`make ci`は`engine.path`を読まないので、その旨を「Godotで開く前に」にも足した。
+- 「Godotのテスト」に、GdUnit4の入れ方、手元での回し方（`commands.test`と`make ci`）、自分のテストの置き場（`tests/unit/<system>/`。PDR-0016）を書いた。
+
+### 取り込む側の作業
+
+なし。`README.md`は`merge=ours`なので、作品が書き換えていればこの追加は届かない。作品のREADMEは作品の説明なので、手で足さなくてよい。
+
 ## 0.22.7（2026-10-23）
 
 ### 変更
