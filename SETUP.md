@@ -52,7 +52,7 @@ python --version
 2. 素材（画像・音・モデル・フォント）はGit LFSに入っている。取り出す前に、1度だけ`git lfs install`を回してから、作品のリポジトリをcloneする。Windowsでは、cloneの前に`git config --global core.longpaths true`も1度回す。`.claude/`の下に名前の長いファイルがあり、深いフォルダの下にcloneすると「Filename too long」で取り出しに失敗するからである。
 3. `.godot/`はGitに入れないので、cloneした直後に`godot --headless --import`を1度回す。`project.godot`がまだ無い作品では要らない。
 4. `gh auth login`を回す。`make ci PR=<番号>`がPRの題と本文を読むのに使う。
-5. Claude Codeを、リポジトリの根で起動する。CCGSのフックと、書く前に確認する設定は、根で起動したときにだけ読み込まれる。最初のセッションでは`/start`を回す。
+5. Claude Codeを、リポジトリの根で起動する。CCGSのフックと、書く前に確認する設定は、根で起動したときにだけ読み込まれる。最初のセッションでは`/start`を回す。参加した人は、`/start`が`project.yaml`に保存するかを聞いたら、「Don't save」を選ぶ。`project.yaml`は、テンプレートの管理者が持つファイルだからである（`.github/CODEOWNERS.example`）。保存してしまったら、コミットせずに`git restore project.yaml`で戻し、`production/stage.txt`ができていたら消す。
 6. `make ci`が通ることを確かめる（下の「4. Godotのテスト」）。
 
 `project.godot`か`addons/gdUnit4/`がまだ無い作品では、作品を作った人が下の「3. 作品を作った人が1回だけすること」の7までを済ませるまで、シーン・スクリプト・テストの作業を始めない。そのあいだの`make ci`は、`project.godotが無いので、Godotの段を飛ばす`と出して文書の検査だけを回すので、通ってもテストは回っていない。作品を作った人が7まで済ませたら、`git pull`してから、上の3と6を回し直す。
