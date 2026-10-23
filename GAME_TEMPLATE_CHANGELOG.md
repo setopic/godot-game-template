@@ -17,6 +17,16 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`と`PROJECT_CHANGELOG.md`の雛形（0.22.7）もこの層で書き足している。どちらも`merge=ours`なので、この層と上流の両方が変えたときはこの層の側が残り、競合しない。そのときは上流の変更が入らないので、上流の変更履歴の「取り込む側の作業」を見て手で合わせる。
 
+## 0.23.11（2026-10-24）
+
+### 変更
+
+`SETUP.md`の「4. Godotのテスト」に、Windowsでは`make ci`をGit Bashで回すことと、通ったときと落ちたときの表示を書いた（#82）。Godotの段は`bash`を呼ぶので、Git for Windowsの`bin`をPATHに足していないPowerShellでは失敗する。全部の段が通ると、最後の行に`local_ci: すべて通った`と出る。
+
+### 取り込む側の作業
+
+なし。
+
 ## 0.23.10（2026-10-24）
 
 ### 変更
