@@ -80,7 +80,7 @@ git lfs unlock <パス>
 
 4より5を後にするのは、`project.godot`ができた時点で、CIが`tests/unit/qa/`のテストを回そうとするからである。`addons/gdUnit4/`が無いと、`.github/scripts/godot-ci.sh`がそこで落とす。
 
-`/setup-engine`の全体を回さないのは、1〜7が共通ファイルを書き換えるからである。エンジンと版は、このテンプレートで決めてある。5と6は、テンプレートの管理者が`project.godot`だけを変えるPRで行う（[META-05](docs/00-meta/dev-flow.md)の「シーンと`project.godot`」）。
+`/setup-engine`の全体を回さないのは、1〜7が共通ファイルを書き換えるからである。エンジンと版は、このテンプレートで決めてある。5と6は、テンプレートの管理者が`project.godot`だけを変えるPRで行う（[META-05](docs/00-meta/dev-flow.md)の「シーンと`project.godot`」）。作品では、`.github/CODEOWNERS`で`project.godot`の持ち主にした人を、テンプレートの管理者と呼ぶ。`CODEOWNERS`を置かない作品では、作品のリポジトリを作った人がテンプレートの管理者である。役割の分け方の雛形は`.github/CODEOWNERS.example`にある。
 
 複数人で開発するなら、mainの保護も設定する（[META-05](docs/00-meta/dev-flow.md)の「複数人で開発するとき」）。
 
