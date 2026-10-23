@@ -13,6 +13,13 @@
 
 ### Godot 4
 
+> **game-template (TDR-0004): skip this section.** `.github/workflows/app-check.yml`
+> already imports the project, parse-checks the scripts, runs gdUnit4 from
+> `addons/gdUnit4/` with the command in `coding-standards.md`, and exports
+> Windows and Web on a push to main. Do not create `tests.yml`: it would run the
+> same tests a second time through `gdUnit4-action`, which TDR-0004 did not take.
+> Tell the user the CI already exists and go to the next phase.
+
 Create `.github/workflows/tests.yml`:
 
 ```yaml

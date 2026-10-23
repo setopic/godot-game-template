@@ -160,6 +160,7 @@ graph LR
     TDR-0001["TDR-0001<br/>Godotの版を4.7.2にする"]
     TDR-0002["TDR-0002<br/>言語をGDScriptにする"]
     TDR-0003["TDR-0003<br/>Godot用のGitの設定をそろえる"]
+    TDR-0004["TDR-0004<br/>GodotのCIをapp-check.ymlで回す"]
   end
   ARCH-02 -->|refines| ARCH-01
   CON-01 -->|depends_on| UC-01
@@ -189,6 +190,8 @@ graph LR
   PDR-0008 -->|depends_on| PDR-0006
   TDR-0002 -.->|decides| UC-02
   TDR-0003 -->|depends_on| TDR-0001
+  TDR-0004 -->|depends_on| TDR-0001
+  TDR-0004 -->|depends_on| TDR-0003
   UC-01 -->|depends_on| DOM-01
   UC-02 -->|depends_on| PDR-0006
   classDef draft stroke-dasharray: 4\,3;
