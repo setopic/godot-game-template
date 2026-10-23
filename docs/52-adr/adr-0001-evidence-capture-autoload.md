@@ -3,7 +3,7 @@ id: ADR-0001
 type: adr
 title: スクリーンショットの証拠を1つのautoloadで撮る
 status: stable
-tags: [qa]
+tags: [qa, template]
 depends_on:
   - TDR-0001
   - TDR-0002
