@@ -17,6 +17,16 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`と`PROJECT_CHANGELOG.md`の雛形（0.22.7）もこの層で書き足している。どちらも`merge=ours`なので、この層と上流の両方が変えたときはこの層の側が残り、競合しない。そのときは上流の変更が入らないので、上流の変更履歴の「取り込む側の作業」を見て手で合わせる。
 
+## 0.23.22（2026-10-24）
+
+### 変更
+
+`SETUP.md`の「3. 作品を作った人が1回だけすること」の6から、`EvidenceCapture`のautoloadを`project.godot`の`[autoload]`の節に書く例へリンクした（#108）。例は`.claude/docs/run-and-observe.md`の「Godot 4 — the capture autoload」にあるが、`SETUP.md`からもADR-0001からもたどれなかった。ADR-0001は確定した記録なので、本文は変えていない。
+
+### 取り込む側の作業
+
+なし。
+
 ## 0.23.21（2026-10-24）
 
 ### 変更
