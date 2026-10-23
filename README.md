@@ -27,6 +27,20 @@ Claude Codeは、リポジトリの根で起動する。CCGSのフックと、�
 
 ## Godotで開く前に
 
+次の2つを入れる。
+
+- Godot 4.7.2の標準版（.NETでない版）。[GitHubのreleases](https://github.com/godotengine/godot/releases)の4.7.2-stableか、公式サイトから入れる。版の理由は[TDR-0001](docs/51-tdr/tdr-0001-godot-version.md)にある。`project.yaml`の`commands`はPATHの`godot`を呼ぶので、PATHに通す。通せないときは、`/settings`で`engine.path`にエディタのパスを設定する。
+- Python 3.12以上。`python -m tools.graph check`と`make ci`が使う。
+
+次のコマンドで、入ったことを確かめる。
+
+```bash
+godot --version
+python --version
+```
+
+`godot --version`は`4.7.2.stable`で始まる。
+
 素材（画像・音・モデル・フォント）はGit LFSに入れる。取り出す前に、1度だけ次を回す。
 
 ```bash
