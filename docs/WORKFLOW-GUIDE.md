@@ -79,6 +79,11 @@ This guided onboarding asks where you are and routes you to the right phase:
   and there is no more than a concept; otherwise to `/project-stage-detect`,
   then `/adopt` for brownfield migration
 
+In game-template (META-08) only the person who created the game runs `/start`,
+once, after connecting the template (`SETUP.md` section 3, step 3). Someone
+joining an existing game does not run it, and finds the next step with `/help`
+(`SETUP.md` section 2, step 5).
+
 ### Step 3: Verify Hooks Are Working
 
 Start a new Claude Code session. You should see output from the
