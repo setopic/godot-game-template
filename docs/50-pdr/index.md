@@ -32,6 +32,7 @@ tags: [index]
 - [PDR-0013 CODEOWNERSの雛形には、既定の持ち主を置かない](./pdr-0013-codeowners-no-default-owner.md)
 - [PDR-0014 この層の共通ファイルを、作品が書き換えないものに限る](./pdr-0014-game-template-common-files.md)
 - [PDR-0015 作品が書き換えるこの層のファイルも、merge=oursにしない](./pdr-0015-no-merge-ours-project-files.md)
+- [PDR-0016 tests/unit/qa/もこの層の共通ファイルにする](./pdr-0016-tests-unit-qa-common-file.md)
 <!-- graph:children:end -->
 
 ## 追加するとき

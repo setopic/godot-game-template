@@ -181,6 +181,7 @@ CCGSが、ADRの置き場や書式を設定で変えられるようにしたと�
 - (depends_on) [PDR-0008 GDDと設計の文書はgraphの検証の外に置く](./pdr-0008-design-docs-outside-graph.md)
 - (depends_on) [PDR-0011 CCGSの.gitignoreは、エンジンの節を除いてこの層の節に写す](./pdr-0011-ccgs-gitignore.md)
 - (depends_on) [PDR-0014 この層の共通ファイルを、作品が書き換えないものに限る](./pdr-0014-game-template-common-files.md)
+- (depends_on) [PDR-0016 tests/unit/qa/もこの層の共通ファイルにする](./pdr-0016-tests-unit-qa-common-file.md)
 - (depends_on) [UC-02 CCGSの更新を取り込む](../30-usecases/uc-02-ccgs-upgrade.md)
 
 <!-- graph:auto:end -->
