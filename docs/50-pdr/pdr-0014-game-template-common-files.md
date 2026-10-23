@@ -102,4 +102,8 @@ game-templateから作った作品は、初回の取り込みで、META-08とgra
 
 - [PDR-0006 CCGSを丸ごと取り込み、決定の記録を4つの種別に分ける](./pdr-0006-ccgs-whole-import-dr-types.md)
 
+このノードを参照しているノード
+
+- (depends_on) [PDR-0015 作品が書き換えるこの層のファイルも、merge=oursにしない](./pdr-0015-no-merge-ours-project-files.md)
+
 <!-- graph:auto:end -->

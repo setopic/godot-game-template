@@ -59,6 +59,8 @@ git lfs unlock <パス>
 | --- | --- |
 | `.claude/`（`.claude/docs/technical-preferences.md`を除く）、`studio-tests/`、`docs/engine-reference/`、CCGSの案内の文書（`docs/CLAUDE.md`、`docs/WORKFLOW-GUIDE.md`、`docs/COLLABORATIVE-DESIGN-PRINCIPLE.md`、`docs/skill-flow-diagrams.md`、`docs/migration-guide-v1.1.md`）、`design/CLAUDE.md`、`src/CLAUDE.md`、`src/qa/`、`scripts/`、各フォルダの`.gdignore`、`.github/CODEOWNERS.example`、`GAME_TEMPLATE_CHANGELOG.md`、`LICENSE-CCGS`、`UPGRADING.md`、`CHANGELOG.md` | `project.yaml`、`.claude/docs/technical-preferences.md`、`docs/architecture/`、`docs/registry/`、`design/registry/`、`graph.toml`、`graph.mk`、`docs/templates/`、ノード本体 |
 
+作品のもののうち、`project.yaml`・`graph.toml`・`graph.mk`・`docs/templates/`は`merge=ours`ではないので、この層の変更が取り込みで届く。競合したら、作品の変更とこの層の変更の両方を残して手で解く。`graph.toml`と`graph.mk`に作品が足すものは、末尾の「ここから下は作品が足すもの」の下に書く（[PDR-0015](docs/50-pdr/pdr-0015-no-merge-ours-project-files.md)）。
+
 `/setup-engine`と`/skill-improve`は、共通ファイルを書き換える。エンジンの版を上げるときや、スキルを直すときは、テンプレートの側で行う。
 
 ---
@@ -211,6 +213,7 @@ graph LR
     PDR-0012["PDR-0012<br/>複数人で開発するときは、持ち主の承認を必須にする"]
     PDR-0013["PDR-0013<br/>CODEOWNERSの雛形には、既定の持ち主を置かない"]
     PDR-0014["PDR-0014<br/>この層の共通ファイルを、作品が書き換えないものに限る"]
+    PDR-0015["PDR-0015<br/>作品が書き換えるこの層のファイルも、merge=oursにしない"]
   end
   subgraph tdr["ゲームの外の技術の決定"]
     TDR-0001["TDR-0001<br/>Godotの版を4.7.2にする"]
@@ -253,6 +256,7 @@ graph LR
   PDR-0012 -->|depends_on| PDR-0009
   PDR-0013 -->|depends_on| PDR-0012
   PDR-0014 -->|depends_on| PDR-0006
+  PDR-0015 -->|depends_on| PDR-0014
   TDR-0002 -.->|decides| UC-02
   TDR-0003 -->|depends_on| TDR-0001
   TDR-0004 -->|depends_on| TDR-0001

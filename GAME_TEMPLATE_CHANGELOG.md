@@ -17,6 +17,18 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`もこの層で書き足しているが、`merge=ours`なので競合しない。
 
+## 0.20.0（2026-10-23）
+
+### 変更
+
+作品が書き換えてよいこの層のファイル（`project.yaml`・`graph.toml`・`graph.mk`・`docs/templates/`）を、`merge=ours`にしないと決めた（#43）。この層の変更（CCGSの更新の`framework.version`、種別の必須の節と雛形、`make ci`）が、取り込みで作品に届くようにするためである。理由と却下した案は、PDR-0015に書いた。
+
+`.gitattributes`のこの層の節に理由を書いた。`graph.toml`と`graph.mk`の末尾に「ここから下は作品が足すもの」の注記を置いた。READMEの共通ファイルの表の下に、競合したときの扱いを書いた。
+
+### 取り込む側の作業
+
+`graph.toml`と`graph.mk`に作品で書き足したものがあれば、末尾の「ここから下は作品が足すもの」の下へ移す。取り込みで4つのファイルが競合したら、作品の変更とこの層の変更の両方を残して手で解く。`README.md`は`merge=ours`なので、READMEの1文は届かない。
+
 ## 0.19.0（2026-10-23）
 
 ### 変更
