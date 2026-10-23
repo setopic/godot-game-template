@@ -66,18 +66,19 @@ git lfs unlock <パス>
 
 作品のリポジトリは、GitHubの"Use this template"で作る。[META-08](docs/00-meta/template-upgrade.md)の初回の手順は、"Use this template"で作ったリポジトリを前提にしている。`git clone`で作ると、`origin`がこのテンプレートを指したまま残る。CCGSの案内の`docs/WORKFLOW-GUIDE.md`は`git clone`を勧めているが、作品を起こすときはこの節に従う。
 
-作ったあとは、上の「2. 参加した人がすること」の1・2・4・5を行ってから、次の順に進める。各手順の中身は、リンク先にある。この節の「PR」は、1人でmainへ直接pushする作品（[META-05](docs/00-meta/dev-flow.md)の「5. PRを出すか、mainへ直接出すか」）では、その変更だけを入れたコミットに読み替える。
+作ったあとは、上の「2. 参加した人がすること」の1・2・4を行い、Claude Codeをリポジトリの根で起動してから、次の順に進める。各手順の中身は、リンク先にある。この節の「PR」は、1人でmainへ直接pushする作品（[META-05](docs/00-meta/dev-flow.md)の「5. PRを出すか、mainへ直接出すか」）では、その変更だけを入れたコミットに読み替える。
 
 1. テンプレートと繋ぐ。[META-08](docs/00-meta/template-upgrade.md)の「1. 最初に一度だけ」を行う。upstreamのURLとラベルの作り方は、この層の値に置き換える（根の`README.md`の「テンプレートの更新を取り込む」の表）。"Use this template"で作った直後は、共通ファイルがテンプレートと同じなので、META-08の手順1（共通ファイルの上書き）は要らない。手順2から行う。
-2. サンプルノードを消し、表紙を書き換える。根の`README.md`の下の段にある「自分のプロジェクトに合わせる」に従い、`python -m tools.graph reset-samples --yes`もここで回す。`README.md`を作品の説明に書き換えるときも、この文書へのリンクは残す。
-3. GdUnit4を入れ、`addons/gdUnit4/`だけのPRを出す（下の「4. Godotのテスト」）。
-4. `project.godot`を作る。`/setup-engine`は回さず、その7.5（[7.5-scaffold.md](.claude/skills/setup-engine/references/7.5-scaffold.md)）の手順だけを行う。7.5が使う`project.yaml`の`engine.rendering`は、先に`/settings`で決める。
-5. 4のPRで、`EvidenceCapture`のautoloadの登録（[ADR-0001](docs/52-adr/adr-0001-evidence-capture-autoload.md)）と、GdUnit4のプラグインの有効化も行う。
-6. `godot --headless --import`を1度回し、`make ci`が通ることを確かめる。
+2. サンプルノードを消し、表紙を書き換える。根の`README.md`の下の段にある「自分のプロジェクトに合わせる」に従い、`python -m tools.graph reset-samples --yes`もここで回す。`README.md`を作品の説明に書き換えるときも、この文書へのリンクは残す。そのあと`make all`を回す。`check`が参照切れ（`G004`）を挙げたら、それを直してから回し直す。
+3. 最初のセッションの`/start`を回す（上の「2」の5）。`/start`は`project.yaml`を書き換えることがあり、`project.yaml`は`merge=ours`ではない。1の取り込みより前に回すと、取り込みで`project.yaml`が競合するおそれがあるので、ここで回す。
+4. GdUnit4を入れ、`addons/gdUnit4/`だけのPRを出す（下の「4. Godotのテスト」）。
+5. `project.godot`を作る。`/setup-engine`は回さず、その7.5（[7.5-scaffold.md](.claude/skills/setup-engine/references/7.5-scaffold.md)）の手順だけを行う。7.5が使う`project.yaml`の`engine.rendering`は、先に`/settings`で決める。
+6. 5のPRで、`EvidenceCapture`のautoloadの登録（[ADR-0001](docs/52-adr/adr-0001-evidence-capture-autoload.md)）と、GdUnit4のプラグインの有効化も行う。
+7. `godot --headless --import`を1度回し、`make ci`が通ることを確かめる。
 
-3より4を後にするのは、`project.godot`ができた時点で、CIが`tests/unit/qa/`のテストを回そうとするからである。`addons/gdUnit4/`が無いと、`.github/scripts/godot-ci.sh`がそこで落とす。
+4より5を後にするのは、`project.godot`ができた時点で、CIが`tests/unit/qa/`のテストを回そうとするからである。`addons/gdUnit4/`が無いと、`.github/scripts/godot-ci.sh`がそこで落とす。
 
-`/setup-engine`の全体を回さないのは、1〜7が共通ファイルを書き換えるからである。エンジンと版は、このテンプレートで決めてある。4と5は、テンプレートの管理者が`project.godot`だけを変えるPRで行う（[META-05](docs/00-meta/dev-flow.md)の「シーンと`project.godot`」）。
+`/setup-engine`の全体を回さないのは、1〜7が共通ファイルを書き換えるからである。エンジンと版は、このテンプレートで決めてある。5と6は、テンプレートの管理者が`project.godot`だけを変えるPRで行う（[META-05](docs/00-meta/dev-flow.md)の「シーンと`project.godot`」）。
 
 複数人で開発するなら、mainの保護も設定する（[META-05](docs/00-meta/dev-flow.md)の「複数人で開発するとき」）。
 
@@ -87,7 +88,7 @@ git lfs unlock <パス>
 
 1. [GdUnit4のreleases](https://github.com/godot-gdunit-labs/gdUnit4/releases)から版を選び、中の`addons/gdUnit4/`をリポジトリの根の`addons/gdUnit4/`に置く。`gdUnit4`のUは大文字である。
 2. `addons/gdUnit4/bin/GdUnitCmdTool.gd`があることを確かめ、`addons/gdUnit4/`だけのPRを出す。
-3. プラグインの有効化（Project Settings → Plugins → GdUnit4）は`project.godot`を書き換えるので、上の「3. 作品を作った人が1回だけすること」の5で、`project.godot`だけのPRに入れる。エディタを使わずに有効にするときは、`project.godot`に次の節を書く。
+3. プラグインの有効化（Project Settings → Plugins → GdUnit4）は`project.godot`を書き換えるので、上の「3. 作品を作った人が1回だけすること」の6で、`project.godot`だけのPRに入れる。エディタを使わずに有効にするときは、`project.godot`に次の節を書く。
 
    ```ini
    [editor_plugins]
