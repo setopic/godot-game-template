@@ -16,6 +16,20 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`もこの層で書き足しているが、`merge=ours`なので競合しない。
 
+## 0.15.0（2026-10-23）
+
+### 変更
+
+開発の流れを、CCGSの7段階（Concept、Systems Design、Technical Setup、Pre-Production、Production、Polish、Release）と`/gate-check`に沿ってARCH-03に書いた（#8）。8段階との対応表、Claudeと作るときの3つの変更点、段階ごとにすること（`workflow-catalog.yaml`の`phases`）と次へ進む関門（`/gate-check`の定義のファイル）への案内、関門の定義に無い人の判断の場面を書いた。運営・アップデートは、Releaseのあと`project.stage`をProductionに戻すくり返しとして書いた。企画書と仕様書は、CCGSの`game-concept.md`と`game-design-document.md`の雛形を指し、新しくは作っていない。
+
+8段階にCCGSを合わせる案を却下したことは、PDR-0010に書いた。
+
+CCGSの`.claude/rules/ccgs-studio.md`の「Collaboration Protocol」に、面白いかの判断、ストアへの登録、規約への同意、価格の決定、公開の判断では、Claudeが止まって聞く項目を足した。この版で直したCCGSのファイルは、UC-02の手順3で、CCGSの更新のときに「手で合わせる」に出る。
+
+### 取り込む側の作業
+
+無い。
+
 ## 0.14.0（2026-10-23）
 
 ### 変更
