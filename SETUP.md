@@ -77,7 +77,7 @@ git lfs unlock <パス>
 3. 最初のセッションで`/start`を回す。`/start`は`project.yaml`を書き換えることがあり、`project.yaml`は`merge=ours`ではない。1の取り込みより前に回すと、取り込みで`project.yaml`が競合するおそれがあるので、ここで回す。`/start`が`project.yaml`に保存するかを聞いたら、「Save them」を選ぶ。`project.yaml`はテンプレートの管理者が持つファイルで、作品を作った人はその管理者だからである（下の段落）。書き換わった`project.yaml`と`production/stage.txt`は、その変更だけのPRにする。
 4. GdUnit4を入れ、`addons/gdUnit4/`だけのPRを出す（下の「4. Godotのテスト」）。
 5. `project.godot`を作る。`/setup-engine`は回さず、その7.5（[7.5-scaffold.md](.claude/skills/setup-engine/references/7.5-scaffold.md)）の手順だけを行う。7.5が使う`project.yaml`の`engine.rendering`は、先に`/settings`で決める。値は`Compatibility`・`Forward+`・`Mobile`のどれかで、`/settings engine.rendering=Forward+`のように書く。Webに書き出す作品では`Compatibility`、それ以外では`Forward+`が既定である（[5.5-project-yaml.md](.claude/skills/setup-engine/references/5.5-project-yaml.md)の表）。7.5は、この値から`project.godot`の描画の設定を書く。同じときに、`engine.physics`も`/settings`で決める。2Dの作品では`Godot Physics 2D`、3Dの作品では`Jolt`が既定である（同じ表）。値に空白があるときは、`/settings "engine.physics=Godot Physics 2D"`のように引用符で囲む。7.5は`engine.physics`を使わないが、`[TO BE CONFIGURED]`のまま残さないために、ここで決める。
-6. 5のPRで、`EvidenceCapture`のautoloadの登録（[ADR-0001](docs/52-adr/adr-0001-evidence-capture-autoload.md)）と、GdUnit4のプラグインの有効化も行う。
+6. 5のPRで、`EvidenceCapture`のautoloadの登録（[ADR-0001](docs/52-adr/adr-0001-evidence-capture-autoload.md)）と、GdUnit4のプラグインの有効化も行う。autoloadを`project.godot`の`[autoload]`の節に書く例は、[run-and-observe.md](.claude/docs/run-and-observe.md)の「Godot 4 — the capture autoload」にある。
 7. `godot --headless --import`を1度回し、`make ci`が通ることを確かめる。
 
 4より5を後にするのは、`project.godot`ができた時点で、CIが`tests/unit/qa/`のテストを回そうとするからである。`addons/gdUnit4/`が無いと、`.github/scripts/godot-ci.sh`がそこで落とす。
