@@ -68,6 +68,10 @@ jq --version           # Should show jq version (optional)
 python --version       # Required: Python 3 (python3 or py also work)
 ```
 
+In game-template (META-08) `make` calls `python` (`PYTHON ?= python` in the
+`Makefile`). Where only `python3` or `py` works, pass it to every `make` call,
+as in `make ci PYTHON=py`.
+
 ## What Happens Without Optional Tools
 
 | Missing Tool | Effect |

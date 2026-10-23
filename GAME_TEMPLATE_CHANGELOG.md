@@ -17,6 +17,18 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`と`PROJECT_CHANGELOG.md`の雛形（0.22.7）もこの層で書き足している。どちらも`merge=ours`なので、この層と上流の両方が変えたときはこの層の側が残り、競合しない。そのときは上流の変更が入らないので、上流の変更履歴の「取り込む側の作業」を見て手で合わせる。
 
+## 0.23.23（2026-10-24）
+
+### 変更
+
+CCGSの`.claude/docs/setup-requirements.md`の「Verifying Your Setup」に、`game-template (META-08)`の注記を足した（#109）。この節は、`python --version`の行に「`python3`か`py`でもよい」と書いているが、`make`は`Makefile`の`PYTHON ?= python`で`python`を呼ぶ。`py`しか通らない環境では、`make ci`が動かない。注記には、そのときは`make ci PYTHON=py`のように、`make`を呼ぶたびに渡すと書いた。`Makefile`は下の層の共通ファイルなので、変えていない。
+
+この版で直したCCGSのファイルは、UC-02の手順3で、CCGSの更新のときに「手で合わせる」に出る。
+
+### 取り込む側の作業
+
+なし。
+
 ## 0.23.22（2026-10-24）
 
 ### 変更
