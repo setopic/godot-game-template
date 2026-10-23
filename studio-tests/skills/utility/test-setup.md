@@ -19,6 +19,10 @@ infrastructure already exists it exits early unless `force` is passed, and
 `force` only creates missing files — it never overwrites. No director gates
 apply. The verdict is COMPLETE when the scaffold is in place.
 
+game-template (TDR-0004): for Godot it does not create `tests.yml`.
+`.github/workflows/app-check.yml` is the test CI, and the plan and the summary
+report it as already present. Unity and Unreal still get `tests.yml`.
+
 ---
 
 ## Static Assertions (Structural)
@@ -55,6 +59,8 @@ Fixture defaults.
 **Fixture:**
 - `project.yaml` has `engine.name: Godot`
 - `tests/` does not exist; `addons/gdUnit4/` is not installed; no CI workflow
+  (game-template (TDR-0004): `.github/workflows/app-check.yml` exists, as in
+  every game; no `tests.yml`)
 - The user approves the plan
 
 **Input:** `/test-setup`
@@ -63,7 +69,8 @@ Fixture defaults.
 1. Phase 1 reports "Engine: Godot. Test directory: not found. CI workflow: not found."
 2. Phase 2 presents the plan: `tests/unit/`, `tests/integration/`, `tests/smoke/`,
    `tests/README.md`, `production/qa/evidence/`, `.github/workflows/tests.yml` —
-   and no runner script
+   and no runner script (game-template (TDR-0004): the plan lists
+   `.github/workflows/app-check.yml` as already present instead of `tests.yml`)
 3. Skill asks "May I create these files? I will not overwrite any test files that
    already exist at these paths."
 4. On approval: `tests/unit/.gdignore_placeholder`,
@@ -72,6 +79,8 @@ Fixture defaults.
    `tests/smoke/critical-paths.md`, and a file under `production/qa/evidence/`
 5. `.github/workflows/tests.yml` uses `godot-gdunit-labs/gdUnit4-action@v1`
    with `version: 'installed'` and `checks: write`
+   (game-template (TDR-0004): no `tests.yml` is written; `tests/README.md` and
+   the Phase 6 summary name `.github/workflows/app-check.yml` as the CI)
 6. The documented test command matches `coding-standards.md`'s CI command:
    `godot --headless -s -d --remote-debug tcp://127.0.0.1:0 res://addons/gdUnit4/bin/GdUnitCmdTool.gd -a res://tests --ignoreHeadlessMode`
 7. Phase 6 summary; verdict COMPLETE
@@ -79,6 +88,7 @@ Fixture defaults.
 **Assertions:**
 - [ ] `tests/unit/`, `tests/integration/`, `tests/smoke/` and `production/qa/evidence/` all exist afterwards (each holds a written file)
 - [ ] No custom runner script is written (the old hand-written runner loaded a file gdUnit4 never shipped and failed every run)
+- [ ] game-template (TDR-0004): no `.github/workflows/tests.yml` is written, and the summary names `.github/workflows/app-check.yml` as the CI
 - [ ] The test command matches the coding-standards.md CI command
 - [ ] Approval is asked before any file is created
 - [ ] Verdict is COMPLETE
@@ -122,6 +132,8 @@ Fixture defaults.
 **Fixture:**
 - Godot project; `tests/unit/`, `tests/integration/`, `.github/workflows/tests.yml`
   and `addons/gdUnit4/bin/GdUnitCmdTool.gd` all exist
+  (game-template (TDR-0004): `.github/workflows/app-check.yml` in place of
+  `tests.yml`)
 - No `force` argument
 
 **Input:** `/test-setup`

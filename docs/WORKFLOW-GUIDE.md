@@ -630,6 +630,10 @@ Scaffolds the engine's test root, `.github/workflows/tests.yml` and one example
 test; the Pre-Production gate checks for them. `/test-helpers` can follow once
 there are systems to test.
 
+In game-template (TDR-0004) a Godot game has no `tests.yml`:
+`.github/workflows/app-check.yml` is its test CI and already runs gdUnit4, so
+`/test-setup` does not create `tests.yml` and the gate accepts `app-check.yml`.
+
 ### Phase 3 Gate
 
 ```
@@ -645,7 +649,8 @@ there are systems to test.
   systems, an `/architecture-review` report and
   `docs/architecture/requirements-traceability.md`
 - The test framework in the engine's test root, `.github/workflows/tests.yml`
-  and one example test (`/test-setup`)
+  and one example test (`/test-setup`). In game-template (TDR-0004),
+  `.github/workflows/app-check.yml` takes the place of `tests.yml` for Godot
 - `design/accessibility-requirements.md` and `design/ux/interaction-patterns.md`
   (`/ux-design accessibility`, `/ux-design patterns`)
 

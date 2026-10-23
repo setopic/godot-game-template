@@ -21,6 +21,8 @@ After approval, create the following files:
 **Engine**: [engine name + version]
 **Test Framework**: [GdUnit4 | Unity Test Framework | UE Automation]
 **CI**: `.github/workflows/tests.yml`
+[game-template (TDR-0004), Godot: write `.github/workflows/app-check.yml` on
+the CI line; it is the CI and no `tests.yml` is created]
 **Setup date**: [date]
 
 ## Directory Layout

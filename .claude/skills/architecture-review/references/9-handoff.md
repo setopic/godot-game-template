@@ -12,6 +12,8 @@ After completing the review and writing approved files, present:
 2. **Pre-gate checklist**: Check whether these exist via Glob and mark each ✅ or ❌:
    - the engine's test root — `tests/unit/` and `tests/integration/` (Godot), `Assets/Tests/EditMode/` and `Assets/Tests/PlayMode/` (Unity), `Source/<Module>/Private/Tests/` (Unreal) — if ❌: run `/test-setup`
    - `.github/workflows/tests.yml` — if ❌: run `/test-setup`
+     (game-template (TDR-0004): for Godot, check `.github/workflows/app-check.yml`
+     instead; it is the test CI, and `/test-setup` does not create `tests.yml`)
    - `design/accessibility-requirements.md` — if ❌: run `/ux-design`
    - `design/ux/interaction-patterns.md` — if ❌: run `/ux-design`
    Present ❌ items as required steps before gate-check. Do not offer `/gate-check`

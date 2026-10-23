@@ -14,6 +14,9 @@
 - [ ] Engine reference docs exist in `docs/engine-reference/[engine]/`
 - [ ] Test framework initialized: the engine's test root exists — `tests/unit/` and `tests/integration/` (Godot), `Assets/Tests/EditMode/` and `Assets/Tests/PlayMode/` (Unity), or `Source/<Module>/Private/Tests/` (Unreal); see `.claude/docs/directory-structure.md`
 - [ ] CI/CD test workflow exists at `.github/workflows/tests.yml` (or equivalent)
+      game-template (TDR-0004): for Godot, `.github/workflows/app-check.yml` is the
+      test workflow and satisfies this item when it runs gdUnit4
+      (`GdUnitCmdTool.gd`). `/test-setup` does not create `tests.yml` there.
 - [ ] At least one example test file exists to confirm the framework is functional
 - [ ] Master architecture document exists at `docs/architecture/architecture.md`
 - [ ] Architecture traceability index exists at `docs/architecture/requirements-traceability.md`
