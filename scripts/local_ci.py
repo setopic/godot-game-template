@@ -53,6 +53,8 @@ def godot() -> bool:
     ).stdout
     found = dict(line.split("=", 1) for line in detected.splitlines() if "=" in line)
     # ログは作業ツリーに置かない。.gitignoreに無いので、コミットに混ざる。
+    # GdUnit4の報告は、GdUnit4の既定のreports/に書く。こちらは.gitignoreにある。
+    # 6.2.2の-rdは、/で始まるパスをres://の下と読む。macOSやLinuxの一時フォルダを渡せないので、使わない（#61）。
     logs = Path(tempfile.mkdtemp(prefix="local_ci-")).as_posix()
     print(f"Godotのログ: {logs}")
     env = dict(os.environ, GODOT_CI_RETRY_SEGV="1")

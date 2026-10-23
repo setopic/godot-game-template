@@ -15,7 +15,33 @@
 | `.gitattributes` | PDR-0001の`merge=ours`の行のパスを変え（0.4.0）、末尾にこの層の行を足した | 競合した部分だけを解き、この層の行と上流の行の両方を残す |
 | `.gitignore` | 末尾に、この層のGodotの節（0.11.0）とCCGSの節（0.16.0）を足した | 競合した部分だけを解き、この層の節と上流の行の両方を残す |
 
-`docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`もこの層で書き足しているが、`merge=ours`なので競合しない。
+`docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`もこの層で書き足している。`merge=ours`なので、この層と上流の両方が変えたときはこの層の側が残り、競合しない。そのときは上流の変更が入らないので、上流の変更履歴の「取り込む側の作業」を見て手で合わせる。
+
+## 0.22.5（2026-10-23）
+
+### 変更
+
+`merge=ours`のファイルには取り込みが届かない、という言い切りを直した（#61）。下の層のMETA-08（graph-doc-templateの1.54.1）のとおり、`merge=ours`のドライバが呼ばれるのは、基点のあと作品とテンプレートの両方がそのファイルを変えたときだけである。作品が書き換えていないファイルには、この層の側の内容がそのまま入る。試しの作品に0.21.0〜0.22.4を取り込んだとき、`docs/00-meta/dev-flow.md`の変更は取り込みで届いていた。
+
+直したのは、この文書の冒頭の「上流と共通のファイルを書き換えたもの」の下の段落、`docs/00-meta/dev-flow.md`の2か所、`README.md`の「テンプレートの更新を取り込む」の段落、`.github/workflows/app-check.yml`の冒頭の注記である。`dev-flow.md`と`README.md`の文言は、graph-project-templateの0.16.4に合わせた。この層が2つを書き換えているので、0.16.4を取り込んだとき`merge=ours`でこの層の側が残り、手で合わせた。
+
+0.21.0の「ログは作業ツリーではなく、一時フォルダに置く」は、Godotのログのことである。`make ci`のGdUnit4は、報告を作業ツリーの`reports/`に書く。`reports/`は`.gitignore`にあるので、コミットには混ざらない。GdUnit4 6.2.2には報告の置き場を変える`-rd`があるが、`/`で始まるパスを`res://`の下と読むので、macOSやLinuxの一時フォルダを渡せない。そのため`scripts/local_ci.py`は変えず、注記にこのことを書いた。
+
+過去の項の「取り込む側の作業」は書き換えていない。変更履歴の項は記録として残す。過去の項を直しても、その版をすでに取り込んだ作品の`upgrade`には出ない。過去の項の誤りと抜けは、下の「取り込む側の作業」にまとめた。
+
+### 取り込む側の作業
+
+過去の項で「`merge=ours`なので届かない」と書いたもの（0.17.0・0.19.0・0.20.0・0.21.0・0.22.0・0.22.2・0.22.3）は、作品がそのファイルを書き換えていれば届かない、と読む。作品が書き換えていなければ、取り込みでもう入っているので、手で足さない。二重に足していないかは、`git diff HEAD template/main -- README.md docs/00-meta/dev-flow.md`で確かめる。
+
+作品が書き換えていて届かなかったときは、過去の項に書いた作業に加えて、次のものを手で合わせる。
+
+| 版 | ファイル | 抜けていたこと、誤っていたこと |
+| --- | --- | --- |
+| 0.21.0 | `README.md` | コマンドの表の`make ci`の行を、「GitHub Actionsが動かないときに、`graph-check.yml`と`app-check.yml`（書き出しを除く）と同じ検査を手元で回す（[META-05](docs/00-meta/dev-flow.md)）」にする |
+| 0.22.0 | `README.md` | 共通ファイルの表に行を足すのではなく、左の列の既存のセルの`src/qa/`の後ろに`tests/unit/qa/`を足す。表の上の「分け方の理由は」のリンクを、PDR-0014から[PDR-0016](docs/50-pdr/pdr-0016-tests-unit-qa-common-file.md)に替える |
+| 0.22.3 | `README.md` | 足す文のGodotの行で、「公式サイトから入れる。」の後ろに「版の理由は[TDR-0001](docs/51-tdr/tdr-0001-godot-version.md)にある。」を足す |
+
+この版の`docs/00-meta/dev-flow.md`・`README.md`・`.github/workflows/app-check.yml`の文言の修正も、作品が書き換えていれば届かない。文言だけの修正なので、手で合わせなくても動作は変わらない。`.gitignore`と`scripts/local_ci.py`は変えていない。
 
 ## 0.22.4（2026-10-23）
 
