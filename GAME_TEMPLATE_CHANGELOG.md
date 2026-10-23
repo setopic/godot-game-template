@@ -16,6 +16,18 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`もこの層で書き足しているが、`merge=ours`なので競合しない。
 
+## 0.11.0（2026-10-23）
+
+### 変更
+
+Godot用のGitの設定をそろえ、決めたことをTDR-0003に書いた（#3）。LFSと`lockable`の対象は、`.gitattributes`のこの層の行のとおりにする。`export_presets.cfg`はGitに入れる。CIでの書き出しに要り、Godot 4.1以降はパスワードなどを`.godot/export_credentials.cfg`に分けて書くからである。
+
+`.gitignore`の末尾に、この層の節を足して`.godot/`・`/android/`・`*.translation`を書いた。`design/`・`docs/`・`tools/`・`studio-tests/`・`scripts/`に`.gdignore`を置き、Godotに読み込ませないようにした。`tests/`には置いていない。Godotのテストを`tests/unit/`と`tests/integration/`に置くので、`tests/`に置くとそれも読み込まれなくなるからである。`.claude/`と`.github/`は、名前が`.`で始まるのでGodotが読み込まない。READMEに、`git lfs install`とロックの使い方を書いた。
+
+### 取り込む側の作業
+
+`README.md`は`merge=ours`なので、取り込んでも「Godotで開く前に」の節は届かない。要るなら、この層のREADMEから手で写す。根にGodotの素材を置かないフォルダを自分で足していたら、そこにも`.gdignore`を置く。
+
 ## 0.10.1（2026-10-23）
 
 ### 変更

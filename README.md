@@ -68,6 +68,23 @@ python -m tools.graph stats
 python -m tools.graph render --format mermaid --out docs/graph.mmd
 ```
 
+## Godotで開く前に
+
+素材（画像・音・モデル・フォント）はGit LFSに入れる。取り出す前に、1度だけ次を回す。
+
+```bash
+git lfs install
+```
+
+`*.blend`・`*.psd`・`*.kra`・`*.aseprite`は差分をマージできないので、編集の前にロックし、pushしたら外す。
+
+```bash
+git lfs lock <パス>
+git lfs unlock <パス>
+```
+
+`.godot/`はGitに入れないので、取り出した直後は`godot --headless --import`を1度回す。どのファイルをLFSに入れ、どのフォルダをGodotに読み込ませないかは、[TDR-0003](docs/51-tdr/tdr-0003-godot-git-settings.md)にある。
+
 ## 構成
 
 ```
@@ -142,6 +159,7 @@ graph LR
   subgraph tdr["ゲームの外の技術の決定"]
     TDR-0001["TDR-0001<br/>Godotの版を4.7.2にする"]
     TDR-0002["TDR-0002<br/>言語をGDScriptにする"]
+    TDR-0003["TDR-0003<br/>Godot用のGitの設定をそろえる"]
   end
   ARCH-02 -->|refines| ARCH-01
   CON-01 -->|depends_on| UC-01
@@ -170,6 +188,7 @@ graph LR
   PDR-0007 -->|depends_on| PDR-0006
   PDR-0008 -->|depends_on| PDR-0006
   TDR-0002 -.->|decides| UC-02
+  TDR-0003 -->|depends_on| TDR-0001
   UC-01 -->|depends_on| DOM-01
   UC-02 -->|depends_on| PDR-0006
   classDef draft stroke-dasharray: 4\,3;

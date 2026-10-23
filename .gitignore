@@ -38,3 +38,16 @@ build/
 logs/
 *.db
 *.sqlite3
+
+# --------------------------------------------------------------------------
+# game-template（Godot）が足しているもの（TDR-0003）
+# --------------------------------------------------------------------------
+# Godotのエディタが作る置き場（読み込んだ素材の写し、キャッシュ、export_credentials.cfg）。
+# export_presets.cfgはCIでの書き出しに要るので、外さずにGitに入れる。
+# Godot 4.1以降は、パスワードなどをexport_presets.cfgではなく.godot/export_credentials.cfgに書く。
+# .importと.uidも、ほかの人が開いたときに同じ設定とidで読み込めるよう、Gitに入れる。
+.godot/
+# Androidのビルドの雛形（エディタの「Androidビルドテンプレートのインストール」で作る）
+/android/
+# CSVの翻訳から、読み込みのときに作られる
+*.translation
