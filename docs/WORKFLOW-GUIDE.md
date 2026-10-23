@@ -638,6 +638,10 @@ there are systems to test.
 In game-template (TDR-0004) a Godot game has no `tests.yml`:
 `.github/workflows/app-check.yml` is its test CI and already runs gdUnit4, so
 `/test-setup` does not create `tests.yml` and the gate accepts `app-check.yml`.
+gdUnit4 is placed by hand in `addons/gdUnit4/` (`SETUP.md` section 4), and
+`/test-setup` leaves it as it is: it installs nothing and writes only missing
+files. It writes no example test either, so write the first one in
+`tests/unit/<system>/`.
 
 ### Phase 3 Gate
 

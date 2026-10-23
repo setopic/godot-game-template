@@ -102,6 +102,8 @@ git lfs unlock <パス>
 
 エディタのAsset Storeから入れる手順は、[3-directories.md](.claude/skills/test-setup/references/3-directories.md)の「Installing GdUnit4」にある。ただしAsset Storeは`project.godot`のある状態で開くので、上の順番では使えない。
 
+作品を作った人は、「3. 作品を作った人が1回だけすること」の7のあとに、`docs/WORKFLOW-GUIDE.md`の「Step 3.6: Test Framework」で`/test-setup`を回してよい。`/test-setup`はGdUnit4を入れないので、手で置いた`addons/gdUnit4/`はそのまま残る。作るのは、`tests/README.md`や`tests/smoke/critical-paths.md`など、まだ無いファイルだけで、すでにあるファイルは書き換えない。`.github/workflows/tests.yml`も作らない（[TDR-0004](docs/51-tdr/tdr-0004-godot-ci.md)）。例のテストは作らないので、Phase 3の関門が求める例のテストは、自分で`tests/unit/<system>/`に書く。
+
 手元では、次のどちらかで回す。
 
 | 回し方 | 何を回すか |
