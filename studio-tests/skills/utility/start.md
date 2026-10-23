@@ -95,6 +95,7 @@ Fixture defaults.
 - [ ] `project.yaml` has exactly one `modes:` block, holding `rigor` and `automation`
 - [ ] Phase 6 prints the minimal 4-step path
 - [ ] The next skill is not started; Verdict is COMPLETE
+- [ ] Variant (game-template) — `project.yaml` has `engine.name: Godot`, as a game made from game-template does: Phase 6 prints the first step as creating `project.godot` per section 3 of `SETUP.md`, and does not name `/setup-engine` as a step
 
 ---
 

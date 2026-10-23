@@ -163,6 +163,12 @@ The path starts with the step Phase 3 named. When that was `/brainstorm` (paths 
 `Formalize it first`), list `/brainstorm` first and `/setup-engine` second: each runs without the
 other.
 
+game-template (SETUP.md, TDR-0001): when `engine` names one, the engine is already pinned and the
+whole `/setup-engine` must not run, because its sections 1-7 rewrite files the template owns. In
+every path below, print that step as "Create `project.godot`: section 3 of `SETUP.md` (only
+section 7.5 of `/setup-engine`)" instead of `/setup-engine`. Keep `/setup-engine` only when no
+engine is set.
+
 **`minimal`: 4 steps to running code**
 1. `/setup-engine`: choose and configure the engine
 2. `/brainstorm`: write the one-page `design/game-brief.md`

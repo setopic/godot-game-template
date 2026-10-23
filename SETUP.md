@@ -8,20 +8,21 @@ game-templateから作った作品で、開発を始めるまでの手順であ�
 
 ## 1. 前提ツール
 
-どのOSでも、次の2つを入れる。
+どのOSでも、次の3つを入れる。
 
 - Godot 4.7.2の標準版（.NETでない版）。[GitHubのreleases](https://github.com/godotengine/godot/releases)の4.7.2-stableか、公式サイトから入れる。版の理由は[TDR-0001](docs/51-tdr/tdr-0001-godot-version.md)にある。`project.yaml`の`commands`と`make ci`はPATHの`godot`を呼ぶので、PATHに通す。`/settings`で`engine.path`にエディタのパスを設定する方法もあるが、`make ci`は`engine.path`を読まない。
 - Python 3.12以上。`python -m tools.graph check`と`make ci`が使う。
+- GitとClaude Code。入れ方は、[setup-requirements.md](.claude/docs/setup-requirements.md)の「Required」にある。
 
 Windowsでは、さらに次のものを入れる。bash・jq・Pythonの入れ方は、[setup-requirements.md](.claude/docs/setup-requirements.md)にある。
 
 | ツール | 使うもの | 入れ方 |
 | --- | --- | --- |
-| Git for Windowsのbash | `.claude/hooks/`のフック、`make ci`のGodotの段（`scripts/local_ci.py`） | [setup-requirements.md](.claude/docs/setup-requirements.md)の「Platform Notes」 |
+| Git for Windows（gitとbash） | `.claude/hooks/`のフック、`make ci`のGodotの段（`scripts/local_ci.py`） | [setup-requirements.md](.claude/docs/setup-requirements.md)の「Platform Notes」 |
 | git-lfs | 素材の取り出し（下の`git lfs install`） | Git for Windowsに含まれる |
 | gh | ラベルの作成（`gh label clone`）、`make ci PR=<番号>` | `winget install GitHub.cli`のあと、`gh auth login` |
 | make | `make ci`・`make update`・`make readme` | `winget install ezwinports.make` |
-| jq | `.claude/hooks/`のフックの多く。無くても動くが、そのフックの検査が抜ける | [setup-requirements.md](.claude/docs/setup-requirements.md)の「Installing jq」 |
+| jq | `.claude/hooks/`のフックが入力のJSONを読む。無ければ、フックは`grep`で代わりに読む | [setup-requirements.md](.claude/docs/setup-requirements.md)の「Installing jq」 |
 
 Windowsでは、Godotの実行ファイルは`Godot_v4.7.2-stable_win64.exe`という名前なので、そのままでは`godot`として呼べない。そのため、Godotを置いたフォルダに次の2つのファイルを作り、そのフォルダをPATHに足す。`godot`はbashから、`godot.cmd`はPowerShellとPythonから呼ぶためのものである。どちらも、ウィンドウを開かずに標準出力へ書く`_console.exe`のほうを呼ぶ。
 
@@ -46,7 +47,7 @@ python --version
 ## 2. 参加した人がすること
 
 1. 上の「1. 前提ツール」を入れる。
-2. 素材（画像・音・モデル・フォント）はGit LFSに入っている。取り出す前に、1度だけ`git lfs install`を回してから、作品のリポジトリをcloneする。
+2. 素材（画像・音・モデル・フォント）はGit LFSに入っている。取り出す前に、1度だけ`git lfs install`を回してから、作品のリポジトリをcloneする。Windowsでは、cloneの前に`git config --global core.longpaths true`も1度回す。`.claude/`の下に名前の長いファイルがあり、深いフォルダの下にcloneすると「Filename too long」で取り出しに失敗するからである。
 3. `.godot/`はGitに入れないので、cloneした直後に`godot --headless --import`を1度回す。`project.godot`がまだ無い作品では要らない。
 4. `gh auth login`を回す。`make ci PR=<番号>`がPRの題と本文を読むのに使う。
 5. Claude Codeを、リポジトリの根で起動する。CCGSのフックと、書く前に確認する設定は、根で起動したときにだけ読み込まれる。最初のセッションでは`/start`を回す。
@@ -65,9 +66,9 @@ git lfs unlock <パス>
 
 作品のリポジトリは、GitHubの"Use this template"で作る。[META-08](docs/00-meta/template-upgrade.md)の初回の手順は、"Use this template"で作ったリポジトリを前提にしている。`git clone`で作ると、`origin`がこのテンプレートを指したまま残る。CCGSの案内の`docs/WORKFLOW-GUIDE.md`は`git clone`を勧めているが、作品を起こすときはこの節に従う。
 
-作ったあとは、上の「2. 参加した人がすること」の1・2・4・5を行ってから、次の順に進める。各手順の中身は、リンク先にある。
+作ったあとは、上の「2. 参加した人がすること」の1・2・4・5を行ってから、次の順に進める。各手順の中身は、リンク先にある。この節の「PR」は、1人でmainへ直接pushする作品（[META-05](docs/00-meta/dev-flow.md)の「5. PRを出すか、mainへ直接出すか」）では、その変更だけを入れたコミットに読み替える。
 
-1. テンプレートと繋ぐ。[META-08](docs/00-meta/template-upgrade.md)の「1. 最初に一度だけ」を行う。upstreamのURLとラベルの作り方は、この層の値に置き換える（根の`README.md`の「テンプレートの更新を取り込む」の表）。
+1. テンプレートと繋ぐ。[META-08](docs/00-meta/template-upgrade.md)の「1. 最初に一度だけ」を行う。upstreamのURLとラベルの作り方は、この層の値に置き換える（根の`README.md`の「テンプレートの更新を取り込む」の表）。"Use this template"で作った直後は、共通ファイルがテンプレートと同じなので、META-08の手順1（共通ファイルの上書き）は要らない。手順2から行う。
 2. サンプルノードを消し、表紙を書き換える。根の`README.md`の下の段にある「自分のプロジェクトに合わせる」に従い、`python -m tools.graph reset-samples --yes`もここで回す。`README.md`を作品の説明に書き換えるときも、この文書へのリンクは残す。
 3. GdUnit4を入れ、`addons/gdUnit4/`だけのPRを出す（下の「4. Godotのテスト」）。
 4. `project.godot`を作る。`/setup-engine`は回さず、その7.5（[7.5-scaffold.md](.claude/skills/setup-engine/references/7.5-scaffold.md)）の手順だけを行う。7.5が使う`project.yaml`の`engine.rendering`は、先に`/settings`で決める。
@@ -86,7 +87,13 @@ git lfs unlock <パス>
 
 1. [GdUnit4のreleases](https://github.com/godot-gdunit-labs/gdUnit4/releases)から版を選び、中の`addons/gdUnit4/`をリポジトリの根の`addons/gdUnit4/`に置く。`gdUnit4`のUは大文字である。
 2. `addons/gdUnit4/bin/GdUnitCmdTool.gd`があることを確かめ、`addons/gdUnit4/`だけのPRを出す。
-3. プラグインの有効化（Project Settings → Plugins → GdUnit4）は`project.godot`を書き換えるので、上の「3. 作品を作った人が1回だけすること」の5で、`project.godot`だけのPRに入れる。
+3. プラグインの有効化（Project Settings → Plugins → GdUnit4）は`project.godot`を書き換えるので、上の「3. 作品を作った人が1回だけすること」の5で、`project.godot`だけのPRに入れる。エディタを使わずに有効にするときは、`project.godot`に次の節を書く。
+
+   ```ini
+   [editor_plugins]
+
+   enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
+   ```
 
 エディタのAsset Storeから入れる手順は、[3-directories.md](.claude/skills/test-setup/references/3-directories.md)の「Installing GdUnit4」にある。ただしAsset Storeは`project.godot`のある状態で開くので、上の順番では使えない。
 
