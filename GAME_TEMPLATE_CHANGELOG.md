@@ -23,7 +23,7 @@
 
 Godotの作品で、関門とスキルが`.github/workflows/tests.yml`をテストのCIとして求めていたのを直した（#69）。この層のGodotのテストのCIは`.github/workflows/app-check.yml`で（TDR-0004）、`/test-setup`は`tests.yml`を作らない。そのため、関門の項目が満たされず、`/help`などが`test-setup`の段を終わっていないと見ていた。直した箇所には`game-template (TDR-0004)`の注記を付けたので、CCGSを更新するときはUC-02の`git diff`で見分けられる。UnityとUnrealの扱いは変えていない。
 
-- `.claude/docs/workflow-catalog.yaml`の`test-setup`の段は、`tests.yml`のglobだけで判定していた。`any_of`で、`app-check.yml`と`tests.yml`のどちらかがあれば終わったとみなすようにした。`any_of`は`artifact-check.sh`がすでに読める書き方である。`app-check.yml`には、GdUnit4を回すコマンドの`GdUnitCmdTool.gd`が書いてあることも求める。下の層から届く中身の無い雛形では、この段を終わったとみなさないためである。
+- `.claude/docs/workflow-catalog.yaml`の`test-setup`の段は、`tests.yml`のglobだけで判定していた。`any_of`で、GdUnit4の`addons/gdUnit4/bin/GdUnitCmdTool.gd`と`tests.yml`のどちらかがあれば終わったとみなすようにした。`any_of`は`artifact-check.sh`がすでに読める書き方である。Godotで`app-check.yml`を判定に使わないのは、`app-check.yml`がテンプレートから最初から届くからである。それで判定すると、GdUnit4を入れる前からこの段が終わったことになり、`/help`などがこの段を案内しなくなる。GdUnit4を入れるのは、作品ごとの手順である（`SETUP.md`の「4」）。
 - `/gate-check`のPre-Productionの関門（`gate-pre-production.md`）に、Godotでは`app-check.yml`がこの項目を満たすと書いた。
 - `.claude/scripts/test-scaffold.sh`は、Godotのときに`tests.yml`を作らないようにした。代わりに、`app-check.yml`があるかを`CI`の行で知らせ、無ければ`NEEDS`の行で`make update`から取り込むよう案内する。Godotの`tests/README.md`のCIの行も`app-check.yml`にした。
 - `/test-setup`の`SKILL.md`と、`references/`の`2-plan.md`・`3-directories.md`・`6-summary.md`の計画と報告に、Godotでは`tests.yml`の代わりに`app-check.yml`を挙げると書いた。
