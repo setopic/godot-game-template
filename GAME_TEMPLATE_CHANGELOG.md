@@ -17,6 +17,16 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`と`PROJECT_CHANGELOG.md`の雛形（0.22.7）もこの層で書き足している。どちらも`merge=ours`なので、この層と上流の両方が変えたときはこの層の側が残り、競合しない。そのときは上流の変更が入らないので、上流の変更履歴の「取り込む側の作業」を見て手で合わせる。
 
+## 0.23.16（2026-10-24）
+
+### 変更
+
+`SETUP.md`の「2. 参加した人がすること」で、`gh auth login`をcloneの前に移した（#93）。これまでは、cloneが2、`gh auth login`が4にあった。作品のリポジトリが非公開なら、HTTPSでcloneするのに、その前に認証が要る。手順は、2が`gh auth login`、3が素材の取り出しとclone、4が`godot --headless --import`になった。手順の番号を指していた同じ文書の2か所（`project.godot`がまだ無い作品の段落と、「3. 作品を作った人が1回だけすること」の冒頭）も合わせた。
+
+### 取り込む側の作業
+
+なし。
+
 ## 0.23.15（2026-10-24）
 
 ### 変更
