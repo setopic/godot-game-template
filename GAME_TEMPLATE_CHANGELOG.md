@@ -17,6 +17,16 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`と`PROJECT_CHANGELOG.md`の雛形（0.22.7）もこの層で書き足している。どちらも`merge=ours`なので、この層と上流の両方が変えたときはこの層の側が残り、競合しない。そのときは上流の変更が入らないので、上流の変更履歴の「取り込む側の作業」を見て手で合わせる。
 
+## 0.23.5（2026-10-24）
+
+### 変更
+
+`make ci`（`scripts/local_ci.py`）が、`project.yaml`の`engine.path`を読むようにした（#75）。これまではPATHの`godot`だけを見ていたので、PATHに`godot`が無く`engine.path`だけを設定している人の手元では、Godotの段が失敗していた。探す順番は`.claude/scripts/test-run.sh`と同じで、`commands.test`の先頭のプログラム（ファイル名に`godot`を含むときだけ）、`engine.path`、PATHの`godot`である。見つけた実行ファイルで、読み込み・スクリプトの確認・GdUnit4の各段を回す。`SETUP.md`の前提ツールの記述も合わせた。
+
+### 取り込む側の作業
+
+なし。
+
 ## 0.23.4（2026-10-24）
 
 ### 変更
