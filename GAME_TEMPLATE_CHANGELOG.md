@@ -17,6 +17,18 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`と`PROJECT_CHANGELOG.md`の雛形（0.22.7）もこの層で書き足している。どちらも`merge=ours`なので、この層と上流の両方が変えたときはこの層の側が残り、競合しない。そのときは上流の変更が入らないので、上流の変更履歴の「取り込む側の作業」を見て手で合わせる。
 
+## 0.23.15（2026-10-24）
+
+### 変更
+
+CCGSの`/setup-engine`の`references/7.5-scaffold.md`に、7.5だけを行うときの値の取り先を書いた（#92）。`SETUP.md`の「3. 作品を作った人が1回だけすること」の5は7.5だけを行わせるが、7.5-scaffold.mdは`engine.version`と実行ファイルをSection 3から、描画の値をSection 5.5.1から取る前提で書かれていた。7.5だけを行うときは、`engine.version`と`engine.rendering`を`project.yaml`から、検証に使う実行ファイルをPATHの`godot`か`engine.path`から取る。`engine.rendering`がまだ`[TO BE CONFIGURED]`なら、止めて`/settings`で決めさせる。
+
+この版で直したCCGSのファイルは、UC-02の手順3で、CCGSの更新のときに「手で合わせる」に出る。
+
+### 取り込む側の作業
+
+なし。
+
 ## 0.23.14（2026-10-24）
 
 ### 変更
