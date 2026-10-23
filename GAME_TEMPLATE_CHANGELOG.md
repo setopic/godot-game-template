@@ -17,6 +17,20 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`もこの層で書き足しているが、`merge=ours`なので競合しない。
 
+## 0.22.2（2026-10-23）
+
+### 変更
+
+META-05の「シーンと`project.godot`」に、作品を作った直後の準備と、最初の画面の登録も、`project.godot`をテンプレートの管理者だけが直す決まりに従うと書いた（#49）。`project.godot`の作成、`EvidenceCapture`のautoloadの登録、GdUnit4のプラグインの有効化は、テンプレートの管理者が`project.godot`だけを変えるPRで行う。最初の画面のストーリーでは、シーンのPRが先にマージされ、そのあとに`run/main_scene`を登録する。試しの作品では、最初のストーリーのPRで`run/main_scene`を設定していた。1人で開発していたので、決まりには反していない。新しい決まりではなく、PDR-0009の決定の当てはめなので、PDRは起こしていない。
+
+### 取り込む側の作業
+
+作品の`docs/00-meta/dev-flow.md`は`merge=ours`なので、この変更は取り込みで届かない。複数人で開発する作品は、「シーンと`project.godot`」の節の末尾に、次の段落を手で足す。
+
+```markdown
+作品を作った直後の準備と、最初の画面の登録も、この決まりに従う。`project.godot`の作成（`/setup-engine`の7.5）、`EvidenceCapture`のautoloadの登録、GdUnit4のプラグインの有効化は、テンプレートの管理者が`project.godot`だけを変えるPRで行う。最初の画面のストーリーでは、シーンのPRが先にマージされ、そのあとにテンプレートの管理者が`run/main_scene`を登録する。シーンのPRの受け入れ条件に「起動すると最初に開く」があれば、登録のPRがマージされてから確かめる。
+```
+
 ## 0.22.1（2026-10-23）
 
 ### 変更
