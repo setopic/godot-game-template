@@ -17,6 +17,20 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`もこの層で書き足しているが、`merge=ours`なので競合しない。
 
+## 0.21.0（2026-10-23）
+
+### 変更
+
+`make ci`が、`project.godot`のある作品では`app-check.yml`のGodotの段も回すようにした（#7）。読み込み・スクリプトの読み込みの確認・GdUnit4の3つを、`.github/scripts/godot-ci.sh`の同じ判定で、PATHの`godot`を使って回す。書き出しの段は、mainへのpushのときだけの段なので回さない。ログは作業ツリーではなく、一時フォルダに置く。
+
+試しの作品で1本のストーリーを通したとき、GitHub Actionsが動かないあいだは、Godotのテストをだれも回していないと分かった。`make ci`は`graph-check.yml`の検査だけを回していたからである。同じ試しで、GdUnit4 6.2.2がWindowsのGodot 4.7.2で動くことも確かめた。
+
+META-05の「6. コミットとマージ」と、READMEの`make ci`の行を合わせて直した。
+
+### 取り込む側の作業
+
+`scripts/local_ci.py`は共通ファイルなので、取り込みで届く。`docs/00-meta/dev-flow.md`と`README.md`は`merge=ours`なので届かない。META-05の「6. コミットとマージ」の`make ci`の段落に、`project.godot`があればGodotの段も回すという2文を手で足す。`make ci`を回すPCには、Godot 4.7.2をPATHの`godot`で呼べるように入れる。
+
 ## 0.20.1（2026-10-23）
 
 ### 変更

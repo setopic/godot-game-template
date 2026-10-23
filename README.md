@@ -17,7 +17,7 @@ Godot 4.7.2とGDScriptでゲームを作るためのプロジェクトテンプ�
 | GodotのCI（[TDR-0004](docs/51-tdr/tdr-0004-godot-ci.md)） | `app-check.yml`でGodotのテストを回す |
 | スクリーンショットの証拠（[ADR-0001](docs/52-adr/adr-0001-evidence-capture-autoload.md)） | `src/qa/evidence_capture.gd`で、見た目の確認の証拠を撮る |
 | 複数人で開発するときの決まり（[META-05](docs/00-meta/dev-flow.md)の「複数人で開発するとき」） | mainの保護と、`.github/CODEOWNERS.example`（[PDR-0009](docs/50-pdr/pdr-0009-codeowners-example.md)、[PDR-0012](docs/50-pdr/pdr-0012-codeowners-review-required.md)、[PDR-0013](docs/50-pdr/pdr-0013-codeowners-no-default-owner.md)） |
-| `make ci` | GitHub Actionsが動かないときに、`graph-check.yml`と同じ検査を手元で回す（[META-05](docs/00-meta/dev-flow.md)） |
+| `make ci` | GitHub Actionsが動かないときに、`graph-check.yml`と`app-check.yml`（書き出しを除く）と同じ検査を手元で回す（[META-05](docs/00-meta/dev-flow.md)） |
 
 この層の変更履歴は、[GAME_TEMPLATE_CHANGELOG.md](GAME_TEMPLATE_CHANGELOG.md)にある。
 
