@@ -17,6 +17,16 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`もこの層で書き足しているが、`merge=ours`なので競合しない。
 
+## 0.20.1（2026-10-23）
+
+### 変更
+
+`docs/engine-reference/godot/VERSION.md`の版の表示を、TDR-0001で決めた4.7.2に合わせた（#13）。`Engine Version`を`Godot 4.7`から`Godot 4.7.2`にした。`Installed at pin time`には、`/setup-engine`の§3の手順でテンプレートのPCのエディタを調べた結果（`4.7.2.stable.official.ed1daf0bf`、Windows、2026-10-23）を書いた。これまでは`NOT DETERMINED`だった。
+
+### 取り込む側の作業
+
+無い。
+
 ## 0.20.0（2026-10-23）
 
 ### 変更
