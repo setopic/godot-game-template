@@ -52,7 +52,7 @@ python --version
 2. 素材（画像・音・モデル・フォント）はGit LFSに入っている。取り出す前に、1度だけ`git lfs install`を回してから、作品のリポジトリをcloneする。Windowsでは、cloneの前に`git config --global core.longpaths true`も1度回す。`.claude/`の下に名前の長いファイルがあり、深いフォルダの下にcloneすると「Filename too long」で取り出しに失敗するからである。
 3. `.godot/`はGitに入れないので、cloneした直後に`godot --headless --import`を1度回す。`project.godot`がまだ無い作品では要らない。
 4. `gh auth login`を回す。`make ci PR=<番号>`がPRの題と本文を読むのに使う。
-5. Claude Codeを、リポジトリの根で起動する。CCGSのフックと、書く前に確認する設定は、根で起動したときにだけ読み込まれる。最初のセッションでは`/start`を回す。参加した人は、`/start`が`project.yaml`に保存するかを聞いたら、「Don't save」を選ぶ。`project.yaml`は、テンプレートの管理者が持つファイルだからである（`.github/CODEOWNERS.example`）。保存してしまったら、コミットせずに`git restore project.yaml`で戻し、`production/stage.txt`ができていたら消す。
+5. Claude Codeを、リポジトリの根で起動する。CCGSのフックと、書く前に確認する設定は、根で起動したときにだけ読み込まれる。参加した人は`/start`を回さない。`/start`は、作品の段階などを決めて`project.yaml`に保存するもので、作品を作った人が下の「3. 作品を作った人が1回だけすること」の3で1度だけ回す。また`/start`は、エンジンが決まっていると`project.godot`を作る手順を案内するが、`project.godot`を作るのはテンプレートの管理者である（下の「3」の5）。次に何をするかは、`/help`で分かる。
 6. `make ci`が通ることを確かめる（下の「4. Godotのテスト」）。
 
 `project.godot`か`addons/gdUnit4/`がまだ無い作品では、作品を作った人が下の「3. 作品を作った人が1回だけすること」の7までを済ませるまで、シーン・スクリプト・テストの作業を始めない。そのあいだの`make ci`は、`project.godotが無いので、Godotの段を飛ばす`と出して文書の検査だけを回すので、通ってもテストは回っていない。作品を作った人が7まで済ませたら、`git pull`してから、上の3と6を回し直す。
@@ -74,7 +74,7 @@ git lfs unlock <パス>
 
 1. テンプレートと繋ぐ。[META-08](docs/00-meta/template-upgrade.md)の「1. 最初に一度だけ」を行う。upstreamのURLとラベルの作り方は、この層の値に置き換える（根の`README.md`の「テンプレートの更新を取り込む」の表）。"Use this template"で作った直後は、共通ファイルがテンプレートと同じなので、META-08の手順1（共通ファイルの上書き）は要らない。手順2から行う。
 2. サンプルノードを消し、表紙を書き換える。根の`README.md`の下の段にある「自分のプロジェクトに合わせる」に従い、`python -m tools.graph reset-samples --yes`もここで回す。`README.md`を作品の説明に書き換えるときも、この文書へのリンクは残す。そのあと`make all`を回す。`check`が参照切れ（`G004`）を挙げたら、それを直してから回し直す。
-3. 最初のセッションの`/start`を回す（上の「2」の5）。`/start`は`project.yaml`を書き換えることがあり、`project.yaml`は`merge=ours`ではない。1の取り込みより前に回すと、取り込みで`project.yaml`が競合するおそれがあるので、ここで回す。
+3. 最初のセッションで`/start`を回す。`/start`は`project.yaml`を書き換えることがあり、`project.yaml`は`merge=ours`ではない。1の取り込みより前に回すと、取り込みで`project.yaml`が競合するおそれがあるので、ここで回す。
 4. GdUnit4を入れ、`addons/gdUnit4/`だけのPRを出す（下の「4. Godotのテスト」）。
 5. `project.godot`を作る。`/setup-engine`は回さず、その7.5（[7.5-scaffold.md](.claude/skills/setup-engine/references/7.5-scaffold.md)）の手順だけを行う。7.5が使う`project.yaml`の`engine.rendering`は、先に`/settings`で決める。値は`Compatibility`・`Forward+`・`Mobile`のどれかで、`/settings engine.rendering=Forward+`のように書く。Webに書き出す作品では`Compatibility`、それ以外では`Forward+`が既定である（[5.5-project-yaml.md](.claude/skills/setup-engine/references/5.5-project-yaml.md)の表）。7.5は、この値から`project.godot`の描画の設定を書く。
 6. 5のPRで、`EvidenceCapture`のautoloadの登録（[ADR-0001](docs/52-adr/adr-0001-evidence-capture-autoload.md)）と、GdUnit4のプラグインの有効化も行う。
