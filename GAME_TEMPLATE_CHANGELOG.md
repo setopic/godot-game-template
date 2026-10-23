@@ -17,6 +17,18 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`と`PROJECT_CHANGELOG.md`の雛形（0.22.7）もこの層で書き足している。どちらも`merge=ours`なので、この層と上流の両方が変えたときはこの層の側が残り、競合しない。そのときは上流の変更が入らないので、上流の変更履歴の「取り込む側の作業」を見て手で合わせる。
 
+## 0.23.19（2026-10-24）
+
+### 変更
+
+`SETUP.md`の「4. Godotのテスト」に、作品を作った人が「3」の7のあとに`/test-setup`を回してよいと書いた（#102）。これまでは、GdUnit4を手で置く手順だけを書いていて、CCGSの`docs/WORKFLOW-GUIDE.md`の「Step 3.6: Test Framework」と「Phase 3 Gate」が求める`/test-setup`を回してよいかが書かれていなかった。`/test-setup`は、GdUnit4を入れる手順を持たず、まだ無いファイルだけを作って、すでにあるファイルを書き換えない（`.claude/skills/test-setup/`の`SKILL.md`と`references/1-detect.md`）。そのため、手で置いた`addons/gdUnit4/`はそのまま残る。例のテストも作らないので、自分で`tests/unit/<system>/`に書く。CCGSの`docs/WORKFLOW-GUIDE.md`の「Step 3.6」の`game-template (TDR-0004)`の注記にも、同じことを足した。
+
+この版で直したCCGSのファイルは、UC-02の手順3で、CCGSの更新のときに「手で合わせる」に出る。
+
+### 取り込む側の作業
+
+なし。
+
 ## 0.23.18（2026-10-24）
 
 ### 変更
