@@ -13,8 +13,23 @@
 | ファイル | この層での書き換え | 取り込みでの扱い |
 | --- | --- | --- |
 | `.gitattributes` | PDR-0001の`merge=ours`の行のパスを変え（0.4.0）、末尾にこの層の行を足した | 競合した部分だけを解き、この層の行と上流の行の両方を残す |
+| `.gitignore` | 末尾に、この層のGodotの節（0.11.0）とCCGSの節（0.16.0）を足した | 競合した部分だけを解き、この層の節と上流の行の両方を残す |
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`もこの層で書き足しているが、`merge=ours`なので競合しない。
+
+## 0.16.0（2026-10-23）
+
+### 変更
+
+CCGSの1.2.0の`.gitignore`を、エンジンの3つの節（Godot・Unity・Unreal）を除いて、`.gitignore`の末尾のこの層の節に写した（#36）。これで、CCGSが書き出すセッションの記録（`production/session-state/`、`production/session-logs/`）、エージェントの記憶（`.claude/agent-memory/`）、個人の設定（`project.local.yaml`、`CLAUDE.local.md`）、検査の結果（`docs/consistency-failures.md`）が、Gitに入らなくなる。
+
+これまで入っていなかったのは、PDR-0002の「写さなかったもの」の表が、Godotの節しか検討していなかったからである。PDR-0006はこの表をそのまま引き継いでいた。写す節と写さない節、却下した案は、PDR-0011に書いた。UC-02の手順4に、`.gitignore`の合わせ方を足した。
+
+写した節の`bin/`と`*.dll`・`*.so`・`*.dylib`は、`addons/<名前>/bin/`にあるGDExtensionの書き出し済みのファイルも外す。CCGSのとおり、gdUnit4のものだけを戻している。
+
+### 取り込む側の作業
+
+無い。いまGitに入っているファイルは、`.gitignore`に当たっても外れない。セッションの記録などをすでにコミットしているなら、`git rm --cached`で外す。
 
 ## 0.15.0（2026-10-23）
 

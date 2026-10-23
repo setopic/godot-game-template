@@ -27,6 +27,7 @@ tags: [index]
 - [PDR-0008 GDDと設計の文書はgraphの検証の外に置く](./pdr-0008-design-docs-outside-graph.md)
 - [PDR-0009 CODEOWNERSは雛形として配り、作品が担当者を入れる](./pdr-0009-codeowners-example.md)
 - [PDR-0010 開発の段階はCCGSの7段階をそのまま使う](./pdr-0010-ccgs-seven-stages.md)
+- [PDR-0011 CCGSの.gitignoreは、エンジンの節を除いてこの層の節に写す](./pdr-0011-ccgs-gitignore.md)
 <!-- graph:children:end -->
 
 ## 追加するとき

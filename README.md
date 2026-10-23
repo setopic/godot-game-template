@@ -160,6 +160,7 @@ graph LR
     PDR-0007["PDR-0007<br/>TDRとADRの最終確認日をフロントマターに持つ"]
     PDR-0008["PDR-0008<br/>GDDと設計の文書はgraphの検証の外に置く"]
     PDR-0010["PDR-0010<br/>開発の段階はCCGSの7段階をそのまま使う"]
+    PDR-0011["PDR-0011<br/>CCGSの.gitignoreは、エンジンの節を除いてこの層の節に写す"]
   end
   subgraph tdr["ゲームの外の技術の決定"]
     TDR-0001["TDR-0001<br/>Godotの版を4.7.2にする"]
@@ -197,6 +198,8 @@ graph LR
   PDR-0007 -->|depends_on| PDR-0006
   PDR-0008 -->|depends_on| PDR-0006
   PDR-0010 -.->|decides| ARCH-03
+  PDR-0011 -->|depends_on| PDR-0006
+  PDR-0011 -.->|decides| UC-02
   TDR-0002 -.->|decides| UC-02
   TDR-0003 -->|depends_on| TDR-0001
   TDR-0004 -->|depends_on| TDR-0001

@@ -65,6 +65,8 @@ CCGSは、[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)のとお�
 
 4. 手順3で「手で合わせる」と出たファイルを、1つずつ合わせる。CCGSの差は`git diff v<いまの版> ccgs/main -- <ファイル>`で、手元で直した箇所は`git diff v<いまの版> HEAD -- <ファイル>`で見る。CCGSの差を手元のファイルに写し、手元で直した箇所は残す。直した理由は、直した箇所の注記（`game-template (PDR-0005)`など）と、`git log -- <ファイル>`で分かる。
 
+   `.gitignore`は、CCGSの差のうち、エンジンの節（`# === Engine: Godot ===`・`Unity`・`Unreal`）の変更は写さず、それ以外の節の変更を、この層のCCGSの節に写す（[PDR-0011](../50-pdr/pdr-0011-ccgs-gitignore.md)）。Godotの節の変更は、[TDR-0003](../51-tdr/tdr-0003-godot-git-settings.md)と食い違わないかを見てから、この層のGodotの節に入れるかを決める。
+
    CCGSの`UPGRADING.md`にMerge Carefullyの指示があるファイルは、その指示にも従う。`project.yaml`は、`framework.version`を新しい版にする。
 
 5. 手順3で外したパスのうち、CCGSで変わったものを合わせる。手順3で外すのは、graph側に同じパスのファイルがあり、CCGSのものを入れないファイルである（[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)が引き継いだ、写さなかったものの表）。
@@ -148,6 +150,7 @@ CCGSは、[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)のとお�
 - (decides) [PDR-0004 ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない](../50-pdr/pdr-0004-adr-location.md)
 - (decides) [PDR-0005 CCGSのsession-start.shとsetup-engineを、rulesのファイルから読み込みの行を探す形に直す](../50-pdr/pdr-0005-engine-import-in-rules.md)
 - (decides) [PDR-0006 CCGSを丸ごと取り込み、決定の記録を4つの種別に分ける](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)
+- (decides) [PDR-0011 CCGSの.gitignoreは、エンジンの節を除いてこの層の節に写す](../50-pdr/pdr-0011-ccgs-gitignore.md)
 - (decides) [TDR-0002 言語をGDScriptにする](../51-tdr/tdr-0002-gdscript.md)
 
 <!-- graph:auto:end -->
