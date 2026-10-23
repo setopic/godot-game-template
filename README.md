@@ -11,7 +11,7 @@ Godot 4.7.2とGDScriptでゲームを作るためのプロジェクトテンプ�
 | CCGSのエージェント・スキル・フック（`.claude/`） | ゲーム開発の役割ごとに、Claudeに作業を任せる。CCGSのルートの`CLAUDE.md`の内容は、`.claude/rules/ccgs-studio.md`にある（[PDR-0003](docs/50-pdr/pdr-0003-claude-md-split.md)） |
 | Godot 4.7.2とGDScript（[TDR-0001](docs/51-tdr/tdr-0001-godot-version.md)、[TDR-0002](docs/51-tdr/tdr-0002-gdscript.md)） | エンジンと言語を決める。エンジンのAPIの資料は`docs/engine-reference/godot/`にある |
 | 決定の記録の4つの種別（[PDR-0006](docs/50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)） | 開発の進め方（PDR）・ゲームの外の技術（TDR）・ゲームの中の構成（ADR）・ゲームデザイン（DDR）の決定を、`docs/50-pdr/`〜`docs/53-ddr/`に分けて置く |
-| 開発の流れ（[ARCH-03](docs/10-architecture/arch-03-ccgs-seven-stages.md)） | CCGSの7段階と、段階を進める関門（`/gate-check`） |
+| 開発の流れ（[ARCH-03](docs/10-architecture/arch-03-dev-stages.md)） | CCGSの7段階と、段階を進める関門（`/gate-check`） |
 | Godot用のGitの設定（[TDR-0003](docs/51-tdr/tdr-0003-godot-git-settings.md)） | Git LFS、`.gitignore`のGodotの節、`.gdignore` |
 | CCGSの`.gitignore`の行（[PDR-0011](docs/50-pdr/pdr-0011-ccgs-gitignore.md)） | CCGSが書き出すセッションの記録やエージェントの記憶を、Gitに入れない |
 | GodotのCI（[TDR-0004](docs/51-tdr/tdr-0004-godot-ci.md)） | `app-check.yml`でGodotのテストを回す |
