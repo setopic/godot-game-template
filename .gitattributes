@@ -96,3 +96,8 @@ production/qa/evidence/** filter=lfs diff=lfs merge=lfs -text
 .worktreeinclude text eol=lf
 *.tsv text eol=lf
 .claude/**/*.md text eol=lf
+
+# project.yaml・graph.toml・graph.mk・docs/templates/は、作品が書き換えてよいが、
+# merge=oursにしない（PDR-0015）。**この層の変更（CCGSの更新のframework.version、
+# 種別の必須の節と雛形、make ci）が、取り込みで捨てられないようにするため。**
+# この層と作品が変えるのはたいてい別の行なので、競合しにくい。競合したら両方を残して手で解く。
