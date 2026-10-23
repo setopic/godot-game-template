@@ -139,7 +139,7 @@ production/qa/evidence/<ストーリーのid>/<日時>-<名前>.png
 
 シーンの担当は、そのシーンを直すissueの担当者が、そのissueが開いている間だけ持つ。同じシーンを直すissueを、同時に2つ開かない。
 
-`project.godot`は、テンプレートの管理者だけが直す。シーンを直すissueで`project.godot`の変更（入力の設定やautoloadの登録）が要るときは、シーンのPRには入れず、テンプレートの管理者が`project.godot`だけを変えるPRを別に出す。
+`project.godot`は、テンプレートの管理者だけが直す。作品では、`.github/CODEOWNERS`で`project.godot`の持ち主にした人を、テンプレートの管理者と呼ぶ。`CODEOWNERS`を置かない作品では、作品のリポジトリを作った人がテンプレートの管理者である。シーンを直すissueで`project.godot`の変更（入力の設定やautoloadの登録）が要るときは、シーンのPRには入れず、テンプレートの管理者が`project.godot`だけを変えるPRを別に出す。
 
 作品を作った直後の準備と、最初の画面の登録も、この決まりに従う。`project.godot`の作成（`/setup-engine`の7.5）、`EvidenceCapture`のautoloadの登録、GdUnit4のプラグインの有効化は、テンプレートの管理者が`project.godot`だけを変えるPRで行う。最初の画面のストーリーでは、シーンのPRが先にマージされ、そのあとにテンプレートの管理者が`run/main_scene`を登録する。シーンのPRの受け入れ条件に「起動すると最初に開く」があれば、登録のPRがマージされてから確かめる。
 

@@ -17,6 +17,16 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`と`PROJECT_CHANGELOG.md`の雛形（0.22.7）もこの層で書き足している。どちらも`merge=ours`なので、この層と上流の両方が変えたときはこの層の側が残り、競合しない。そのときは上流の変更が入らないので、上流の変更履歴の「取り込む側の作業」を見て手で合わせる。
 
+## 0.23.7（2026-10-24）
+
+### 変更
+
+作品での「テンプレートの管理者」が誰を指すかを、`SETUP.md`の「3. 作品を作った人が1回だけすること」と`docs/00-meta/dev-flow.md`の「シーンと`project.godot`」に書いた（#78）。作品の`.github/CODEOWNERS`で`project.godot`の持ち主にした人で、`CODEOWNERS`を置かない作品では、作品のリポジトリを作った人である。これまでは、参加者は`project.godot`の変更を頼む相手が分からず、作品を作った人は自分のことかが分からなかった。
+
+### 取り込む側の作業
+
+`docs/00-meta/dev-flow.md`は`merge=ours`なので、取り込みでは変わらない。作品で書き換えていないなら、「シーンと`project.godot`」の節に、上の2文を手で足す。
+
 ## 0.23.6（2026-10-24）
 
 ### 変更
