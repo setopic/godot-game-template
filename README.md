@@ -76,7 +76,7 @@ docs/
   00-meta/              規約とテンプレート（グラフの語彙そのもの）
     graph-rules.md      ルール ID G001〜G023 と直し方
     node-types.md       ノード種別・接頭辞・置き場所・層
-    templates/          new コマンドが使う雛形（グラフには含めない）
+    templates/          new コマンドが使う、上流と共通の雛形（グラフには含めない）
   10-architecture/      層 10: 構成要素と責務、境界
   20-domain/            層 20: 概念・不変条件・用語
   30-usecases/          層 30: 誰が何をして何が起きるか
@@ -85,6 +85,7 @@ docs/
   51-tdr/               横断: ゲームの外の技術の決定
   52-adr/               横断: ゲームの中の構成の決定
   53-ddr/               横断: ゲームデザインの決定
+  templates/            PDR・TDR・ADR・DDRの雛形（graph.tomlのtemplateで指す。グラフには含めない）
 tools/graph/            検証・可視化・生成ツール（依存なし）
 ```
 
@@ -357,7 +358,7 @@ python -m tools.graph linkify
 
 5. 表を合わせる。4を変えたら、`docs/00-meta/node-types.md`の表を一致させる
 
-6. 雛形を直す。`docs/00-meta/templates/*.md`を、自分たちの書式にする
+6. 雛形を直す。`docs/templates/*.md`（PDR・TDR・ADR・DDR）を、自分たちの書式にする。上流と共通の`docs/00-meta/templates/*.md`は書き換えない
 
 ## テンプレートの更新を取り込む
 

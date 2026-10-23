@@ -130,7 +130,7 @@ calling skill reads the first line for the verdict token.
 
 ### Output Format
 
-Architecture decisions should follow the TDR and ADR format (`docs/00-meta/templates/adr.md`;
+Architecture decisions should follow the TDR and ADR format (`docs/templates/adr.md`;
 the English names are mapped in `.claude/docs/templates/architecture-decision-record.md`):
 - **Title**: Short descriptive title
 - **status** (front matter): `draft` or `review` (Proposed) / `stable` (Accepted) / `deprecated` (Deprecated, Superseded) — **you are the only agent who may move an ADR to `stable` (Accepted), and only on the user's explicit confirmation.** Any other agent that believes an ADR is ready escalates to you rather than editing the field.

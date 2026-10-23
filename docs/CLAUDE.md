@@ -7,7 +7,7 @@ When authoring or editing files in this directory, follow these standards.
 game-template (PDR-0006): TDRs (what the game uses from outside its own code)
 and ADRs (how the inside of the game is built) are graph nodes. Create one with
 `/architecture-decision`, which runs `python -m tools.graph new --type tdr|adr`
-on the template `docs/00-meta/templates/tdr.md` or `adr.md`. Never place the
+on the template `docs/templates/tdr.md` or `adr.md`. Never place the
 file by hand.
 
 **Required sections:** the 15 Japanese sections of the template (日付, 決めた人,
@@ -28,7 +28,7 @@ with the successor's `supersedes` naming it)
 
 game-template (PDR-0006): game design decisions (what the player can do, see
 or feel) are graph nodes too, in the six sections of
-`docs/00-meta/templates/ddr.md` (背景, 決定, 理由, 却下した案, 影響, 見直しの条件).
+`docs/templates/ddr.md` (背景, 決定, 理由, 却下した案, 影響, 見直しの条件).
 The line with an ADR is whether the player can tell the difference; a topic
 with both sides is a DDR and an ADR whose `depends_on` names the DDR. Create
 one with `python -m tools.graph new --type ddr`, following

@@ -79,7 +79,7 @@ record with a targeted grep (not a full read):
 ### 2b: ADR Format Audit
 
 For each ADR file found, check for these critical sections (game-template,
-PDR-0006: the sections are the Japanese ones of `docs/00-meta/templates/adr.md`,
+PDR-0006: the sections are the Japanese ones of `docs/templates/adr.md`,
 and the status is the front matter's `status:`, never a `## Status` section; an
 ADR still in CCGS's English form counts every one of them as missing):
 

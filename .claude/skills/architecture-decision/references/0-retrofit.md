@@ -15,7 +15,7 @@ Enter **retrofit mode**:
    mode), since a whole-file Read over 40 KB is refused.
 2. Identify which template sections are present by scanning headings and the
    front matter (game-template, PDR-0006: the sections are the Japanese ones of
-   `docs/00-meta/templates/adr.md`, and the status is the front matter's
+   `docs/templates/adr.md`, and the status is the front matter's
    `status:`, never a `## Status` section):
    - front matter `status:` — **BLOCKING if missing**: `/story-readiness` cannot check ADR acceptance.
      A file with no front matter at all is not a graph node, and `python -m tools.graph check` fails on it

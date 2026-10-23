@@ -179,7 +179,7 @@ Ask yourself: "What department would handle this in a real studio?"
 Templates are in `.claude/docs/templates/`:
 
 - `game-design-document.md` -- for new mechanics and systems
-- `architecture-decision-record.md` -- maps CCGS's ADR sections onto the Japanese TDR and ADR template (`docs/00-meta/templates/adr.md`)
+- `architecture-decision-record.md` -- maps CCGS's ADR sections onto the Japanese TDR and ADR template (`docs/templates/adr.md`)
 - `architecture-traceability.md` -- sample layout for a GDD requirement to ADR to
   story index (`/architecture-review` writes its own index to
   `docs/architecture/requirements-traceability.md`)

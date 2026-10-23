@@ -36,7 +36,7 @@ GDDはgraphの外にあるので、GDDからDDRへの参照は`check`が確か�
 片方だけ直してもエラーにならない。変えるときは両方を直す。
 
 置き換えるときは、新しいDDRの`supersedes`に古いDDRのidを書き、古いDDRの`status`を`deprecated`にする。
-引き継ぐ範囲の書き方は、PDRの雛形（docs/00-meta/templates/pdr.md）の「決定」の案内と同じである。
+引き継ぐ範囲の書き方は、PDRの雛形（docs/templates/pdr.md）の「決定」の案内と同じである。
 -->
 
 ## 背景

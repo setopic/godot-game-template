@@ -551,7 +551,7 @@ For each significant technical decision:
 ADRs go through a lifecycle: Proposed > Accepted > Superseded/Deprecated. In
 game-template (PDR-0006) the record is a graph node created with
 `python -m tools.graph new`, its sections are Japanese
-(`docs/00-meta/templates/adr.md`), and the lifecycle is its front matter
+(`docs/templates/adr.md`), and the lifecycle is its front matter
 `status:`: `draft` > `stable` > `deprecated`.
 
 **Minimum 3 Foundation-layer ADRs are required** before the gate check.

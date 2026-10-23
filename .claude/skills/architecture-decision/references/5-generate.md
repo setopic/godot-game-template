@@ -14,8 +14,8 @@
 - Write approval
 - Update Architecture Registry, and the registry append logic
 
-Following the template `docs/00-meta/templates/tdr.md` (a TDR) or
-`docs/00-meta/templates/adr.md` (an ADR). The two have the same sections.
+Following the template `docs/templates/tdr.md` (a TDR) or
+`docs/templates/adr.md` (an ADR). The two have the same sections.
 
 > **game-template (PDR-0006): a TDR or ADR is a graph node.** Its sections are
 > CCGS's ADR template sections in Japanese, one for one: 日付 (Date), 決めた人

@@ -2,7 +2,7 @@
 
 **This is not the template to copy.** In game-template (PDR-0006) a TDR or ADR
 is a graph node. Create it with the graph tool, which copies
-`docs/00-meta/templates/tdr.md` or `docs/00-meta/templates/adr.md` (the two have
+`docs/templates/tdr.md` or `docs/templates/adr.md` (the two have
 the same sections), numbers nothing for you, and lists it in its folder's
 `index.md`:
 
