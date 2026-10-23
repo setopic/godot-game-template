@@ -28,6 +28,8 @@ production/qa/
 [Engine-specific files — see per-engine details below]
 
 .github/workflows/tests.yml  — CI: run tests on every push to main
+[game-template (TDR-0004), Godot: replace the line above with
+ .github/workflows/app-check.yml — CI: already present, not created]
 
 Estimated time: ~5 minutes to create all files.
 ```

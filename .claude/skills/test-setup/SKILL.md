@@ -28,6 +28,9 @@ A test framework installed at sprint four costs 3 sprints.
 
 **Output:** `tests/` directory structure + `.github/workflows/tests.yml`
 
+> **game-template (TDR-0004):** for Godot the output is the `tests/` structure
+> only. `.github/workflows/app-check.yml` is the CI; do not create `tests.yml`.
+
 ---
 
 ## Phase 1: Detect Engine and Existing State

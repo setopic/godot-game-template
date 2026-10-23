@@ -17,6 +17,23 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`と`PROJECT_CHANGELOG.md`の雛形（0.22.7）もこの層で書き足している。どちらも`merge=ours`なので、この層と上流の両方が変えたときはこの層の側が残り、競合しない。そのときは上流の変更が入らないので、上流の変更履歴の「取り込む側の作業」を見て手で合わせる。
 
+## 0.23.2（2026-10-24）
+
+### 変更
+
+Godotの作品で、関門とスキルが`.github/workflows/tests.yml`をテストのCIとして求めていたのを直した（#69）。この層のGodotのテストのCIは`.github/workflows/app-check.yml`で（TDR-0004）、`/test-setup`は`tests.yml`を作らない。そのため、関門の項目が満たされず、`/help`などが`test-setup`の段を終わっていないと見ていた。直した箇所には`game-template (TDR-0004)`の注記を付けたので、CCGSを更新するときはUC-02の`git diff`で見分けられる。UnityとUnrealの扱いは変えていない。
+
+- `.claude/docs/workflow-catalog.yaml`の`test-setup`の段は、`tests.yml`のglobだけで判定していた。`any_of`で、`app-check.yml`と`tests.yml`のどちらかがあれば終わったとみなすようにした。`any_of`は`artifact-check.sh`がすでに読める書き方である。`app-check.yml`には、GdUnit4を回すコマンドの`GdUnitCmdTool.gd`が書いてあることも求める。下の層から届く中身の無い雛形では、この段を終わったとみなさないためである。
+- `/gate-check`のPre-Productionの関門（`gate-pre-production.md`）に、Godotでは`app-check.yml`がこの項目を満たすと書いた。
+- `.claude/scripts/test-scaffold.sh`は、Godotのときに`tests.yml`を作らないようにした。代わりに、`app-check.yml`があるかを`CI`の行で知らせ、無ければ`NEEDS`の行で`make update`から取り込むよう案内する。Godotの`tests/README.md`のCIの行も`app-check.yml`にした。
+- `/test-setup`の`SKILL.md`と、`references/`の`2-plan.md`・`3-directories.md`・`6-summary.md`の計画と報告に、Godotでは`tests.yml`の代わりに`app-check.yml`を挙げると書いた。
+- `/architecture-review`の`9-handoff.md`の関門の前の確認と、`docs/WORKFLOW-GUIDE.md`のStep 3.6と関門の説明にも、同じ注記を足した。
+- `studio-tests/`の`test-setup.md`と`architecture-review.md`の期待する動作を合わせた。
+
+### 取り込む側の作業
+
+なし。直したファイルは共通ファイルなので、取り込みで届く。
+
 ## 0.23.1（2026-10-23）
 
 ### 変更

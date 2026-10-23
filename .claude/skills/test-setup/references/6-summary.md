@@ -18,6 +18,8 @@ Files created:
 - production/qa/evidence/.gitkeep
 [engine-specific files]
 - .github/workflows/tests.yml
+  [game-template (TDR-0004), Godot: omit this line; report instead
+   "CI: .github/workflows/app-check.yml (already present)"]
 
 Next steps:
 1. [Engine-specific install step, e.g., "Install GdUnit4 via the Asset Store (AssetLib before Godot 4.7)"]
@@ -37,6 +39,7 @@ Gate note: /gate-check Technical Setup → Pre-Production now requires:
   Assets/Tests/EditMode/ and Assets/Tests/PlayMode/ (Unity), or
   Source/<Module>/Private/Tests/ (Unreal)
 - .github/workflows/tests.yml
+  [game-template (TDR-0004), Godot: .github/workflows/app-check.yml instead]
 - At least one example test file
 Run /test-setup and write one example test before advancing.
 (At `workflow: minimal` that gate requires only the engine.)

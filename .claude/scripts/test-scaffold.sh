@@ -34,7 +34,11 @@
 #   unity    Assets/Tests/EditMode/EditModeTests.asmdef,
 #            Assets/Tests/PlayMode/PlayModeTests.asmdef
 #   unreal   Source/<Module>/Private/Tests/README.md
-#   all      .github/workflows/tests.yml, tests/smoke/critical-paths.md
+#   unity, unreal  .github/workflows/tests.yml
+#   all      tests/smoke/critical-paths.md
+# game-template (TDR-0004): Godot gets no tests.yml. .github/workflows/app-check.yml
+# is the project's CI and already runs gdUnit4; a tests.yml would run the same
+# tests a second time. A Godot run reports app-check.yml in a CI row instead.
 # The skill asks Godot's two test folders to hold a .gdignore_placeholder file;
 # Godot knows no such name (.gdignore would hide the folder from the editor and
 # from the test runner), so they hold an empty .gitkeep, which keeps the empty
@@ -52,7 +56,8 @@
 #   engine <name>, mode write|dry-run, then per path
 #   CREATED <path> | WOULD_CREATE <path> | EXISTS <path> | SKIPPED <path> <reason>
 #   | FAILED <path> <reason>, then created (or would_create) <n>, exists <n>,
-#   skipped <n> (and failed <n> when above 0), then
+#   skipped <n> (and failed <n> when above 0), then, for Godot only,
+#   CI <path> present|missing (game-template, TDR-0004: app-check.yml), then
 #   NEEDS <id> <file> <what> for each input still needed.
 #   EXISTS means the path was there (a file, a folder or a link) and was not
 #   touched. A file is written with the shell's noclobber on, so one that
@@ -170,7 +175,8 @@ list_paths() {
     unity) echo Assets/Tests/EditMode/EditModeTests.asmdef; echo Assets/Tests/PlayMode/PlayModeTests.asmdef ;;
     unreal) echo "$UNREAL_README" ;;
   esac
-  echo "$CI"
+  # game-template (TDR-0004): not for Godot; app-check.yml is its CI.
+  [ "$ENG" = godot ] || echo "$CI"
   echo "$SMOKE"
 }
 if [ "$MODE" = list ]; then
@@ -180,13 +186,15 @@ fi
 
 # ------------------------------------------------------------------- contents
 # Each file is a function printing it; @TOKENS@ are filled by render.
+# game-template (TDR-0004): the Godot README names app-check.yml as the CI, and
+# app-check.yml runs every suite under tests/ with the command shown.
 tpl_readme_godot() {
   cat <<'TPL_README_GODOT'
 # Test Infrastructure
 
 **Engine**: @ENGINE@
 **Test Framework**: GdUnit4
-**CI**: `.github/workflows/tests.yml`
+**CI**: `.github/workflows/app-check.yml`
 **Setup date**: @DATE@
 
 ## Directory Layout
@@ -221,8 +229,8 @@ a test script does not parse. A run that finds no tests prints `No test cases
 found` and exits 0, which is not a pass. The folder is `addons/gdUnit4/` with a
 capital U.
 
-CI runs `tests/unit` and `tests/integration`; the command above runs every suite
-under `tests/`.
+CI runs the same command after the import, so it runs every suite under `tests/`
+too.
 
 ## Installing GdUnit4
 
@@ -402,6 +410,8 @@ runner with Unreal Editor installed and `UE_ROOT` set.
 TPL_README_UNREAL
 }
 
+# game-template (TDR-0004): never written; list_paths gives Godot no CI path.
+# Kept as upstream wrote it so UC-02's git diff shows only the notes.
 tpl_ci_godot() {
   cat <<'TPL_CI_GODOT'
 name: Automated Tests
@@ -699,6 +709,13 @@ EOF
 if [ "$MODE" = dry-run ]; then printf 'would_create\t%d\n' "$NCREATE"; else printf 'created\t%d\n' "$NCREATE"; fi
 printf 'exists\t%d\nskipped\t%d\n' "$NEXIST" "$NSKIP"
 [ "$NFAIL" -eq 0 ] || printf 'failed\t%d\n' "$NFAIL"
+# game-template (TDR-0004): Godot's CI is app-check.yml, which this script never
+# writes; report whether it is there.
+APP_CHECK=.github/workflows/app-check.yml
+if [ "$ENG" = godot ]; then
+  if [ -f "$APP_CHECK" ]; then printf 'CI\t%s\tpresent\n' "$APP_CHECK"
+  else printf 'CI\t%s\tmissing\n' "$APP_CHECK"; fi
+fi
 
 # --------------------------------------------------------------------- needs
 # A need belongs to a file this run creates (its placeholders are in it), or
@@ -710,6 +727,9 @@ if made "$README" && [ -z "$VER" ]; then
 fi
 case "$ENG" in
   godot)
+    if [ ! -f "$APP_CHECK" ]; then
+      need app_check "$APP_CHECK" "take app-check.yml from game-template (make update); do not write tests.yml (TDR-0004)"
+    fi
     if made "$CI" && [ "$GODOTVER" != "$VER" ]; then
       need godot_version "$CI" "replace [FULL GODOT VERSION, e.g. 4.7.2] with the full release (godot --version)"
     fi

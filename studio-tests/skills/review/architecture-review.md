@@ -68,7 +68,8 @@ Fixture defaults.
 - `docs/architecture/architecture.md` exists and names every system in the index
 - No prior `docs/architecture/architecture-review-*.md` report
 - Pre-gate items all exist: `tests/unit/`, `tests/integration/` (the Godot test root),
-  `.github/workflows/tests.yml`, `design/accessibility-requirements.md`,
+  `.github/workflows/tests.yml` (game-template (TDR-0004): for Godot,
+  `.github/workflows/app-check.yml`), `design/accessibility-requirements.md`,
   `design/ux/interaction-patterns.md`
 
 **Input:** `/architecture-review`

@@ -234,8 +234,15 @@ phases:
         name: "Test Framework Setup"
         command: /test-setup
         required: true
+        # game-template (TDR-0004): Godot's test CI is app-check.yml, and
+        # /test-setup does not write tests.yml there. The pattern is the gdUnit4
+        # runner app-check.yml calls, so the lower layer's empty app-check.yml
+        # stub does not count. tests.yml stays the CI for Unity and Unreal.
         artifact:
-          glob: ".github/workflows/tests.yml"
+          any_of:
+            - glob: ".github/workflows/app-check.yml"
+              pattern: 'GdUnitCmdTool\.gd'
+            - glob: ".github/workflows/tests.yml"
         description: "Scaffold the test framework, the CI workflow and an example test. The Technical Setup → Pre-Production gate requires all three at `standard` and `full`. Leads to /test-helpers for fixture generation, /qa-plan per epic, and /smoke-check per sprint."
 
   pre-production:
