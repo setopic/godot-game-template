@@ -8,6 +8,7 @@ depends_on: []
 decides: []
 supersedes: []
 related: []
+last_verified:
 ---
 
 # {{TITLE}}
@@ -29,6 +30,11 @@ CCGSのスクリプト（adr-status.sh）は、この雛形の`##`の節と、[�
 ほかのエージェントやスキルは、自分の判断で`stable`にしない。
 `draft`か`review`の記録を指すストーリーは止まり、エピックは`stable`の記録を求めるので、決める人を名指しにしている。
 
+最終確認日は本文に書かず、フロントマターの`last_verified`に持つ（PDR-0007）。CCGSのLast Verifiedに当たる。
+いまのエンジンの版と設計に照らして、正しいと最後に確かめた日を、`last_verified: 2026-10-23`のようにYYYY-MM-DDで書く。
+まだ確かめていなければ、値を空のままにする。読み直して確かめたら、何も変わらなくても更新する。
+確定した記録を書き換えない決まりは本文のものなので、`stable`の記録でも`last_verified`は更新してよい。本文は変えない。
+
 置き換えるときは、新しい記録の`supersedes`に古い記録のidを書き、古い記録の`status`を`deprecated`にする。
 前提にするTDRとADRは、「前提のADR」の節の「前提」の行に加えて、フロントマターの`depends_on`にも書く。
 graphの`check`が、`depends_on`の循環と向きを確かめる。
@@ -37,10 +43,6 @@ graphの`check`が、`depends_on`の循環と向きを確かめる。
 ## 日付
 
 [決めた日。YYYY-MM-DDで書く]
-
-## 最終確認日
-
-[YYYY-MM-DD。いまのエンジンの版と設計に照らして、正しいと最後に確かめた日。読み直して確かめたら、何も変わらなくても更新する]
 
 ## 決めた人
 

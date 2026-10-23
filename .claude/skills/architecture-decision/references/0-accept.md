@@ -83,7 +83,7 @@ never leaves.
    is useful information, not an empty result to omit.
 6. On confirmation, `Edit` the front matter's `status:` line to `status: stable`.
    Leave an existing `## 日付` as it is: it records when the ADR was written, and
-   `/create-stories` stamps stories with it (or `## 最終確認日`), so rewriting it
+   `/create-stories` stamps stories with it (or the front matter's `last_verified:`), so rewriting it
    on acceptance would make every story drafted against the Proposed ADR look out
    of date to `/dev-story`. **If that section is absent, add it** with today's
    date — retrofit mode already owns this shape, and acceptance must not fail on

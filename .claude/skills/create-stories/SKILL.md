@@ -191,9 +191,9 @@ UI last. For each story:
   - Several apply: list them all, the most direct first.
   - None applies: `ADR: N/A — [reason]`, e.g. "pure data configuration". Never
     blank: blank means unchecked.
-- **ADR Version:** the story's **ADR Version** is the ADR's `## 最終確認日`
-  date, else its `## 日付`, else `unversioned` (the `version` column). `/dev-story`
-  trusts the story's ADR summary while this still matches the ADR.
+- **ADR Version:** the story's **ADR Version** is the ADR's front matter
+  `last_verified:` date, else its `## 日付`, else `unversioned` (the `version`
+  column). `/dev-story` trusts the story's ADR summary while this still matches the ADR.
 - **Engine risk:** from the ADR's エンジンとの互換 (its knowledge risk).
 - **Estimate:** propose a t-shirt size from the criteria and the files the story
   touches: `S` (a few hours), `M` (about a day) or `L` (several days). It is a

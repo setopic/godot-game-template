@@ -18,14 +18,16 @@ Following the template `docs/00-meta/templates/tdr.md` (a TDR) or
 `docs/00-meta/templates/adr.md` (an ADR). The two have the same sections.
 
 > **game-template (PDR-0006): a TDR or ADR is a graph node.** Its sections are
-> CCGS's ADR template sections in Japanese, one for one: 日付 (Date), 最終確認日
-> (Last Verified), 決めた人 (Decision Makers), 要約 (Summary), エンジンとの互換
+> CCGS's ADR template sections in Japanese, one for one: 日付 (Date), 決めた人
+> (Decision Makers), 要約 (Summary), エンジンとの互換
 > (Engine Compatibility), 前提のADR (ADR Dependencies), 背景 (Context), 決定
 > (Decision), 検討した案 (Alternatives Considered), 影響 (Consequences), リスク
 > (Risks), 対応するGDDの要件 (GDD Requirements Addressed), 性能への影響
 > (Performance Implications), 移行の手順 (Migration Plan), 確かめ方 (Validation
 > Criteria), 関連 (Related). There is no `## Status`: the status is the front
-> matter's `status:`, and a new record is always `draft` (Proposed). Rows and
+> matter's `status:`, and a new record is always `draft` (Proposed). There is no
+> Last Verified section either: it is the front matter's `last_verified:`
+> (game-template PDR-0007), which a new record leaves empty. Rows and
 > subsections are Japanese too: the エンジンとの互換 table's rows are **エンジン**,
 > **分野** (Domain), **層** (Layer), **知識のリスク** (Knowledge Risk),
 > **参照した資料**, **学習の範囲より後のAPI**, **確かめること**; the 前提のADR

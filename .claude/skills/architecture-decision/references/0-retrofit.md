@@ -24,7 +24,8 @@ Enter **retrofit mode**:
      present table with no **層** row is HIGH too: the ADR counts as critical
      wherever it is read, so at `standard` its advisory items become blockers
    - `## 対応するGDDの要件` — MEDIUM if missing: traceability lost
-   - `## 日付` — MEDIUM if missing, and no `## 最終確認日` either: `/create-stories`
+   - `## 日付` — MEDIUM if missing, and no front matter `last_verified:` date
+     (nor a `## 最終確認日` section, moved there below) either: `/create-stories`
      stamps stories with it and `/dev-story` compares against it, so without it a
      story can never tell whether the ADR changed
    - every other `##` section of the template (`python -m tools.graph check`
@@ -75,7 +76,12 @@ Enter **retrofit mode**:
    - For **対応するGDDの要件**: ask — "Which GDD systems motivated this decision?
      What specific requirement in each GDD does this ADR address?"
    - Append each missing section to the ADR file using the Edit tool.
-   - For **日付** (counted only when there is no `## 最終確認日`): append
+   - For a `## 最終確認日` section (a record written before game-template 0.9.0,
+     PDR-0007): move its date to the front matter's `last_verified:` and delete
+     the section; if it says 「なし」, delete it and leave `last_verified:` empty.
+     The date is not changed, only where it is kept, so this is the one
+     exception to the rule below, also on a `stable` record.
+   - For **日付** (counted only when there is no front matter `last_verified:` date): append
      `## 日付` with today's date — even when it is the only missing section, the
      case `/dev-story` sends you here for — and say that it records the retrofit,
      not when the decision was made.

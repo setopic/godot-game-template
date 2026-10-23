@@ -6,6 +6,32 @@
 
 現在の版は、`tools/graph/layers/game-template.toml`の`version`に書く。版の付け方と見出しの書き方は、[PROJECT_TEMPLATE_CHANGELOG.md](PROJECT_TEMPLATE_CHANGELOG.md)の「版の付け方」に合わせる。
 
+## 0.9.0（2026-10-23）
+
+### 変更
+
+TDRとADRの最終確認日（CCGSのLast Verified）を、本文の「最終確認日」の節をやめ、フロントマターの`last_verified`（`YYYY-MM-DD`）に持つようにした（PDR-0007、#24）。確定した記録を書き換えない決まりは本文のものなので、`stable`のTDRやADRでも`last_verified`は更新してよい。更新してよいのは`last_verified`だけで、本文は変えない。状態を`status`に持つのと同じ形である。PDR-0007は、PDR-0006の決定の4のうち「最終確認日」の節だけを改めるので、PDR-0006を置き換えずに`depends_on`で指す。
+
+`graph.toml`の`tdr`と`adr`の`required_sections`から「最終確認日」を外し、15節にした。`docs/00-meta/templates/tdr.md`と`adr.md`は、節を外してフロントマターに`last_verified:`を足し、書き方を雛形の注記に書いた。まだ確かめていない記録では、値を空のままにする。graphのツールは、フロントマターの知らないキーを受け付けるので、上流の道具は直していない。
+
+`adr-status.sh`の`last_verified`の列は、フロントマターの`last_verified`の日付を出す。値が無ければ`-`、日付でなければ`UNFILLED`である。`version`の列は、これまでどおり`last_verified`、無ければ日付、無ければ`unversioned`である。これに合わせて、`/architecture-decision`（`CONTRACT.md`、`accept`、`retrofit`、記録を書く手順）、`/create-stories`、`/dev-story`（`CONTRACT.md`と版の食い違いの手順）、`.claude/docs/templates/`の`architecture-decision-record.md`と`story.md`、`docs/CLAUDE.md`を直した。`architecture-decision-record.md`には、`stable`の記録で`last_verified`を更新する手順を書いた。`retrofit`は、「最終確認日」の節を見つけたら、その日付を`last_verified`に移して節を消す。`studio-tests/`の`/architecture-decision`と`/dev-story`の仕様も直した。GDDの`Last Verified`はGDDのものなので、変えていない。CCGSの英語のファイルの中の説明文は、英語で書いた。
+
+TDR-0001とTDR-0002から、「なし」と書いた「最終確認日」の節を消した。確定した記録を書き換えない決まりの例外で、0.7.0の組み替えで足した「なし」の節を外すだけなので、中身は変わらない。0.7.0と同じ扱いである。確かめていないので、`last_verified`は書いていない。
+
+この版で直したCCGSのファイルは、UC-02の手順3で、CCGSの更新のときに「手で合わせる」に出る。
+
+### 取り込む側の作業
+
+`docs/51-tdr/`か`docs/52-adr/`に自分で書いた記録に「最終確認日」の節があれば、1つずつフロントマターに移す。
+
+1. 節の日付を、フロントマターの`last_verified:`に写す。節が「なし」なら、`last_verified:`を値の無いまま足す
+2. 「最終確認日」の節を消す。ほかの節は変えない
+3. `python -m tools.graph check`を回す
+
+移さなくても`check`は通る。ただし、`adr-status.sh`は節の日付を読まなくなり、記録の版は「日付」の節で決まる。最終確認日に合わせて版を写したストーリーは、`/dev-story`で版の食い違いが出る。`/architecture-decision retrofit <パス>`でも移せる。
+
+`docs/00-meta/templates/tdr.md`か`adr.md`を自分で直していて競合したら、この層のもの（15節と`last_verified:`）に合わせる。`.claude/`の下のCCGSのファイルを自分で直していて競合したら、最終確認日の読み方はこの層のものに合わせ、自分で足した行は残す。
+
 ## 0.8.0（2026-10-23）
 
 ### 変更

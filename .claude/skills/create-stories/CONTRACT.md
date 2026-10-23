@@ -12,7 +12,7 @@ and `/story-readiness` + `/dev-story`.
 |------|---------------------------|-----------|
 | `production/epics/[epic-slug]/EPIC.md` | `Layer:`, `GDD:` path, `Architecture Module:`, `## Governing ADRs` table, `## GDD Requirements` table with TR-IDs | Yes |
 | `design/gdd/[filename].md` | The sections required at the system's tier (all 8 at `full`; the 5 required + conditional Formulas at `standard`), especially `## Acceptance Criteria`, `## Formulas`, `## Edge Cases` | Yes |
-| `docs/51-tdr/tdr-NNNN-[slug].md` or `docs/52-adr/adr-NNNN-[slug].md` (all governing ADRs) | front matter `status:`, `## 要約`, `## 決定` (incl. `### 実装の指針`), `## エンジンとの互換`, `## 最終確認日` / `## 日付`, the `**前提**` row and `depends_on` (read through `adr-status.sh`) | Yes |
+| `docs/51-tdr/tdr-NNNN-[slug].md` or `docs/52-adr/adr-NNNN-[slug].md` (all governing ADRs) | front matter `status:`, `## 要約`, `## 決定` (incl. `### 実装の指針`), `## エンジンとの互換`, front matter `last_verified:` / `## 日付`, the `**前提**` row and `depends_on` (read through `adr-status.sh`) | Yes |
 | `docs/architecture/control-manifest.md` | Layer rules (required patterns, forbidden patterns, guardrails), `Manifest Version:` date in header | Yes |
 | `docs/architecture/tr-registry.yaml` | All TR-IDs for the epic's system, with stable `id` values | Yes |
 

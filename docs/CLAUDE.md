@@ -10,11 +10,13 @@ and ADRs (how the inside of the game is built) are graph nodes. Create one with
 on the template `docs/00-meta/templates/tdr.md` or `adr.md`. Never place the
 file by hand.
 
-**Required sections:** the 16 Japanese sections of the template (日付, 最終確認日,
-決めた人, 要約, エンジンとの互換, 前提のADR, 背景, 決定, 検討した案, 影響, リスク,
+**Required sections:** the 15 Japanese sections of the template (日付, 決めた人,
+要約, エンジンとの互換, 前提のADR, 背景, 決定, 検討した案, 影響, リスク,
 対応するGDDの要件, 性能への影響, 移行の手順, 確かめ方, 関連). CCGS's English
 names are mapped in `.claude/docs/templates/architecture-decision-record.md`.
-`python -m tools.graph check` fails on a missing one (`G014`).
+`python -m tools.graph check` fails on a missing one (`G014`). Last Verified is
+not a section: it is the front matter's `last_verified:` (PDR-0007), which may
+be updated on a `stable` record too, leaving the body as it is.
 
 **Status lifecycle:** the front matter's `status:`, never a `## Status`
 section: `draft` (Proposed) → `stable` (Accepted) → `deprecated` (Superseded,
