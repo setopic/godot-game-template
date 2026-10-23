@@ -1,4 +1,67 @@
-# graph-project-template
+# game-template
+
+Godot 4.7.2とGDScriptでゲームを作るためのプロジェクトテンプレートである。
+
+[graph-project-template](https://github.com/setopic/graph-project-template)の上に重ねた3段目の層である。設計文書をグラフで検証する仕組みと、文書と実装を同じリポジトリで扱う仕組みは、下の層から流れてくる（下の`---`より後ろの説明）。ゲーム開発のエージェントとスキルは、[CCGS](https://github.com/Donchitos/Claude-Code-Game-Studios)（Claude-Code-Game-Studios、MITライセンス）の1.2.0を丸ごと取り込んでいる（[PDR-0006](docs/50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)）。CCGSのライセンスの表示は[LICENSE-CCGS](LICENSE-CCGS)にある。
+
+## この層が足しているもの
+
+| 足しているもの | 何のため |
+| --- | --- |
+| CCGSのエージェント・スキル・フック（`.claude/`） | ゲーム開発の役割ごとに、Claudeに作業を任せる。CCGSのルートの`CLAUDE.md`の内容は、`.claude/rules/ccgs-studio.md`にある（[PDR-0003](docs/50-pdr/pdr-0003-claude-md-split.md)） |
+| Godot 4.7.2とGDScript（[TDR-0001](docs/51-tdr/tdr-0001-godot-version.md)、[TDR-0002](docs/51-tdr/tdr-0002-gdscript.md)） | エンジンと言語を決める。エンジンのAPIの資料は`docs/engine-reference/godot/`にある |
+| 決定の記録の4つの種別（[PDR-0006](docs/50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)） | 開発の進め方（PDR）・ゲームの外の技術（TDR）・ゲームの中の構成（ADR）・ゲームデザイン（DDR）の決定を、`docs/50-pdr/`〜`docs/53-ddr/`に分けて置く |
+| 開発の流れ（[ARCH-03](docs/10-architecture/arch-03-ccgs-seven-stages.md)） | CCGSの7段階と、段階を進める関門（`/gate-check`） |
+| Godot用のGitの設定（[TDR-0003](docs/51-tdr/tdr-0003-godot-git-settings.md)） | Git LFS、`.gitignore`のGodotの節、`.gdignore` |
+| CCGSの`.gitignore`の行（[PDR-0011](docs/50-pdr/pdr-0011-ccgs-gitignore.md)） | CCGSが書き出すセッションの記録やエージェントの記憶を、Gitに入れない |
+| GodotのCI（[TDR-0004](docs/51-tdr/tdr-0004-godot-ci.md)） | `app-check.yml`でGodotのテストを回す |
+| スクリーンショットの証拠（[ADR-0001](docs/52-adr/adr-0001-evidence-capture-autoload.md)） | `src/qa/evidence_capture.gd`で、見た目の確認の証拠を撮る |
+| 複数人で開発するときの決まり（[META-05](docs/00-meta/dev-flow.md)の「複数人で開発するとき」） | mainの保護と、`.github/CODEOWNERS.example`（[PDR-0009](docs/50-pdr/pdr-0009-codeowners-example.md)、[PDR-0012](docs/50-pdr/pdr-0012-codeowners-review-required.md)、[PDR-0013](docs/50-pdr/pdr-0013-codeowners-no-default-owner.md)） |
+| `make ci` | GitHub Actionsが動かないときに、`graph-check.yml`と同じ検査を手元で回す（[META-05](docs/00-meta/dev-flow.md)） |
+
+この層の変更履歴は、[GAME_TEMPLATE_CHANGELOG.md](GAME_TEMPLATE_CHANGELOG.md)にある。
+
+## 使い始める
+
+Claude Codeは、リポジトリの根で起動する。CCGSのフックと、書く前に確認する設定は、根で起動したときにだけ読み込まれる。最初のセッションでは`/start`を回す。いまの状態に合わせて、次に何をするかを案内する。
+
+## Godotで開く前に
+
+素材（画像・音・モデル・フォント）はGit LFSに入れる。取り出す前に、1度だけ次を回す。
+
+```bash
+git lfs install
+```
+
+`*.blend`・`*.psd`・`*.kra`・`*.aseprite`は差分をマージできないので、編集の前にロックし、pushしたら外す。
+
+```bash
+git lfs lock <パス>
+git lfs unlock <パス>
+```
+
+`.godot/`はGitに入れないので、取り出した直後は`godot --headless --import`を1度回す。どのファイルをLFSに入れ、どのフォルダをGodotに読み込ませないかは、[TDR-0003](docs/51-tdr/tdr-0003-godot-git-settings.md)にある。
+
+## テンプレートの更新を取り込む
+
+取り込みの手順は、[META-08](docs/00-meta/template-upgrade.md)にある。ここには、この層がMETA-08の手順とgraph-project-templateの説明（下の「テンプレートの更新を取り込む」）に足すものだけを書く。
+
+| 場面 | この層で足すもの |
+| --- | --- |
+| 初回に上書きする共通ファイル | META-08とgraph-project-templateの一覧に加えて、下の表の共通ファイルを上書きする。この層の版を持つ`tools/graph/layers/game-template.toml`は、`tools/`に含まれる |
+| upstreamのURL | `git remote add template https://github.com/setopic/game-template.git`にする。graph-project-templateを指すと、この層を取り込めない |
+| ラベルを作る | `gh label clone setopic/game-template`を使う |
+| CCGSの更新 | 作品は、CCGSから直接取り込まない。game-templateがCCGSの更新を取り入れたあと（[UC-02](docs/30-usecases/uc-02-ccgs-upgrade.md)）、`make update`で届く |
+
+この層の共通ファイルと、作品のものは次のとおりである。分け方の理由は、[PDR-0014](docs/50-pdr/pdr-0014-game-template-common-files.md)にある。
+
+| 共通ファイル（作品は書き換えない） | 作品のもの（作品が書き換えてよい） |
+| --- | --- |
+| `.claude/`（`.claude/docs/technical-preferences.md`を除く）、`studio-tests/`、`docs/engine-reference/`、CCGSの案内の文書（`docs/CLAUDE.md`、`docs/WORKFLOW-GUIDE.md`、`docs/COLLABORATIVE-DESIGN-PRINCIPLE.md`、`docs/skill-flow-diagrams.md`、`docs/migration-guide-v1.1.md`）、`design/CLAUDE.md`、`src/CLAUDE.md`、`src/qa/`、`scripts/`、各フォルダの`.gdignore`、`.github/CODEOWNERS.example`、`GAME_TEMPLATE_CHANGELOG.md`、`LICENSE-CCGS`、`UPGRADING.md`、`CHANGELOG.md` | `project.yaml`、`.claude/docs/technical-preferences.md`、`docs/architecture/`、`docs/registry/`、`design/registry/`、`graph.toml`、`graph.mk`、`docs/templates/`、ノード本体 |
+
+`/setup-engine`と`/skill-improve`は、共通ファイルを書き換える。エンジンの版を上げるときや、スキルを直すときは、テンプレートの側で行う。
+
+---
 
 設計文書と実装を、同じリポジトリで扱うためのプロジェクトテンプレートである。
 
@@ -67,23 +130,6 @@ python -m tools.graph stats
 ```bash
 python -m tools.graph render --format mermaid --out docs/graph.mmd
 ```
-
-## Godotで開く前に
-
-素材（画像・音・モデル・フォント）はGit LFSに入れる。取り出す前に、1度だけ次を回す。
-
-```bash
-git lfs install
-```
-
-`*.blend`・`*.psd`・`*.kra`・`*.aseprite`は差分をマージできないので、編集の前にロックし、pushしたら外す。
-
-```bash
-git lfs lock <パス>
-git lfs unlock <パス>
-```
-
-`.godot/`はGitに入れないので、取り出した直後は`godot --headless --import`を1度回す。どのファイルをLFSに入れ、どのフォルダをGodotに読み込ませないかは、[TDR-0003](docs/51-tdr/tdr-0003-godot-git-settings.md)にある。
 
 ## 構成
 
@@ -164,6 +210,7 @@ graph LR
     PDR-0011["PDR-0011<br/>CCGSの.gitignoreは、エンジンの節を除いてこの層の節に写す"]
     PDR-0012["PDR-0012<br/>複数人で開発するときは、持ち主の承認を必須にする"]
     PDR-0013["PDR-0013<br/>CODEOWNERSの雛形には、既定の持ち主を置かない"]
+    PDR-0014["PDR-0014<br/>この層の共通ファイルを、作品が書き換えないものに限る"]
   end
   subgraph tdr["ゲームの外の技術の決定"]
     TDR-0001["TDR-0001<br/>Godotの版を4.7.2にする"]
@@ -205,6 +252,7 @@ graph LR
   PDR-0011 -.->|decides| UC-02
   PDR-0012 -->|depends_on| PDR-0009
   PDR-0013 -->|depends_on| PDR-0012
+  PDR-0014 -->|depends_on| PDR-0006
   TDR-0002 -.->|decides| UC-02
   TDR-0003 -->|depends_on| TDR-0001
   TDR-0004 -->|depends_on| TDR-0001

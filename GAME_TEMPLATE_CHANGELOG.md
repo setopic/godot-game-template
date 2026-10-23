@@ -17,6 +17,18 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`もこの層で書き足しているが、`merge=ours`なので競合しない。
 
+## 0.19.0（2026-10-23）
+
+### 変更
+
+`README.md`の先頭に、この層の説明を足した（#40）。題を`# game-template`にし、この層が足しているもの、使い始め方、この層の共通ファイルと作品のもの、取り込みのときのupstreamのURLとラベルを書いた。#3で足した「Godotで開く前に」の節は、この層の説明の中へ移した。下の層の説明は、`---`の下にそのまま残している。
+
+この層の共通ファイルの範囲を、PDR-0014に決めた。これまでどの文書にも決めておらず、PDR-0002は`README.md`を「graphの共通ファイル」としていたが、`README.md`は`merge=ours`である。
+
+### 取り込む側の作業
+
+`README.md`は`merge=ours`なので、取り込んでもこの変更は届かない。game-templateから作った作品は、`git diff HEAD template/main -- README.md`で差を見て、初回に上書きする共通ファイルの一覧とupstreamのURLを確かめる。
+
 ## 0.18.0（2026-10-23）
 
 ### 変更
