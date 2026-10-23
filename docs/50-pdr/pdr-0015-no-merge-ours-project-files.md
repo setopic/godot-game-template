@@ -5,7 +5,7 @@ title: 作品が書き換えるこの層のファイルも、merge=oursにしな
 status: stable
 tags: [template]
 depends_on:
-  - PDR-0014
+  - PDR-0016
 decides: []
 supersedes: []
 related: []
@@ -63,6 +63,6 @@ related: []
 
 `depends_on`: この文書が成立するために前提となるノード
 
-- [PDR-0014 この層の共通ファイルを、作品が書き換えないものに限る](./pdr-0014-game-template-common-files.md)
+- [PDR-0016 tests/unit/qa/もこの層の共通ファイルにする](./pdr-0016-tests-unit-qa-common-file.md)
 
 <!-- graph:auto:end -->

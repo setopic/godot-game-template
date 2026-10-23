@@ -2,7 +2,7 @@
 id: PDR-0014
 type: pdr
 title: この層の共通ファイルを、作品が書き換えないものに限る
-status: stable
+status: deprecated
 tags: [template]
 depends_on:
   - PDR-0006
@@ -14,7 +14,7 @@ related: []
 # この層の共通ファイルを、作品が書き換えないものに限る
 
 - 日付: 2026-10-23
-- 状態: stable
+- 状態: deprecated（[PDR-0016](./pdr-0016-tests-unit-qa-common-file.md)が置き換えた）
 
 ## 背景
 
@@ -104,6 +104,6 @@ game-templateから作った作品は、初回の取り込みで、META-08とgra
 
 このノードを参照しているノード
 
-- (depends_on) [PDR-0015 作品が書き換えるこの層のファイルも、merge=oursにしない](./pdr-0015-no-merge-ours-project-files.md)
+- (supersedes) [PDR-0016 tests/unit/qa/もこの層の共通ファイルにする](./pdr-0016-tests-unit-qa-common-file.md)
 
 <!-- graph:auto:end -->

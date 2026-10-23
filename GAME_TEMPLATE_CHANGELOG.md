@@ -17,6 +17,25 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`もこの層で書き足しているが、`merge=ours`なので競合しない。
 
+## 0.22.0（2026-10-23）
+
+### 変更
+
+`src/qa/evidence_capture.gd`と`tests/unit/qa/qa_evidence_capture_test.gd`に付く`.uid`のファイルを配るようにした（#53）。TDR-0003は`.uid`をGitに入れると決めているが、この層は配っていなかった。そのため作品は、最初の`--import`で作品ごとに別のuidを作っていた。`.uid`は、Godot 4.7.2の`--import`で作った。
+
+`tests/unit/qa/`を、この層の共通ファイルにした。テストが確かめる`src/qa/`が共通ファイルで、2つはいつも一緒に変わるからである。理由と却下した案は、PDR-0016に書いた。PDR-0016はPDR-0014を置き換え、PDR-0014の決定をすべて引き継ぐ。READMEの共通ファイルの表に`tests/unit/qa/`を足した。
+
+### 取り込む側の作業
+
+`.uid`と`tests/unit/qa/`は共通ファイルなので、取り込みで届く。作品が2つの`.uid`をすでにコミットしていると、取り込みで`add/add`の競合になる。この層の側を採る。
+
+```bash
+git checkout --theirs src/qa/evidence_capture.gd.uid tests/unit/qa/qa_evidence_capture_test.gd.uid
+git add src/qa/evidence_capture.gd.uid tests/unit/qa/qa_evidence_capture_test.gd.uid
+```
+
+作品のシーンやリソース（`.tscn`・`.tres`）が、作品で作った古いuidを`uid://`で指していることがある。`git grep <古いuid>`で探し、見つかったらこの層のuidに書き換える。`--import`を回し直しても、シーンの中のuidは書き換わらない。書き換えないと、Godotは読み込むたびに`invalid UID`の警告を出して、パスで読み込む。書き換えたら`godot --headless --import`を1度回す。作品の`README.md`は`merge=ours`なので、共通ファイルの表への1行は届かない。手で足す。
+
 ## 0.21.1（2026-10-23）
 
 ### 変更
