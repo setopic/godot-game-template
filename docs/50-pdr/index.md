@@ -25,6 +25,7 @@ tags: [index]
 - [PDR-0006 CCGSを丸ごと取り込み、決定の記録を4つの種別に分ける](./pdr-0006-ccgs-whole-import-dr-types.md)
 - [PDR-0007 TDRとADRの最終確認日をフロントマターに持つ](./pdr-0007-last-verified-front-matter.md)
 - [PDR-0008 GDDと設計の文書はgraphの検証の外に置く](./pdr-0008-design-docs-outside-graph.md)
+- [PDR-0009 CODEOWNERSは雛形として配り、作品が担当者を入れる](./pdr-0009-codeowners-example.md)
 <!-- graph:children:end -->
 
 ## 追加するとき

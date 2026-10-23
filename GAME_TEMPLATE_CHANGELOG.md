@@ -16,6 +16,22 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`もこの層で書き足しているが、`merge=ours`なので競合しない。
 
+## 0.14.0（2026-10-23）
+
+### 変更
+
+複数人で開発するための決まりを、META-05（`docs/00-meta/dev-flow.md`）の「複数人で開発するとき」の節に書いた（#4）。mainの保護の設定（PRを必須にする、承認1人以上、必須のチェック、force pushの禁止）、1つのストーリーをissue1件・ブランチ1本・PR1本にすること、PRの本文にストーリーのパスとスクリーンショットの証拠のパスを書くこと、シーンの担当と`project.godot`を変えるPRを分けることを決めた。PRの雛形は下の層と共通なので、欄は足していない。
+
+CODEOWNERSの雛形を`.github/CODEOWNERS.example`に置き、分け方と雛形にした理由をPDR-0009に書いた。`merge=ours`にはしていない。
+
+CCGSの`/story-done`が、閉じたストーリーのパスと証拠のパスを、PRの本文に書く節の形で出すようにした。
+
+CCGSの`validate-commit.sh`はコミットメッセージの形を見ず、`validate-push.sh`はmainへのpushを警告するだけなので、graphの決まりで書いたコミットとpushは止められない。
+
+### 取り込む側の作業
+
+`docs/00-meta/dev-flow.md`は`merge=ours`なので、取り込んでも「複数人で開発するとき」の節は届かない。複数人で開発するなら、この層のMETA-05から手で写す。そのうえで、`.github/CODEOWNERS.example`を`.github/CODEOWNERS`に写して担当者の名前を入れ、mainの保護を設定する。
+
 ## 0.13.0（2026-10-23）
 
 ### 変更
