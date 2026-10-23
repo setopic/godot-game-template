@@ -17,6 +17,32 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`もこの層で書き足しているが、`merge=ours`なので競合しない。
 
+## 0.22.3（2026-10-23）
+
+### 変更
+
+`README.md`の「Godotで開く前に」の節に、Godot 4.7.2の標準版とPython 3.12以上を入れる手順を足した（#51）。#7の試しで、READMEだけで準備を進めたとき、この2つが書いていなかった。Godotは、PATHの`godot`で呼べるようにし、`godot --version`が`4.7.2.stable`で始まることを確かめる。Pythonは、`python -m tools.graph check`と`make ci`が使う。
+
+### 取り込む側の作業
+
+作品の`README.md`は`merge=ours`なので、この変更は取り込みで届かない。「Godotで開く前に」の節の頭に、次の文を手で足す。節が無い作品は、同じ内容を使い始めの手順に足す。
+
+````markdown
+次の2つを入れる。
+
+- Godot 4.7.2の標準版（.NETでない版）。[GitHubのreleases](https://github.com/godotengine/godot/releases)の4.7.2-stableか、公式サイトから入れる。`project.yaml`の`commands`はPATHの`godot`を呼ぶので、PATHに通す。通せないときは、`/settings`で`engine.path`にエディタのパスを設定する。
+- Python 3.12以上。`python -m tools.graph check`と`make ci`が使う。
+
+次のコマンドで、入ったことを確かめる。
+
+```bash
+godot --version
+python --version
+```
+
+`godot --version`は`4.7.2.stable`で始まる。
+````
+
 ## 0.22.2（2026-10-23）
 
 ### 変更
