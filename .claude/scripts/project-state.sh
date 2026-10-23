@@ -27,13 +27,18 @@
 #                   the legacy `Engine:` line of .claude/docs/technical-preferences.md
 #   code_root       the same answer and source label as resolve_code_root in
 #                   .claude/hooks/yaml-helper.sh; never defaults to src
-#   source_files    `unknown` when code_root is unset: unknown is not zero
+#   source_files    `unknown` when code_root is unset: unknown is not zero.
+#                   game-template (PDR-0016): src/qa/ is not counted. The
+#                   template ships it to every game as a common file, so it
+#                   says nothing about how far the project has got
 #   adr, tdr        game-template (PDR-0006) keeps ADRs (the game's own
 #                   structure) in docs/52-adr/ and TDRs (the engine, language
 #                   and other technology from outside the game) in
 #                   docs/51-tdr/. Only adr feeds phase_inferred: the template
 #                   ships TDRs for the engine it pins, so a TDR says nothing
-#                   about how far the project has got
+#                   about how far the project has got. For the same reason adr
+#                   leaves out an ADR whose front matter `tags` names
+#                   `template`: the template ships it (ADR-0001, for src/qa/)
 #   stage_yaml      project.stage in project.yaml as written (even if invalid)
 #   stage_txt       first non-blank line of production/stage.txt as written
 #   stage           the resolved stage: a valid stage_yaml, else a valid
@@ -183,10 +188,11 @@ if [ -z "$CODE_ROOT" ]; then
 fi
 
 if [ -n "$CODE_ROOT" ]; then
-  # The source extensions detect-gaps.sh check 1 counts.
-  SRC_FILES=$(count "$CODE_ROOT" -type f \( -name '*.gd' -o -name '*.cs' -o -name '*.cpp' \
-              -o -name '*.c' -o -name '*.h' -o -name '*.hpp' -o -name '*.rs' -o -name '*.py' \
-              -o -name '*.js' -o -name '*.ts' \))
+  # The source extensions detect-gaps.sh check 1 counts, outside src/qa/
+  # (the header's source_files).
+  SRC_FILES=$(count "$CODE_ROOT" -path src/qa -prune -o -type f \( -name '*.gd' -o -name '*.cs' \
+              -o -name '*.cpp' -o -name '*.c' -o -name '*.h' -o -name '*.hpp' -o -name '*.rs' \
+              -o -name '*.py' -o -name '*.js' -o -name '*.ts' \) -print)
   SSRC="$CODE_ROOT"
 else
   SRC_FILES="unknown"; SSRC="code_root unset"
@@ -200,7 +206,27 @@ SYSIDX=""
 [ -f design/gdd/systems-index.md ] && SYSIDX="design/gdd/systems-index.md"
 
 GDD=$(count design/gdd -maxdepth 1 -type f -name '*.md')
-ADR=$(count docs/52-adr -maxdepth 1 -type f -name 'adr-*.md')
+# is_template_record FILE: true when the front matter's `tags` names `template`,
+# inline (`tags: [qa, template]`) or as a block list. The header's adr says why.
+is_template_record() {
+  awk '
+    { sub(/\r$/, "") }
+    NR == 1 { if ($0 != "---") exit; next }
+    $0 == "---" { exit }
+    /^tags:/ { s = $0; sub(/^tags:/, "", s); intags = 1 }
+    !/^tags:/ && intags && /^[ \t]*-/ { s = $0; sub(/^[ \t]*-/, "", s) }
+    !/^tags:/ && !/^[ \t]*-/ { intags = 0; next }
+    intags {
+      gsub(/[][,"\047\t]/, " ", s)
+      if (index(" " s " ", " template ") > 0) { print "y"; exit }
+    }
+  ' "$1" | grep -q y
+}
+ADR=0
+for f in docs/52-adr/adr-*.md; do
+  [ -f "$f" ] || continue
+  is_template_record "$f" || ADR=$((ADR + 1))
+done
 TDR=$(count docs/51-tdr -maxdepth 1 -type f -name 'tdr-*.md')
 STORY=$(count production/epics -type f -name 'story-*.md')
 PROTO=$(count prototypes -mindepth 1 -maxdepth 1 -type d)
@@ -223,7 +249,7 @@ row source_files "$SRC_FILES" "$SSRC"
 row concept "$CONCEPT" "$( [ -n "$CONCEPT" ] && echo found || echo absent )"
 row systems_index "$SYSIDX" "$( [ -n "$SYSIDX" ] && echo found || echo absent )"
 row gdd_files "$GDD" "design/gdd/*.md"
-row adr "$ADR" "docs/52-adr/adr-*.md"
+row adr "$ADR" "docs/52-adr/adr-*.md without tag template"
 row tdr "$TDR" "docs/51-tdr/tdr-*.md"
 row story "$STORY" "production/epics/**/story-*.md"
 row prototype "$PROTO" "prototypes/*/"

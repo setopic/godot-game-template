@@ -17,6 +17,20 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`もこの層で書き足しているが、`merge=ours`なので競合しない。
 
+## 0.22.1（2026-10-23）
+
+### 変更
+
+`.claude/scripts/project-state.sh`が、この層の配るものを作品の進み具合に数えないようにした（#48）。これまでは、作ったばかりの作品でも`adr 1`・`source_files 1`・`phase_inferred technical-setup`が出ていた。この層がADR-0001と`src/qa/evidence_capture.gd`を配っているからである。そのため/startは、Phase 4の経路Dで段階を`Technical Setup`にし、Phase 2で経路Aを選ぶと「コードがある」と問い返していた。
+
+`adr`は、フロントマターの`tags`に`template`を持つADRを数えない。この層の配るADRには、このタグを付ける。いまはADR-0001だけで、`tags`を`[qa, template]`にした。ADR-0001の本文は変えていない。`source_files`は、この層の共通ファイルである`src/qa/`を数えない。どちらも、TDRを数えないのと同じ理由である。スクリプトの冒頭の説明に、その理由を書いた。
+
+この版で直したCCGSのファイルは、UC-02の手順3で、CCGSの更新のときに「手で合わせる」に出る。
+
+### 取り込む側の作業
+
+無い。`.claude/`とADR-0001は取り込みで届く。作品がADR-0001の`tags`を自分で変えていて競合したら、`template`を残す。
+
 ## 0.22.0（2026-10-23）
 
 ### 変更
