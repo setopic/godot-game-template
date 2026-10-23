@@ -6,7 +6,7 @@
 # game-template (PDR-0006): TDRs and ADRs are graph nodes. The status is the
 # front matter's `status:` (draft, review, stable, deprecated), not a
 # `## Status` section; the sections are the Japanese ones of
-# docs/00-meta/templates/adr.md (日付, 前提のADR, ...). The last-verified date
+# docs/templates/adr.md (日付, 前提のADR, ...). The last-verified date
 # is the front matter's `last_verified:` (YYYY-MM-DD), not a section
 # (game-template PDR-0007).
 #
@@ -111,7 +111,7 @@ fi
 # game-template (PDR-0006): TDRs and ADRs sit in a folder per kind.
 TDR_DIR="docs/51-tdr"
 ADR_DIR="docs/52-adr"
-TEMPLATE="docs/00-meta/templates/adr.md"
+TEMPLATE="docs/templates/adr.md"
 # adr_id PATH — adr-dep-graph.sh's id: the first adr-<digits> or tdr-<digits>
 # in the name, lower case.
 adr_id() { printf '%s\n' "${1##*/}" | tr '[:upper:]' '[:lower:]' | grep -oE '[at]dr-[0-9]+' | head -1; }

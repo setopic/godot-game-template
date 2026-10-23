@@ -47,7 +47,7 @@ write. Then:
    python -m tools.graph new --type ddr --id DDR-NNNN --title "[decision, in Japanese]" --slug [ascii-slug]
    ```
 
-   It uses `docs/00-meta/templates/ddr.md` and adds the DDR to
+   It uses `docs/templates/ddr.md` and adds the DDR to
    `docs/53-ddr/index.md`.
 3. Fill the six sections in Japanese, following the template's comments:
    背景, 決定, 理由, 却下した案, 影響, 見直しの条件. In `## 背景`, write the GDD

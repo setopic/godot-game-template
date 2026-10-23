@@ -21,7 +21,7 @@
 #   suite) are taken as-is, and each is read for both kinds.
 #   The dependencies are the `**前提**` row of `## 前提のADR` and the front
 #   matter's depends_on (game-template, PDR-0006: the Japanese sections of
-#   docs/00-meta/templates/adr.md). A `## 前提のADR` that says only なし is a
+#   docs/templates/adr.md). A `## 前提のADR` that says only なし is a
 #   leaf.
 #
 # Output:

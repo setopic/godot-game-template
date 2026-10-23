@@ -8,44 +8,33 @@
 
 ## 上流と共通のファイルを書き換えたもの
 
-この層は、下の層と共通のファイル（[META-08](docs/00-meta/template-upgrade.md)の「共通ファイル」）のうち、次のものを書き換えている。上流がこれらのファイルを変えると、`make update`で競合することがある。
+この層は、下の層と共通のファイル（[META-08](docs/00-meta/template-upgrade.md)の「共通ファイル」）のうち、次のものを書き換えている。上流がこのファイルを変えると、`make update`で競合することがある。
 
 | ファイル | この層での書き換え | 取り込みでの扱い |
 | --- | --- | --- |
-| `docs/00-meta/templates/adr.md` | 中身を、この層のADR（ゲームの中の構成の決定）の雛形に差し替えた（0.7.0、0.9.0） | 下の「adr.mdを取り込むとき」の手順で、この層の内容を残す |
 | `.gitattributes` | PDR-0001の`merge=ours`の行のパスを変え（0.4.0）、末尾にこの層の行を足した | 競合した部分だけを解き、この層の行と上流の行の両方を残す |
 
-`docs/00-meta/templates/`の`tdr.md`・`pdr.md`・`ddr.md`は、この層が新しく足したファイルで、上流には無い。上流が同じ名前のファイルを足さない限り、競合しない。`docs/00-meta/dev-flow.md`もこの層で書き足しているが、`merge=ours`なので競合しない。
+`docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`もこの層で書き足しているが、`merge=ours`なので競合しない。
 
-`adr.md`を`merge=ours`にしないのは、この層の直しが派生に届かなくなるからである（#25）。種別ごとの雛形を層の側に置くしくみは、上流にまだ無い。そのため、`graph.toml`の`adr`の種別の雛形を自分のものにするには、上流と共通の`adr.md`を書き換えるしかない。
+## 0.10.0（2026-10-23）
 
-### adr.mdを取り込むとき
+### 変更
 
-上流が`adr.md`を変えた版を取り込むと、`make update`がこのファイルで競合して止まる。この層の内容を残し、上流の差分を読んで、要るものだけを手で取り入れる。
+`graph.toml`の一番上に`extend_default_types = true`を置き、既定の種別を書き写さないようにした（PDR-0006、上流の1.54.0）。`architecture`・`domain`・`usecase`・`contract`の`[node_types.*]`は、`tools/graph/schema.py`の既定と同じ内容だったので消した。`pdr`・`tdr`・`adr`・`ddr`は残した。`adr`は既定と同じ名前なので丸ごと上書きになり、`immutable`と`required_sections`を書いたままにしてある。これで、上流が既定の種別に入れた変更が、手で合わせなくても届く。
 
-1. 上流の変更を読む。`MERGE_HEAD`は取り込もうとしている上流の版で、`git merge-base HEAD MERGE_HEAD`は前に取り込んだ上流の版である。どの版で変わったかは、`git log --oneline HEAD..MERGE_HEAD -- docs/00-meta/templates/adr.md`と、`python -m tools.graph upgrade`が出す変更履歴で分かる。
+`pdr`・`tdr`・`adr`・`ddr`の雛形を、上流と共通の`docs/00-meta/templates/`から`docs/templates/`に移し、各種別に`template = "docs/templates/<名前>.md"`を書いた（上流の1.53.0）。共通のフォルダの`adr.md`は上流の内容に戻した。`.claude/`の下と`docs/`の中で、雛形のパスを指していた箇所（`architecture-decision`のスキル、`adr-status.sh`、`adr-dep-graph.sh`、`design-decision-records.md`など）は、新しいパスに直した。これで、上流が`adr.md`を変えても取り込みで競合しなくなり、前の版で書いた`adr.md`を取り込むときの手順は要らなくなった。
 
-   ```bash
-   git diff $(git merge-base HEAD MERGE_HEAD) MERGE_HEAD -- docs/00-meta/templates/adr.md
-   ```
+PDR-0007の本文は、確定した記録なので、雛形の古いパスのまま残してある。
 
-2. ファイルを、この層の内容に戻す。
+### 取り込む側の作業
 
-   ```bash
-   git checkout --ours docs/00-meta/templates/adr.md
-   ```
+`docs/00-meta/templates/`に自分で雛形を置いていたら、`docs/templates/`に移し、`graph.toml`のその種別に`template`を書く。
 
-3. 1で読んだ変更のうち、この層の雛形にも要るもの（フロントマターのキーや、記入の案内の決まりの変更など）を、この層の節の形に合わせて手で書き足す。上流の既定のADRの節にだけ関わる変更は入れない
-4. `git add docs/00-meta/templates/adr.md`を回し、ほかの競合も解いてから`git commit`する。メッセージは、`make update`が用意したものが使われる（META-08）
-5. 取り入れた変更と見送った変更を、取り込みのPRの本文に書く
-
-競合せずに取り込みが終わることもある。上流の変更がこの層の書き換えと重ならない行だけなら、gitが両方を混ぜてマージコミットを作る。そのため、`make update`のあとは競合しなくても、次のコマンドで上流から入った行を確かめる。何も出なければ、上流は`adr.md`を変えていない。要らない行が入っていたら、取り込みのブランチで消す。
-
-```bash
-git diff HEAD^1 HEAD -- docs/00-meta/templates/adr.md
-```
-
-この手順は、game-templateが下の層（`graph-project-template`）を取り込むときのものである。game-templateから作った派生には、game-templateが解いたあとの`adr.md`が届く。派生が`adr.md`を自分の雛形に差し替えていれば、派生の取り込みでも同じ競合が起きる。そのときは、上の手順の「この層」を自分のリポジトリに、「上流」をgame-templateに読み替えて解く。何を取り入れるかは、その版の「取り込む側の作業」を見て決める。
+1. 自分で直した`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`があれば、中身を`docs/templates/`の同じ名前のファイルに移す。取り込みで`docs/00-meta/templates/adr.md`が競合したら、上流の内容を取る
+2. `graph.toml`の各種別に、`template = "docs/templates/<名前>.md"`を書く。パスはリポジトリの根から書く
+3. `graph.toml`で`architecture`などの既定の種別を書き写していたら、一番上に`extend_default_types = true`を置き、既定と同じ内容のものを消す（上流の1.54.0の「取り込む側の作業」にある）
+4. `.claude/`の下や`docs/`の中で、自分で書いた箇所が`docs/00-meta/templates/adr.md`などを指していれば、新しいパスに直す
+5. `python -m tools.graph check --strict`を回す
 
 ## 0.9.1（2026-10-23）
 

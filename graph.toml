@@ -1,3 +1,5 @@
+extend_default_types = true
+
 # CCGS（Claude-Code-Game-Studios）から取り込んだ、フロントマターの無いMarkdownを
 # グラフに含めない（PDR-0006）。CCGSのスキルやフックがこれらのパスを決め打ちで
 # 読むので、docs/から動かせない。docs_dirを変えたら、ここも書き直す。
@@ -14,43 +16,13 @@ exclude = [
 ]
 
 # ノード種別（#16）。決定の記録を、PDR・TDR・ADR・DDRの4つの種別に分ける。
-# 種別を1つでも書くと、書いたものが種別の全体になる（META-02の「プロジェクトごとの種別」）。
-# そのため、architecture・domain・usecase・contractは、tools/graph/schema.pyの既定の
-# NODE_TYPES・REQUIRED_SECTIONS・REQUIRED_SECTIONS_REFINED・TERM_TYPESを同じ内容で書き写した。
-# 上流（graph-doc-template）が既定の種別を変えても、ここには届かない。上流の変更履歴を見て、手で合わせる。
+# 一番上のextend_default_types = trueで、ここに書いた種別を既定の種別に足す（META-02の「プロジェクトごとの種別」）。
+# architecture・domain・usecase・contractは、書かずに既定のものを使う。
+# 同じ名前のadrは、既定を丸ごと上書きする。そのためimmutableとrequired_sectionsも書いたままにしてある。
 # 50番台は決定の記録である。PDRは50、TDRは51、ADRは52、DDRは53に置く。
 # 番号は種別ごとに0001から振る。
-
-[node_types.architecture]
-prefix = "ARCH"
-dir = "10-architecture"
-layer = 10
-label = "アーキテクチャ"
-required_sections = ["解決したい構造上の問題"]
-required_sections_refined = []
-
-[node_types.domain]
-prefix = "DOM"
-dir = "20-domain"
-layer = 20
-label = "ドメイン"
-terms = true
-required_sections = ["定義", "不変条件", "用語"]
-required_sections_refined = ["不変条件", "用語"]
-
-[node_types.usecase]
-prefix = "UC"
-dir = "30-usecases"
-layer = 30
-label = "ユースケース"
-required_sections = ["概要", "事前条件"]
-
-[node_types.contract]
-prefix = "CON"
-dir = "40-contracts"
-layer = 40
-label = "契約"
-required_sections = []
+# 4つの種別の雛形は、上流と共通のdocs/00-meta/templates/の外のdocs/templates/に置き、
+# 各種別のtemplateで指す。共通のフォルダに置くと、上流が同じ名前の雛形を変えたときに取り込みで競合する。
 
 # 開発の進め方の決定。道具、テンプレート、手順、文書の置き場。
 [node_types.pdr]
@@ -61,6 +33,7 @@ exempt_layer = true
 immutable = true
 label = "開発の進め方の決定"
 required_sections = ["背景", "決定", "理由", "却下した案", "影響", "見直しの条件"]
+template = "docs/templates/pdr.md"
 
 # TDRとADRの節は、CCGSのADRの雛形の節を日本語にしたものである。状態はフロントマターのstatusだけに持つ（PDR-0006）。
 # 最終確認日（CCGSのLast Verified）は、本文の節にせず、フロントマターのlast_verifiedに持つ（PDR-0007）。
@@ -73,6 +46,7 @@ exempt_layer = true
 immutable = true
 label = "ゲームの外の技術の決定"
 required_sections = ["日付", "決めた人", "要約", "エンジンとの互換", "前提のADR", "背景", "決定", "検討した案", "影響", "リスク", "対応するGDDの要件", "性能への影響", "移行の手順", "確かめ方", "関連"]
+template = "docs/templates/tdr.md"
 
 # ゲームの中の構成の決定。イベントの仕組み、セーブデータの形、シーンの分け方など。
 [node_types.adr]
@@ -83,6 +57,7 @@ exempt_layer = true
 immutable = true
 label = "ゲームの中の構成の決定"
 required_sections = ["日付", "決めた人", "要約", "エンジンとの互換", "前提のADR", "背景", "決定", "検討した案", "影響", "リスク", "対応するGDDの要件", "性能への影響", "移行の手順", "確かめ方", "関連"]
+template = "docs/templates/adr.md"
 
 # ゲームデザインの決定。プレイヤーができること、見るもの、感じることが変わるもの（PDR-0006）。
 # ADRとの境は「プレイヤーから違いが分かるか」で決める。節はPDRと同じ6節にする。
@@ -96,3 +71,4 @@ exempt_layer = true
 immutable = true
 label = "ゲームデザインの決定"
 required_sections = ["背景", "決定", "理由", "却下した案", "影響", "見直しの条件"]
+template = "docs/templates/ddr.md"
