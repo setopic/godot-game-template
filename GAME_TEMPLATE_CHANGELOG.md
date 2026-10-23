@@ -32,6 +32,12 @@
 
 `README.md`の「Godotで開く前に」は`SETUP.md`に移し、代わりに「開発環境を用意する」の節から`SETUP.md`を指した。共通ファイルの表にも`SETUP.md`を足した。
 
+CCGSから取り込んだ案内の文書のうち、この層の決まりと食い違う箇所に、`game-template (…)`の注記を足した。食い違うときは、この層の日本語の文書に従うことも`SETUP.md`に書いた。CCGSのファイルを直すのはPDR-0006の範囲内で、CCGSを更新するときはUC-02の`git diff`で見分ける。
+
+- `docs/WORKFLOW-GUIDE.md`のQuick Startで、前提ツールの一覧と作品の作り方（"Use this template"）は`SETUP.md`にあると書いた。CCGSの手順は`git clone`だけを書いていて、cloneすると`origin`がテンプレートを指したまま残る。
+- 同じ文書のディレクトリの構成で、`docs/architecture/`をADRの置き場としていたのを直し、`docs/50-pdr/`〜`docs/53-ddr/`を足した。
+- `UPGRADING.md`の冒頭に、作品はこの文書に従わず、META-08の`make update`で取り込むと書いた。CCGSの手順は、CCGSを直接`git merge`するもので、`merge=ours`のドライバも、この層がCCGSのファイルに入れた直しも素通りする。
+
 ### 取り込む側の作業
 
 `SETUP.md`は取り込みで届く。作品の`README.md`が作品の説明に書き換えてあるなら、`SETUP.md`へのリンクを手で足す。`README.md`は`merge=ours`なので、この層の「開発環境を用意する」の節は、作品が書き換えていれば届かない。
