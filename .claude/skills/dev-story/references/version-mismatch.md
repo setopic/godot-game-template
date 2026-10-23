@@ -4,7 +4,7 @@ Read only when Phase 2 found a version mismatch.
 
 ## The ADR
 
-The ADR's `version` (from `adr-status.sh`: its 最終確認日 date, else its 日付,
+The ADR's `version` (from `adr-status.sh`: its front matter `last_verified:` date, else its 日付,
 else `unversioned`) differs from the story's `ADR Version`, or the ADR is
 `unversioned` while the story names a date. Its decision may have changed.
 

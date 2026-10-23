@@ -135,6 +135,7 @@ graph LR
     PDR-0004["PDR-0004<br/>ADRを役割で2か所に分け、CCGSのADRはgraphで検証しない"]
     PDR-0005["PDR-0005<br/>CCGSのsession-start.shとsetup-engineを、rulesのファイルから読み込みの行を探す形に直す"]
     PDR-0006["PDR-0006<br/>CCGSを丸ごと取り込み、決定の記録を4つの種別に分ける"]
+    PDR-0007["PDR-0007<br/>TDRとADRの最終確認日をフロントマターに持つ"]
   end
   subgraph tdr["ゲームの外の技術の決定"]
     TDR-0001["TDR-0001<br/>Godotの版を4.7.2にする"]
@@ -164,6 +165,7 @@ graph LR
   PDR-0006 ==>|supersedes| PDR-0002
   PDR-0006 ==>|supersedes| PDR-0004
   PDR-0006 -.->|decides| UC-02
+  PDR-0007 -->|depends_on| PDR-0006
   TDR-0002 -.->|decides| UC-02
   UC-01 -->|depends_on| DOM-01
   UC-02 -->|depends_on| PDR-0006

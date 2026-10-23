@@ -260,7 +260,7 @@ Fixture defaults.
 **Input:** `/architecture-decision retrofit docs/52-adr/adr-0004-input-mapping.md`
 
 **Expected behavior:**
-1. The retrofit block lists Status (BLOCKING), 前提のADR (HIGH) and Date (MEDIUM — the fixture has no `## 日付` and no `## 最終確認日`) as missing, then asks "Shall I add the 3 missing sections? I will not modify any existing content."
+1. The retrofit block lists Status (BLOCKING), 前提のADR (HIGH) and Date (MEDIUM — the fixture has no `## 日付` and no front matter `last_verified:`) as missing, then asks "Shall I add the 3 missing sections? I will not modify any existing content."
 2. Asked for the current status, the user answers "Accepted" — the decision is already in force; asked for dependencies, the user answers "前提: ADR-0001"
 3. The skill writes the front matter `status:` as `draft` (Proposed), the 前提のADR section and `## 日付` (today, noted as the retrofit date); no existing section changes
 4. It then runs acceptance mode on ADR-0004: the dependency check passes (ADR-0001 is Accepted), the blocked story is found, and "Accept ADR-0004 — [title]? …" is asked with "1 story becomes Ready"
@@ -271,6 +271,7 @@ Fixture defaults.
 - [ ] The retrofit answer `Accepted` is never written straight into the front matter `status:`; `Accepted` appears only after acceptance mode's dependency check and confirmation
 - [ ] The confirmation prompt names the story count, as in Case 5
 - [ ] Variant — the user declines "Shall I add the 3 missing sections?": no section is written, `## 日付` included
+- [ ] Variant — the fixture also has a `## 最終確認日` section reading `2026-09-01` (written before game-template 0.9.0, PDR-0007): the retrofit block does not rate the missing Date MEDIUM (the record has a Last Verified date), and on yes the front matter gets `last_verified: 2026-09-01` and the section is deleted, the date itself unchanged
 
 ---
 

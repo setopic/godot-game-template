@@ -6,7 +6,9 @@
 # game-template (PDR-0006): TDRs and ADRs are graph nodes. The status is the
 # front matter's `status:` (draft, review, stable, deprecated), not a
 # `## Status` section; the sections are the Japanese ones of
-# docs/00-meta/templates/adr.md (日付, 最終確認日, 前提のADR, ...).
+# docs/00-meta/templates/adr.md (日付, 前提のADR, ...). The last-verified date
+# is the front matter's `last_verified:` (YYYY-MM-DD), not a section
+# (game-template PDR-0007).
 #
 # Replaces the hand-run ADR reads in /architecture-decision, /architecture-review,
 # /create-control-manifest, /create-epics, /create-stories, /dev-story,
@@ -49,9 +51,11 @@
 #   status        draft | review | stable | deprecated: the front matter's
 #                 `status:`; OTHER for any other value; `-` when there is none
 #   layer         the `**層**` row's value, or UNFILLED
-#   date, last_verified   the first YYYY-MM-DD under `## 日付` and `## 最終確認日`;
-#                 `-` when the section says なし or is not there; UNFILLED
-#                 otherwise
+#   date          the first YYYY-MM-DD under `## 日付`; `-` when the section
+#                 says なし or is not there; UNFILLED otherwise
+#   last_verified the front matter's `last_verified:` when it is a
+#                 YYYY-MM-DD; `-` when the key is not there or has no value;
+#                 UNFILLED otherwise
 #   version       last_verified, else date, else `unversioned` (the rule
 #                 /create-stories and /dev-story stamp stories with)
 #   depends_on    every ADR-N and TDR-N on the `**前提**` row of `## 前提のADR`
@@ -250,7 +254,10 @@ TPL="$TPL_ARG" SCOPE="$SCOPE" SUPMAP="$SUPMAP" awk '
     cnt[st == "-" ? "no_status" : tolower(st)]++
     if (cur_id in supby) { sb = supby[cur_id]; if (st == "deprecated") cnt["superseded"]++ }
     d = date_of(date_line, "日付")
-    lv = date_of(lv_line, "最終確認日")
+    # last_verified is a front matter key (PDR-0007): no value is `-`, a date is
+    # itself, anything else is UNFILLED.
+    w = fm_lv; gsub(/["\047]/, "", w); w = trim(w); if (w == "[]") w = ""
+    lv = (w == "") ? "-" : ((w ~ /^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]$/) ? w : "UNFILLED")
     ver = (lv ~ /^[0-9]/) ? lv : ((d ~ /^[0-9]/) ? d : "unversioned")
     # The ids come from the whole row and an ADR naming itself is dropped, as
     # adr-dep-graph.sh builds its edges; the cell decides UNFILLED versus none.
@@ -278,7 +285,7 @@ TPL="$TPL_ARG" SCOPE="$SCOPE" SUPMAP="$SUPMAP" awk '
       # The id adr-dep-graph.sh uses: the first adr-<digits> or tdr-<digits>
       # in the file name, lower case.
       b = tolower(cur_path); sub(/^.*\//, "", b); cur_id = match(b, /[at]dr-[0-9]+/) ? substr(b, RSTART, RLENGTH) : "-"
-      split("", has); fm_status = ""; fm_deps = ""; date_line = ""; lv_line = ""
+      split("", has); fm_status = ""; fm_deps = ""; fm_lv = ""; date_line = ""
       dep_seen = 0; dep_cell = ""; dep_row = ""; layer_seen = 0; layer_cell = ""; unfilled = 0
     }
   }
@@ -291,13 +298,15 @@ TPL="$TPL_ARG" SCOPE="$SCOPE" SUPMAP="$SUPMAP" awk '
   FNR == 1 { reach(FILENAME); begin(FILENAME) }
   {
     line = $0; sub(/\r$/, "", line)
-    # The front matter: its status and depends_on; no line of it is a section.
+    # The front matter: its status, last_verified and depends_on; no line of it
+    # is a section.
     if (FNR == 1 && line == "---") { infm = 1; next }
     if (infm) {
       if (line == "---") { infm = 0; next }
       if (line ~ /^[A-Za-z_]+:/) {
         fmkey = line; sub(/:.*/, "", fmkey); v = line; sub(/^[^:]*:/, "", v)
         if (!intpl && fmkey == "status") fm_status = trim(v)
+        if (!intpl && fmkey == "last_verified") fm_lv = trim(v)
       }
       if (!intpl && fmkey == "depends_on") fm_deps = fm_deps " " line
       next
@@ -328,7 +337,6 @@ TPL="$TPL_ARG" SCOPE="$SCOPE" SUPMAP="$SUPMAP" awk '
     # the template guidance, not the value.
     if (substr(r, 1, 1) != ">") {
       if (sec == "日付" && date_line == "") date_line = r
-      if (sec == "最終確認日" && lv_line == "") lv_line = r
     }
     if (!layer_seen && r ~ /^\|[ \t]*\*\*層\*\*[ \t]*\|/) { layer_seen = 1; layer_cell = cell2(r) }
     if (sec == "前提のadr" && !dep_seen && r ~ /\*\*前提\*\*/) { dep_seen = 1; dep_row = r; dep_cell = cell2(r); if (dep_cell == "") dep_cell = r }

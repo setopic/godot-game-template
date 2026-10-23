@@ -38,12 +38,38 @@ There is no `## Status` section. The status is the front matter's `status:`.
 `bash .claude/scripts/adr-status.sh` reads the status, layer, dates and
 dependencies of every TDR and ADR.
 
+## Last Verified
+
+There is no `## 最終確認日` section either (game-template PDR-0007). The date a
+record was last confirmed right against the current engine version and design
+is the front matter's `last_verified:`, as `YYYY-MM-DD`:
+
+```yaml
+last_verified: 2026-10-23
+```
+
+A new record leaves it empty (`last_verified:`), which reads as not yet
+verified. When you re-read a record and confirm it still holds, set
+`last_verified:` to today's date, even when nothing else changed. **This is
+allowed on a `stable` record too, and it is the only edit allowed there:**
+the rule that a decided record is never rewritten covers its body, as the
+status lives in `status:` for the same reason. Change only the
+`last_verified:` line; leave every section as it is. If the check found the
+decision no longer holds, do not edit the body: write a new record that
+supersedes it.
+
+`/create-stories` stamps a story's **ADR Version** with `last_verified:`, else
+`## 日付`, else `unversioned` (the `version` column of `adr-status.sh`), and
+`/dev-story` compares against it. Updating `last_verified:` therefore makes
+the stories written before it show a version mismatch, which is the point: the
+programmer re-reads the record.
+
 ## Sections
 
 | CCGS section | Section |
 |---|---|
 | Date | `## 日付` |
-| Last Verified | `## 最終確認日` |
+| Last Verified | front matter `last_verified:` (not a section; see above) |
 | Decision Makers | `## 決めた人` |
 | Summary | `## 要約` |
 | Engine Compatibility | `## エンジンとの互換` |

@@ -16,7 +16,7 @@
 
 **ADR Governing Implementation**: [ADR-NNNN: title]
 **ADR Decision Summary**: [1-2 sentence summary of what the ADR decided]
-**ADR Version**: [the ADR's `## 最終確認日` date, else its `## 日付`, else `unversioned`]
+**ADR Version**: [the ADR's front matter `last_verified:` date, else its `## 日付`, else `unversioned`]
 
 **Engine**: [name + version] | **Risk**: [LOW / MEDIUM / HIGH]
 **Engine Notes**: [from ADR エンジンとの互換 section — post-cutoff APIs, verification required]
