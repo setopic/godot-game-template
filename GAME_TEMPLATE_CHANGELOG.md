@@ -17,6 +17,16 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`もこの層で書き足しているが、`merge=ours`なので競合しない。
 
+## 0.21.1（2026-10-23）
+
+### 変更
+
+`.gitattributes`の`production/qa/evidence/**`の行を、画像と動画の拡張子（`png`・`jpg`・`jpeg`・`webp`・`gif`・`mp4`・`webm`）の行に分けた（#50）。これまでは証拠のフォルダの全部がLFSに入り、`stamp.txt`や`<story>-evidence.md`もLFSのポインタになっていた。TDR-0003は`*.md`をLFSに入れずにテキストのまま扱うと決めているので、実装をその決定に合わせた。試しの作品では、`stamp.txt`の差分がGitHubのPRで見えなかった。
+
+### 取り込む側の作業
+
+`.gitattributes`は共通ファイルなので、取り込みで届く。証拠のフォルダの文字のファイルがすでにLFSに入っていて、テキストに戻すなら、取り込んだあとに`git add --renormalize production/qa/evidence`を回してコミットする。属性を変えただけでは、Gitは入っているファイルを入れ直さない。
+
 ## 0.21.0（2026-10-23）
 
 ### 変更
