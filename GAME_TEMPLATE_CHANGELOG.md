@@ -17,6 +17,16 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`と`PROJECT_CHANGELOG.md`の雛形（0.22.7）もこの層で書き足している。どちらも`merge=ours`なので、この層と上流の両方が変えたときはこの層の側が残り、競合しない。そのときは上流の変更が入らないので、上流の変更履歴の「取り込む側の作業」を見て手で合わせる。
 
+## 0.23.17（2026-10-24）
+
+### 変更
+
+`SETUP.md`の「3. 作品を作った人が1回だけすること」の5に、`engine.rendering`と同じときに`engine.physics`も`/settings`で決めると書いた（#94）。これまでは`rendering`だけを決めさせていて、`project.yaml`の`physics`は`[TO BE CONFIGURED]`のまま、いつ決めるかが書かれていなかった。2Dの作品では`Godot Physics 2D`、3Dの作品では`Jolt`が既定である（`/setup-engine`の`references/5.5-project-yaml.md`の表）。
+
+### 取り込む側の作業
+
+なし。
+
 ## 0.23.16（2026-10-24）
 
 ### 変更
