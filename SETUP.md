@@ -6,7 +6,7 @@ game-templateから作った作品で、開発を始めるまでの手順であ�
 
 この文書を含むこの層の日本語の文書と、CCGSから取り込んだ英語の文書（`docs/WORKFLOW-GUIDE.md`・`UPGRADING.md`など）が食い違うときは、日本語の文書に従う。CCGSの文書の食い違う箇所には、`game-template (…)`で始まる注記を付けて、日本語の文書を指している。
 
-作品を起こす手順と開発環境の手順では、確定したTDR・PDR・ADRの「影響」などに書いた手順と食い違うときも、この文書に従う。確定した記録は本文を後から直さないので、書いた時点の手順が残っていることがある。たとえば[TDR-0002](docs/51-tdr/tdr-0002-gdscript.md)の「影響」は、`/setup-engine`を回し直し、gdUnit4を`/test-setup`で入れると書いているが、下の「3. 作品を作った人が1回だけすること」に従う。
+作品を起こす手順と開発環境の手順では、確定したTDR・PDR・ADRの「影響」などに書いた手順と食い違うときも、この文書に従う。確定した記録は本文を後から直さないので、書いた時点の手順が残っていることがある。たとえば[TDR-0002](docs/51-tdr/tdr-0002-gdscript.md)の「影響」は、`/setup-engine`を回し直してgdUnit4を`/test-setup`で入れると書いているが、下の「3. 作品を作った人が1回だけすること」に従う。
 
 ## 1. 前提ツール
 
@@ -70,13 +70,15 @@ git lfs unlock <パス>
 
 作品のリポジトリは、GitHubの"Use this template"で作る。[META-08](docs/00-meta/template-upgrade.md)の初回の手順は、"Use this template"で作ったリポジトリを前提にしている。`git clone`で作ると、`origin`がこのテンプレートを指したまま残る。CCGSの案内の`docs/WORKFLOW-GUIDE.md`は`git clone`を勧めているが、作品を起こすときはこの節に従う。
 
-作ったあとは、上の「2. 参加した人がすること」の1〜3を行い、Claude Codeをリポジトリの根で起動してから、次の順に進める。各手順の中身は、リンク先にある。この節の「PR」は、1人でmainへ直接pushする作品（[META-05](docs/00-meta/dev-flow.md)の「5. PRを出すか、mainへ直接出すか」）では、その変更だけを入れたコミットに読み替える。
+作ったあとは、上の「2. 参加した人がすること」の1〜3を行ってClaude Codeをリポジトリの根で起動し、次の順に進める。各手順の中身は、リンク先にある。この節の「PR」は、1人でmainへ直接pushする作品（[META-05](docs/00-meta/dev-flow.md)の「5. PRを出すか、mainへ直接出すか」）では、その変更だけを入れたコミットに読み替える。
 
 1. テンプレートと繋ぐ。[META-08](docs/00-meta/template-upgrade.md)の「1. 最初に一度だけ」を行う。upstreamのURLとラベルの作り方は、この層の値に置き換える（根の`README.md`の「テンプレートの更新を取り込む」の表）。"Use this template"で作った直後は、共通ファイルがテンプレートと同じなので、META-08の手順1（共通ファイルの上書き）は要らない。手順2から行う。手順3の`make update UPDATE_ARGS=--allow-unrelated-histories`で競合が出たら、作ってから繋ぐまでのあいだにテンプレートが更新されている。作品はまだそのファイルを書き換えていないので、競合したファイルはテンプレートの側を取る。Git Bashで`git diff --name-only --diff-filter=U | xargs git checkout --theirs --`を回し（PowerShellには`xargs`が無い）、`git add -A`のあと`git commit --no-edit`でマージを終える。
 2. サンプルノードを消し、表紙を書き換える。根の`README.md`の下の段にある「自分のプロジェクトに合わせる」に従い、`python -m tools.graph reset-samples --yes`もここで回す。`README.md`を作品の説明に書き換えるときも、この文書へのリンクは残す。そのあと`make all`を回す。`check`が参照切れ（`G004`）を挙げたら、それを直してから回し直す。
 3. 最初のセッションで`/start`を回す。`/start`は`project.yaml`を書き換えることがあり、`project.yaml`は`merge=ours`ではない。1の取り込みより前に回すと、取り込みで`project.yaml`が競合するおそれがあるので、ここで回す。`/start`が`project.yaml`に保存するかを聞いたら、「Save them」を選ぶ。`project.yaml`はテンプレートの管理者が持つファイルで、作品を作った人はその管理者だからである（下の段落）。書き換わった`project.yaml`と`production/stage.txt`は、その変更だけのPRにする。
 4. GdUnit4を入れ、`addons/gdUnit4/`だけのPRを出す（下の「4. Godotのテスト」）。
-5. `project.godot`を作る。`/setup-engine`は回さず、その7.5（[7.5-scaffold.md](.claude/skills/setup-engine/references/7.5-scaffold.md)）の手順だけを行う。7.5が使う`project.yaml`の`engine.rendering`は、先に`/settings`で決める。値は`Compatibility`・`Forward+`・`Mobile`のどれかで、`/settings engine.rendering=Forward+`のように書く。Webに書き出す作品では`Compatibility`、それ以外では`Forward+`が既定である（[5.5-project-yaml.md](.claude/skills/setup-engine/references/5.5-project-yaml.md)の表）。7.5は、この値から`project.godot`の描画の設定を書く。同じときに、`engine.physics`も`/settings`で決める。2Dの作品では`Godot Physics 2D`、3Dの作品では`Jolt`が既定である（同じ表）。値に空白があるときは、`/settings "engine.physics=Godot Physics 2D"`のように引用符で囲む。7.5は`engine.physics`を使わないが、`[TO BE CONFIGURED]`のまま残さないために、ここで決める。
+5. `project.godot`を作る。`/setup-engine`は回さず、その7.5（[7.5-scaffold.md](.claude/skills/setup-engine/references/7.5-scaffold.md)）の手順だけを行う。7.5が使う`project.yaml`の`engine.rendering`は、先に`/settings`で決める。値は`Compatibility`・`Forward+`・`Mobile`のどれかで、`/settings engine.rendering=Forward+`のように書く。Webに書き出す作品では`Compatibility`、それ以外では`Forward+`が既定である（[5.5-project-yaml.md](.claude/skills/setup-engine/references/5.5-project-yaml.md)の表）。7.5は、この値から`project.godot`の描画の設定を書く。
+
+   同じときに、`engine.physics`も`/settings`で決める。2Dの作品では`Godot Physics 2D`、3Dの作品では`Jolt`が既定である（同じ表）。値に空白があるときは、`/settings "engine.physics=Godot Physics 2D"`のように引用符で囲む。7.5は`engine.physics`を使わないが、`[TO BE CONFIGURED]`のまま残さないために、ここで決める。
 6. 5のPRで、`EvidenceCapture`のautoloadの登録（[ADR-0001](docs/52-adr/adr-0001-evidence-capture-autoload.md)）と、GdUnit4のプラグインの有効化も行う。autoloadを`project.godot`の`[autoload]`の節に書く例は、[run-and-observe.md](.claude/docs/run-and-observe.md)の「Godot 4 — the capture autoload」にある。
 7. `godot --headless --import`を1度回し、`make ci`が通ることを確かめる。
 
@@ -102,7 +104,7 @@ git lfs unlock <パス>
 
 エディタのAsset Storeから入れる手順は、[3-directories.md](.claude/skills/test-setup/references/3-directories.md)の「Installing GdUnit4」にある。ただしAsset Storeは`project.godot`のある状態で開くので、上の順番では使えない。
 
-作品を作った人は、「3. 作品を作った人が1回だけすること」の7のあとに、`docs/WORKFLOW-GUIDE.md`の「Step 3.6: Test Framework」で`/test-setup`を回してよい。`/test-setup`はGdUnit4を入れないので、手で置いた`addons/gdUnit4/`はそのまま残る。作るのは、`tests/README.md`や`tests/smoke/critical-paths.md`など、まだ無いファイルだけで、すでにあるファイルは書き換えない。`.github/workflows/tests.yml`も作らない（[TDR-0004](docs/51-tdr/tdr-0004-godot-ci.md)）。例のテストは作らないので、Phase 3の関門が求める例のテストは、自分で`tests/unit/<system>/`に書く。
+作品を作った人は、「3. 作品を作った人が1回だけすること」の7のあとに、`docs/WORKFLOW-GUIDE.md`の「Step 3.6: Test Framework」で`/test-setup`を回してよい。`/test-setup`はGdUnit4を入れないので、手で置いた`addons/gdUnit4/`はそのまま残る。作るのは`tests/README.md`や`tests/smoke/critical-paths.md`などのまだ無いファイルだけで、すでにあるファイルは書き換えない。`.github/workflows/tests.yml`も作らない（[TDR-0004](docs/51-tdr/tdr-0004-godot-ci.md)）。例のテストも作らないので、Phase 3の関門が求める例のテストは自分で`tests/unit/<system>/`に書く。
 
 手元では、次のどちらかで回す。
 
@@ -113,6 +115,6 @@ git lfs unlock <パス>
 
 `make ci PR=<番号>`のように番号を渡すと、PRのときにしか走らない検査も回す。`project.godot`が無いあいだは、`make ci`はGodotの段を飛ばす。
 
-Windowsでは、`make ci`をGit Bashで回す。Godotの段は`bash`を呼ぶので、PowerShellで回すと、Git for Windowsの`bin`をPATHに足していない限り、`bashがPATHに無いので、Godotの段を回せない`と出て失敗する。`project.godot`が無いあいだは、Godotの段を飛ばすので、PowerShellでも通る。全部の段が通ると、最後の行に`local_ci: すべて通った`と出る。途中の段が落ちると、`local_ci: 失敗した（終了コード…）`などと出て、終了コードが0でなくなる。
+Windowsでは、`make ci`をGit Bashで回す。Godotの段は`bash`を呼ぶ。そのため、Git for Windowsの`bin`をPATHに足していない限り、PowerShellで回すと`bashがPATHに無いので、Godotの段を回せない`と出て失敗する。`project.godot`が無いあいだはGodotの段を飛ばすので、PowerShellでも通る。全部の段が通ると、最後の行に`local_ci: すべて通った`と出る。途中の段が落ちると、`local_ci: 失敗した（終了コード…）`などと出て、終了コードが0でなくなる。
 
 自分のテストは、`tests/unit/<system>/`に置く（統合のテストは`tests/integration/<system>/`）。`tests/unit/qa/`はこの層の共通ファイルなので、そこには足さない（[PDR-0016](docs/50-pdr/pdr-0016-tests-unit-qa-common-file.md)）。テストの名前の付け方は、[test-standards.md](.claude/rules/test-standards.md)にある。
