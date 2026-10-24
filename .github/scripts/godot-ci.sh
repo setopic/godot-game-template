@@ -71,7 +71,7 @@ checked() {
     echo "::error title=app-check::終了コードが${code}だった: $*" >&2
     return 1
   fi
-  # Godotは、エラーがあっても終了コードを0にすることがある（setopic/game-template#5）。
+  # Godotは、エラーがあっても終了コードを0にすることがある（setopic/godot-game-template#5）。
   if grep -E -q "$ERROR_PATTERN" "$log"; then
     echo "::error title=app-check::終了コードは0だが、ログにERRORの行がある: $*" >&2
     grep -E -n "$ERROR_PATTERN" "$log" >&2

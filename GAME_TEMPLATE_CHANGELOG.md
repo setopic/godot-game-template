@@ -1,4 +1,4 @@
-# game-templateの変更履歴
+# godot-game-templateの変更履歴
 
 この層だけの履歴である。下の層の履歴は、[TEMPLATE_CHANGELOG.md](TEMPLATE_CHANGELOG.md)（`graph-doc-template`）と[PROJECT_TEMPLATE_CHANGELOG.md](PROJECT_TEMPLATE_CHANGELOG.md)（`graph-project-template`）にある。そのプロジェクト自身の履歴は、[PROJECT_CHANGELOG.md](PROJECT_CHANGELOG.md)に書く。
 
@@ -16,6 +16,35 @@
 | `.gitignore` | 末尾に、この層のGodotの節（0.11.0）とCCGSの節（0.16.0）を足した | 競合した部分だけを解き、この層の節と上流の行の両方を残す |
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`と`PROJECT_CHANGELOG.md`の雛形（0.22.7）もこの層で書き足している。どちらも`merge=ours`なので、この層と上流の両方が変えたときはこの層の側が残り、競合しない。そのときは上流の変更が入らないので、上流の変更履歴の「取り込む側の作業」を見て手で合わせる。
+
+## 0.23.25（2026-10-24）
+
+### 変更
+
+リポジトリを`setopic/game-template`から`setopic/godot-game-template`に改名するので、リポジトリの中の名前を新しい名前に合わせた。GitHubでの改名は、この版のあとに行う。
+
+- 層の宣言（`tools/graph/layers/game-template.toml`）の`repository`を、新しいURLにした。
+- `.claude/hooks/update-check.sh`は、`origin`が層の宣言の`repository`と同じときに、テンプレート本体として扱う。改名の前にcloneした手元は古いURLのままのことがあるので、`setopic/game-template`もテンプレート本体として扱うようにした。
+- 根の`README.md`の題と、upstreamのURL・`gh label clone`の取り込み元・CCGSの更新の行、`SETUP.md`の冒頭、UC-02、`app-check.yml`のコメント、コードのコメントのissueの参照を、新しい名前にした。`README.md`には、以前の名前と、層の名前は`game-template`のままであることを書いた。
+- 層の名前（層の宣言の`name`とファイル名）、`GAME_TEMPLATE_CHANGELOG.md`のファイル名、CCGSのファイルに付けた`game-template (…)`の注記、`.gitattributes`・`.gitignore`の層の節の見出し、`PROJECT_CHANGELOG.md`と`docs/00-meta/dev-flow.md`の層の表は、層の名前を指すので変えていない。確定した記録と取り下げた記録の本文、変更履歴の過去の項、下の層から取り込んだ共通ファイルも変えていない。
+
+この版で直したCCGSのファイル（`update-check.sh`）は、UC-02の手順3で、CCGSの更新のときに「手で合わせる」に出る。
+
+### 取り込む側の作業
+
+GitHubは古いURLを新しいURLへ転送するので、作品の取り込みはこのままでも動く。転送に頼らないように、作品の手元で、取り込み元を新しいURLにする。
+
+```bash
+git remote set-url template https://github.com/setopic/godot-game-template.git
+```
+
+テンプレート本体をcloneしている手元では、`origin`を新しいURLにする。
+
+```bash
+git remote set-url origin https://github.com/setopic/godot-game-template.git
+```
+
+作品の`README.md`が古いURLを書いていれば、新しいURLに書き換える。`README.md`は`merge=ours`なので、作品が書き換えていれば、この版の直しは届かない。
 
 ## 0.23.24（2026-10-24）
 

@@ -30,7 +30,7 @@ var _busy := false
 
 
 func _ready() -> void:
-	# 書き出したゲームでは動かさない（setopic/game-template#6の受け入れ条件）。
+	# 書き出したゲームでは動かさない（setopic/godot-game-template#6の受け入れ条件）。
 	# 書き出しの雛形には"editor"の機能が無い。
 	if not OS.has_feature("editor"):
 		queue_free()

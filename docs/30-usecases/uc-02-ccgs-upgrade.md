@@ -15,10 +15,10 @@ related: []
 
 | 項目 | 内容 |
 | --- | --- |
-| 実行者 | game-templateを保守する人 |
+| 実行者 | godot-game-templateを保守する人 |
 | きっかけ | CCGS（Claude-Code-Game-Studios）が新しい版を出したとき。セッションの開始のときに、CCGSの`update-check.sh`が新しい版を知らせる |
-| 完了したときに得られる状態 | CCGSの新しい版の変更が、game-templateに入っている。graph側のファイルと、この層でCCGSのファイルを直した箇所は残っている |
-| 影響 | 作業はブランチで行うので、mainは止まらない。作品へは、game-templateをマージした後に`make update`で届く |
+| 完了したときに得られる状態 | CCGSの新しい版の変更が、godot-game-templateに入っている。graph側のファイルと、この層でCCGSのファイルを直した箇所は残っている |
+| 影響 | 作業はブランチで行うので、mainは止まらない。作品へは、godot-game-templateをマージした後に`make update`で届く |
 
 CCGSは、[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)のとおり丸ごと取り込み、更新は中身を読んで取り入れる。この層で直したCCGSのファイルの一覧は、手で持たない。いまの版のCCGSと手元を`git diff`で比べて見分ける。履歴が共通でないので、`git merge`は使わない。
 

@@ -72,14 +72,18 @@ _update_check_newer() {
 # and this layer's edits, so it stays off there. It stays on in game-template
 # itself, where it starts UC-02. The layer declaration's `repository` matches
 # `origin` only in game-template itself; a game without an origin yet counts
-# as a game. 0 for a game made from game-template.
+# as a game. 0 for a game made from game-template. The repository was renamed
+# from setopic/game-template to setopic/godot-game-template, and a clone made
+# before the rename may keep the old URL, so the old name counts as
+# game-template itself too.
 _update_check_game_project() {
-  local decl="$1/tools/graph/layers/game-template.toml" repo origin
+  local decl="$1/tools/graph/layers/game-template.toml" repo origin slug
   [ -f "$decl" ] || return 1
   repo=$(sed -n 's/^repository[[:space:]]*=[[:space:]]*"\([^"]*\)".*/\1/p' "$decl" 2>/dev/null)
   [ -n "$repo" ] || return 1
   origin=$(git -C "$1" remote get-url origin 2>/dev/null)
-  [ "$(_update_check_slug "$origin")" != "$(_update_check_slug "$repo")" ]
+  slug=$(_update_check_slug "$origin")
+  [ "$slug" != "$(_update_check_slug "$repo")" ] && [ "$slug" != "setopic/game-template" ]
 }
 
 # owner/repo of a GitHub URL, https or ssh, with or without .git.
