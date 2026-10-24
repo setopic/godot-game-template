@@ -1,8 +1,10 @@
-# game-template
+# godot-game-template
 
 Godot 4.7.2とGDScriptでゲームを作るためのプロジェクトテンプレートである。
 
 [graph-project-template](https://github.com/setopic/graph-project-template)の上に重ねた3段目の層である。設計文書をグラフで検証する仕組みと、文書と実装を同じリポジトリで扱う仕組みは、下の層から流れてくる（下の`---`より後ろの説明）。ゲーム開発のエージェントとスキルは、[CCGS](https://github.com/Donchitos/Claude-Code-Game-Studios)（Claude-Code-Game-Studios、MITライセンス）の1.2.0を丸ごと取り込んでいる（[PDR-0006](docs/50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)）。CCGSのライセンスの表示は[LICENSE-CCGS](LICENSE-CCGS)にある。
+
+このリポジトリは、以前は`setopic/game-template`という名前だった。層の名前は、改名の前と同じ`game-template`のままである。層の宣言の`tools/graph/layers/game-template.toml`と変更履歴の`GAME_TEMPLATE_CHANGELOG.md`のファイル名、CCGSのファイルに付けた`game-template (…)`の注記は、この層の名前を指している。
 
 ## この層が足しているもの
 
@@ -36,9 +38,9 @@ Claude Codeは、リポジトリの根で起動する。CCGSのフックと、�
 | 場面 | この層で足すもの |
 | --- | --- |
 | 初回に上書きする共通ファイル | META-08とgraph-project-templateの一覧に加えて、下の表の共通ファイルを上書きする。この層の版を持つ`tools/graph/layers/game-template.toml`は、`tools/`に含まれる |
-| upstreamのURL | `git remote add template https://github.com/setopic/game-template.git`にする。graph-project-templateを指すと、この層を取り込めない |
-| ラベルを作る | `gh label clone setopic/game-template`を使う |
-| CCGSの更新 | 作品は、CCGSから直接取り込まない。game-templateがCCGSの更新を取り入れたあと（[UC-02](docs/30-usecases/uc-02-ccgs-upgrade.md)）、`make update`で届く |
+| upstreamのURL | `git remote add template https://github.com/setopic/godot-game-template.git`にする。graph-project-templateを指すと、この層を取り込めない |
+| ラベルを作る | `gh label clone setopic/godot-game-template`を使う |
+| CCGSの更新 | 作品は、CCGSから直接取り込まない。godot-game-templateがCCGSの更新を取り入れたあと（[UC-02](docs/30-usecases/uc-02-ccgs-upgrade.md)）、`make update`で届く |
 
 この層の共通ファイルと、作品のものは次のとおりである。分け方の理由は、[PDR-0016](docs/50-pdr/pdr-0016-tests-unit-qa-common-file.md)にある。
 
