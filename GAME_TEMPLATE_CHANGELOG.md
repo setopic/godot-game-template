@@ -17,6 +17,16 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`と`PROJECT_CHANGELOG.md`の雛形（0.22.7）もこの層で書き足している。どちらも`merge=ours`なので、この層と上流の両方が変えたときはこの層の側が残り、競合しない。そのときは上流の変更が入らないので、上流の変更履歴の「取り込む側の作業」を見て手で合わせる。
 
+## 0.23.28（2026-10-28）
+
+### 変更
+
+下の層の最新（`graph-doc-template`の1.58.0、`graph-project-template`の0.16.7）を取り込んだ。上流の1.57.3が、線の多いSVGの図で`decides`の線と名前が重なるのを直したので、`make readme`で`docs/graph.svg`を作り直した。この層のノードと文書は変えていない。
+
+### 取り込む側の作業
+
+`make update`で取り込んだら、`make readme`を回し、`README.md`と`docs/graph.svg`をコミットする。回すまで、CIの`readme-check`が落ちる。
+
 ## 0.23.27（2026-10-28）
 
 ### 変更
