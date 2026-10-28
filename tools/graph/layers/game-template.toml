@@ -1,7 +1,7 @@
 name = "game-template"
 label = "game"
 below = "graph-project-template"
-version = "0.23.28"
+version = "0.23.29"
 changelog = "GAME_TEMPLATE_CHANGELOG.md"
 repository = "https://github.com/setopic/godot-game-template.git"
 versioned_title = true
