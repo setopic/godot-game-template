@@ -1,0 +1,374 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 985 1364" width="985" height="1364" class="graph" role="img" aria-label="設計文書のグラフ">
+<title>設計文書のグラフ</title>
+<style><![CDATA[
+/* graph-doc-templateの既定のテーマ（render --format svg）。
+   自分のテーマにするときは、このファイルを写して書き換え、graph.tomlの[render]のthemeで指す。
+   renderは配置とクラス名だけを出す。色・フォント・線の太さ・動きの見た目は、ここで決める。 */
+
+.graph {
+  --bg: #ffffff;
+  --lane: #f7f7f5;
+  --muted: #77756f;
+  --ink: #2b2a27;
+  --edge: #6f6d67;
+  --flow: #c8743a;
+  font-family: "Hiragino Sans", "Yu Gothic UI", "Meiryo", "Noto Sans JP", sans-serif;
+}
+
+.bg { fill: var(--bg); }
+.lane-bg { fill: var(--lane); rx: 10px; }
+.lane-label, .band-label { fill: var(--muted); font-size: 13px; font-weight: 600; }
+
+/* 箱。層の種別ごとに色と枠を分ける */
+.box { fill: #f3f3f1; stroke: #8a8a84; stroke-width: 1.6px; rx: 9px; }
+.t-contract .box { fill: #fdf2e9; stroke: #c8743a; }
+.t-usecase .box { fill: #eaf4ec; stroke: #3f8a52; }
+.t-domain .box { fill: #e9f0fb; stroke: #3b6db3; }
+.t-architecture .box { fill: #f1ecf9; stroke: #7652b0; }
+.t-adr .box { fill: #fbf6df; stroke: #a8891c; }
+.t-meta .box, .t-index .box { fill: #f3f3f1; stroke: #8a8a84; }
+.group .box { stroke-width: 2.4px; }
+.node-id { fill: var(--ink); font-size: 12px; font-weight: 700; }
+.node-title { fill: var(--ink); font-size: 12.5px; }
+
+/* status */
+.s-draft .box { stroke-dasharray: 5 3; }
+.s-deprecated { opacity: 0.5; }
+.focus .box { stroke-width: 3.2px; }
+
+/* 線 */
+.edge { fill: none; stroke: var(--edge); stroke-width: 1.6px; }
+.edge.k-related, .edge.k-decides, .edge.k-mentions { stroke-dasharray: 5 4; }
+.edge.k-supersedes { stroke-width: 2.6px; }
+.arrow-head { fill: var(--edge); }
+.edge-label {
+  fill: var(--muted);
+  font-size: 10.5px;
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 3px;
+}
+/* depends_onとrelatedは数が多いので、名前を書かない。まとめた線の本数は書く */
+.edge-label.k-depends_on:not(.counted), .edge-label.k-related:not(.counted) { display: none; }
+
+/* 動き。点の色と、行き着いた先の箱の光り方 */
+.flow-dot { fill: var(--flow); }
+.glow { fill: none; stroke: var(--flow); stroke-width: 3px; stroke-opacity: 0.55; rx: 11px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .flow { display: none; }
+}
+
+@media (prefers-color-scheme: dark) {
+  .graph {
+    --bg: #1c1c1a;
+    --lane: #262624;
+    --muted: #a9a79f;
+    --ink: #ecebe6;
+    --edge: #a9a79f;
+    --flow: #e8955a;
+  }
+  .box { fill: #2c2c2a; stroke: #8a8a84; }
+  .t-contract .box { fill: #3a2a1e; stroke: #e0905a; }
+  .t-usecase .box { fill: #1f3324; stroke: #6cbf80; }
+  .t-domain .box { fill: #1d2a3d; stroke: #6f9ee0; }
+  .t-architecture .box { fill: #2b2340; stroke: #a688db; }
+  .t-adr .box { fill: #36301a; stroke: #d2b44a; }
+  .t-meta .box, .t-index .box { fill: #2c2c2a; stroke: #8a8a84; }
+}
+]]></style>
+<defs>
+<marker id="arrow-depends_on" class="arrow k-depends_on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrow-head k-depends_on" d="M0,0 L10,5 L0,10 z"/></marker>
+<marker id="arrow-refines" class="arrow k-refines" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrow-head k-refines" d="M0,0 L10,5 L0,10 z"/></marker>
+<marker id="arrow-supersedes" class="arrow k-supersedes" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrow-head k-supersedes" d="M0,0 L10,5 L0,10 z"/></marker>
+</defs>
+<rect class="bg" width="985" height="1364"/>
+<g class="lanes">
+<g class="lane t-contract"><rect class="lane-bg" x="48" y="884" width="190" height="218"/><text class="lane-label" x="60" y="906">40 契約</text></g>
+<g class="lane t-usecase"><rect class="lane-bg" x="302" y="884" width="182" height="218"/><text class="lane-label" x="314" y="906">30 ユースケース</text></g>
+<g class="lane t-domain"><rect class="lane-bg" x="548" y="884" width="148" height="218"/><text class="lane-label" x="560" y="906">20 ドメイン</text></g>
+<g class="lane t-architecture"><rect class="lane-bg" x="760" y="884" width="177" height="218"/><text class="lane-label" x="772" y="906">10 アーキテクチャ</text></g>
+<g class="band t-adr"><text class="band-label" x="20" y="34">ゲームの中の構成の決定</text></g>
+<g class="band t-tdr"><text class="band-label" x="20" y="213">ゲームの外の技術の決定</text></g>
+<g class="band t-pdr"><text class="band-label" x="20" y="375">開発の進め方の決定</text></g>
+<g class="band t-meta"><text class="band-label" x="20" y="1152">メタ / 規約</text></g>
+</g>
+<g class="edges">
+<path id="e0" class="edge k-depends_on" d="M172.9,122 L259.7,220" marker-end="url(#arrow-depends_on)" data-src="ADR-0001" data-dst="TDR-0001"/>
+<path id="e1" class="edge k-depends_on" d="M128.1,122 L106.5,220" marker-end="url(#arrow-depends_on)" data-src="ADR-0001" data-dst="TDR-0002"/>
+<path id="e2" class="edge k-depends_on" d="M223.6,122 L433.1,220" marker-end="url(#arrow-depends_on)" data-src="ADR-0001" data-dst="TDR-0003"/>
+<path id="e3" class="edge k-refines" d="M848.5,995 L848.5,979" marker-end="url(#arrow-refines)" data-src="ARCH-02" data-dst="ARCH-01"/>
+<path id="e4" class="edge k-depends_on" d="M227,941 C270,941 270,947 313,947" marker-end="url(#arrow-depends_on)" data-src="CON-01" data-dst="UC-01"/>
+<path id="e5" class="edge k-depends_on" d="M227,953 C264.5,953 264.5,1003 302,1003 L484,1003 C521.5,1003 521.5,953 559,953" marker-end="url(#arrow-depends_on)" data-src="CON-01" data-dst="DOM-01"/>
+<path id="e6" class="edge k-depends_on" d="M685,947 C728,947 728,947 771,947" marker-end="url(#arrow-depends_on)" data-src="DOM-01" data-dst="ARCH-01"/>
+<path id="e7" class="edge k-related undirected" d="M512,1191 L528,1191" data-src="META-01" data-dst="META-02"/>
+<path id="e8" class="edge k-related undirected" d="M461,1223 Q599,1276.1 737,1223" data-src="META-01" data-dst="META-03"/>
+<path id="e9" class="edge k-related undirected" d="M443,1223 Q269,1284.8 95,1223" data-src="META-01" data-dst="META-07"/>
+<path id="e10" class="edge k-related undirected" d="M386,1191 L370,1191" data-src="META-01" data-dst="META-08"/>
+<path id="e11" class="edge k-related undirected" d="M159,1271 L143,1271" data-src="META-04" data-dst="META-05"/>
+<path id="e12" class="edge k-related undirected" d="M389,1271 L405,1271" data-src="META-04" data-dst="META-06"/>
+<path id="e13" class="edge k-related undirected" d="M149,1191 L165,1191" data-src="META-07" data-dst="META-08"/>
+<path id="e14" class="edge k-related undirected" d="M562.9,382 L355.7,284" data-src="PDR-0002" data-dst="TDR-0001"/>
+<path id="e15" class="edge k-related undirected" d="M526,422.5 L510,422.5" data-src="PDR-0002" data-dst="PDR-0003"/>
+<path id="e16" class="edge k-related undirected" d="M526,445.8 L259,496.5" data-src="PDR-0002" data-dst="PDR-0004"/>
+<path id="e17" class="edge k-related undirected" d="M275,422.5 L259,422.5" data-src="PDR-0003" data-dst="PDR-0005"/>
+<path id="e18" class="edge k-supersedes" d="M647.3,479 L647.7,463" marker-end="url(#arrow-supersedes)" data-src="PDR-0006" data-dst="PDR-0002"/>
+<path id="e19" class="edge k-supersedes" d="M634.5,479 Q392.2,403 150,479" marker-end="url(#arrow-supersedes)" data-src="PDR-0006" data-dst="PDR-0004"/>
+<path id="e20" class="edge k-depends_on" d="M513,519.5 L529,519.5" marker-end="url(#arrow-depends_on)" data-src="PDR-0007" data-dst="PDR-0006"/>
+<path id="e21" class="edge k-depends_on" d="M257,593.7 L529,541.9" marker-end="url(#arrow-depends_on)" data-src="PDR-0008" data-dst="PDR-0006"/>
+<path id="e22" class="edge k-depends_on" d="M497.4,576 L539.6,560" marker-end="url(#arrow-depends_on)" data-src="PDR-0011" data-dst="PDR-0006"/>
+<path id="e23" class="edge k-depends_on" d="M259,810.5 L275,810.5" marker-end="url(#arrow-depends_on)" data-src="PDR-0012" data-dst="PDR-0009"/>
+<path id="e24" class="edge k-depends_on" d="M526,736.6 L259,787.4" marker-end="url(#arrow-depends_on)" data-src="PDR-0013" data-dst="PDR-0012"/>
+<path id="e25" class="edge k-depends_on" d="M645.6,576 L645.9,560" marker-end="url(#arrow-depends_on)" data-src="PDR-0014" data-dst="PDR-0006"/>
+<path id="e26" class="edge k-depends_on" d="M268,713.5 L252,713.5" marker-end="url(#arrow-depends_on)" data-src="PDR-0015" data-dst="PDR-0016"/>
+<path id="e27" class="edge k-depends_on" d="M241.4,673 L539.6,560" marker-end="url(#arrow-depends_on)" data-src="PDR-0016" data-dst="PDR-0006"/>
+<path id="e28" class="edge k-supersedes" d="M252,691.2 L524,639.5" marker-end="url(#arrow-supersedes)" data-src="PDR-0016" data-dst="PDR-0014"/>
+<path id="e29" class="edge k-depends_on" d="M394,252 L378,252" marker-end="url(#arrow-depends_on)" data-src="TDR-0003" data-dst="TDR-0001"/>
+<path id="e30" class="edge k-depends_on" d="M734,220 Q517,147.9 300,220" marker-end="url(#arrow-depends_on)" data-src="TDR-0004" data-dst="TDR-0001"/>
+<path id="e31" class="edge k-depends_on" d="M625,252 L609,252" marker-end="url(#arrow-depends_on)" data-src="TDR-0004" data-dst="TDR-0003"/>
+<path id="e32" class="edge k-depends_on" d="M473,947 C516,947 516,941 559,941" marker-end="url(#arrow-depends_on)" data-src="UC-01" data-dst="DOM-01"/>
+<path id="e33" class="edge k-depends_on" d="M473,1076.4 L506,1076.4 Q516,1076.4 516,1066.4 L516,876 Q516,866 526,866 L636.5,866 Q646.5,866 646.5,856 L646.5,560" marker-end="url(#arrow-depends_on)" data-src="UC-02" data-dst="PDR-0006"/>
+</g>
+<g class="edge-labels">
+<text class="edge-label k-depends_on" x="216.3" y="167" text-anchor="middle">depends_on</text>
+<text class="edge-label k-depends_on" x="117.3" y="167" text-anchor="middle">depends_on</text>
+<text class="edge-label k-depends_on" x="328.3" y="167" text-anchor="middle">depends_on</text>
+<text class="edge-label k-refines" x="856.5" y="991" text-anchor="start">refines</text>
+<text class="edge-label k-depends_on" x="270" y="940" text-anchor="middle">depends_on</text>
+<text class="edge-label k-depends_on" x="393" y="999" text-anchor="middle">depends_on</text>
+<text class="edge-label k-depends_on" x="728" y="943" text-anchor="middle">depends_on</text>
+<text class="edge-label k-related" x="520" y="1187" text-anchor="middle">related</text>
+<text class="edge-label k-related" x="599" y="1249.6" text-anchor="middle">related</text>
+<text class="edge-label k-related" x="269" y="1253.9" text-anchor="middle">related</text>
+<text class="edge-label k-related" x="378" y="1187" text-anchor="middle">related</text>
+<text class="edge-label k-related" x="151" y="1267" text-anchor="middle">related</text>
+<text class="edge-label k-related" x="397" y="1267" text-anchor="middle">related</text>
+<text class="edge-label k-related" x="157" y="1187" text-anchor="middle">related</text>
+<text class="edge-label k-related" x="459.3" y="329" text-anchor="middle">related</text>
+<text class="edge-label k-related" x="518" y="418.5" text-anchor="middle">related</text>
+<text class="edge-label k-related" x="392.5" y="467.1" text-anchor="middle">related</text>
+<text class="edge-label k-related" x="267" y="418.5" text-anchor="middle">related</text>
+<text class="edge-label k-supersedes" x="647.5" y="467" text-anchor="middle">supersedes</text>
+<text class="edge-label k-supersedes" x="392.2" y="433" text-anchor="middle">supersedes</text>
+<text class="edge-label k-depends_on" x="521" y="515.5" text-anchor="middle">depends_on</text>
+<text class="edge-label k-depends_on" x="393" y="563.8" text-anchor="middle">depends_on</text>
+<text class="edge-label k-depends_on" x="518.5" y="564" text-anchor="middle">depends_on</text>
+<text class="edge-label k-depends_on" x="267" y="806.5" text-anchor="middle">depends_on</text>
+<text class="edge-label k-depends_on" x="392.5" y="758" text-anchor="middle">depends_on</text>
+<text class="edge-label k-depends_on" x="645.8" y="564" text-anchor="middle">depends_on</text>
+<text class="edge-label k-depends_on" x="260" y="709.5" text-anchor="middle">depends_on</text>
+<text class="edge-label k-depends_on" x="390.5" y="612.5" text-anchor="middle">depends_on</text>
+<text class="edge-label k-supersedes" x="388" y="661.3" text-anchor="middle">supersedes</text>
+<text class="edge-label k-depends_on" x="386" y="248" text-anchor="middle">depends_on</text>
+<text class="edge-label k-depends_on" x="517" y="176" text-anchor="middle">depends_on</text>
+<text class="edge-label k-depends_on" x="617" y="248" text-anchor="middle">depends_on</text>
+<text class="edge-label k-depends_on" x="516" y="940" text-anchor="middle">depends_on</text>
+<text class="edge-label k-depends_on" x="581.2" y="862" text-anchor="middle">depends_on</text>
+</g>
+<g class="flow">
+<circle class="flow-dot k-depends_on" r="4" opacity="0"><animateMotion dur="6s" begin="0s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.7;1" calcMode="spline" keySplines="0.45 0 0.25 1;0 0 1 1"><mpath href="#e0"/></animateMotion><animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.08;0.64;0.7;1" dur="6s" begin="0s" repeatCount="indefinite"/></circle>
+<circle class="flow-dot k-depends_on" r="4" opacity="0"><animateMotion dur="6s" begin="-0.42s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.7;1" calcMode="spline" keySplines="0.45 0 0.25 1;0 0 1 1"><mpath href="#e1"/></animateMotion><animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.08;0.64;0.7;1" dur="6s" begin="-0.42s" repeatCount="indefinite"/></circle>
+<circle class="flow-dot k-depends_on" r="4" opacity="0"><animateMotion dur="6s" begin="-0.84s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.7;1" calcMode="spline" keySplines="0.45 0 0.25 1;0 0 1 1"><mpath href="#e2"/></animateMotion><animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.08;0.64;0.7;1" dur="6s" begin="-0.84s" repeatCount="indefinite"/></circle>
+<circle class="flow-dot k-depends_on" r="4" opacity="0"><animateMotion dur="6s" begin="-1.26s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.7;1" calcMode="spline" keySplines="0.45 0 0.25 1;0 0 1 1"><mpath href="#e4"/></animateMotion><animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.08;0.64;0.7;1" dur="6s" begin="-1.26s" repeatCount="indefinite"/></circle>
+<circle class="flow-dot k-depends_on" r="4" opacity="0"><animateMotion dur="6s" begin="0s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.7;1" calcMode="spline" keySplines="0.45 0 0.25 1;0 0 1 1"><mpath href="#e5"/></animateMotion><animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.08;0.64;0.7;1" dur="6s" begin="0s" repeatCount="indefinite"/></circle>
+<circle class="flow-dot k-depends_on" r="4" opacity="0"><animateMotion dur="6s" begin="-1.5s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.7;1" calcMode="spline" keySplines="0.45 0 0.25 1;0 0 1 1"><mpath href="#e6"/></animateMotion><animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.08;0.64;0.7;1" dur="6s" begin="-1.5s" repeatCount="indefinite"/></circle>
+<circle class="flow-dot k-depends_on" r="4" opacity="0"><animateMotion dur="6s" begin="-0.42s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.7;1" calcMode="spline" keySplines="0.45 0 0.25 1;0 0 1 1"><mpath href="#e20"/></animateMotion><animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.08;0.64;0.7;1" dur="6s" begin="-0.42s" repeatCount="indefinite"/></circle>
+<circle class="flow-dot k-depends_on" r="4" opacity="0"><animateMotion dur="6s" begin="-0.84s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.7;1" calcMode="spline" keySplines="0.45 0 0.25 1;0 0 1 1"><mpath href="#e21"/></animateMotion><animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.08;0.64;0.7;1" dur="6s" begin="-0.84s" repeatCount="indefinite"/></circle>
+<circle class="flow-dot k-depends_on" r="4" opacity="0"><animateMotion dur="6s" begin="-1.26s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.7;1" calcMode="spline" keySplines="0.45 0 0.25 1;0 0 1 1"><mpath href="#e22"/></animateMotion><animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.08;0.64;0.7;1" dur="6s" begin="-1.26s" repeatCount="indefinite"/></circle>
+<circle class="flow-dot k-depends_on" r="4" opacity="0"><animateMotion dur="6s" begin="0s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.7;1" calcMode="spline" keySplines="0.45 0 0.25 1;0 0 1 1"><mpath href="#e23"/></animateMotion><animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.08;0.64;0.7;1" dur="6s" begin="0s" repeatCount="indefinite"/></circle>
+<circle class="flow-dot k-depends_on" r="4" opacity="0"><animateMotion dur="6s" begin="-0.42s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.7;1" calcMode="spline" keySplines="0.45 0 0.25 1;0 0 1 1"><mpath href="#e24"/></animateMotion><animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.08;0.64;0.7;1" dur="6s" begin="-0.42s" repeatCount="indefinite"/></circle>
+<circle class="flow-dot k-depends_on" r="4" opacity="0"><animateMotion dur="6s" begin="-0.84s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.7;1" calcMode="spline" keySplines="0.45 0 0.25 1;0 0 1 1"><mpath href="#e25"/></animateMotion><animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.08;0.64;0.7;1" dur="6s" begin="-0.84s" repeatCount="indefinite"/></circle>
+<circle class="flow-dot k-depends_on" r="4" opacity="0"><animateMotion dur="6s" begin="-1.26s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.7;1" calcMode="spline" keySplines="0.45 0 0.25 1;0 0 1 1"><mpath href="#e26"/></animateMotion><animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.08;0.64;0.7;1" dur="6s" begin="-1.26s" repeatCount="indefinite"/></circle>
+<circle class="flow-dot k-depends_on" r="4" opacity="0"><animateMotion dur="6s" begin="0s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.7;1" calcMode="spline" keySplines="0.45 0 0.25 1;0 0 1 1"><mpath href="#e27"/></animateMotion><animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.08;0.64;0.7;1" dur="6s" begin="0s" repeatCount="indefinite"/></circle>
+<circle class="flow-dot k-depends_on" r="4" opacity="0"><animateMotion dur="6s" begin="-0.42s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.7;1" calcMode="spline" keySplines="0.45 0 0.25 1;0 0 1 1"><mpath href="#e29"/></animateMotion><animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.08;0.64;0.7;1" dur="6s" begin="-0.42s" repeatCount="indefinite"/></circle>
+<circle class="flow-dot k-depends_on" r="4" opacity="0"><animateMotion dur="6s" begin="-0.84s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.7;1" calcMode="spline" keySplines="0.45 0 0.25 1;0 0 1 1"><mpath href="#e30"/></animateMotion><animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.08;0.64;0.7;1" dur="6s" begin="-0.84s" repeatCount="indefinite"/></circle>
+<circle class="flow-dot k-depends_on" r="4" opacity="0"><animateMotion dur="6s" begin="-1.26s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.7;1" calcMode="spline" keySplines="0.45 0 0.25 1;0 0 1 1"><mpath href="#e31"/></animateMotion><animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.08;0.64;0.7;1" dur="6s" begin="-1.26s" repeatCount="indefinite"/></circle>
+<circle class="flow-dot k-depends_on" r="4" opacity="0"><animateMotion dur="6s" begin="-0.75s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.7;1" calcMode="spline" keySplines="0.45 0 0.25 1;0 0 1 1"><mpath href="#e32"/></animateMotion><animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.08;0.64;0.7;1" dur="6s" begin="-0.75s" repeatCount="indefinite"/></circle>
+<circle class="flow-dot k-depends_on" r="4" opacity="0"><animateMotion dur="6s" begin="-1.17s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.7;1" calcMode="spline" keySplines="0.45 0 0.25 1;0 0 1 1"><mpath href="#e33"/></animateMotion><animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.08;0.64;0.7;1" dur="6s" begin="-1.17s" repeatCount="indefinite"/></circle>
+<rect class="glow" x="198" y="220" width="180" height="64" opacity="0"><animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.66;0.74;0.92;1" dur="6s" begin="0s" repeatCount="indefinite"/></rect>
+<rect class="glow" x="17" y="220" width="165" height="64" opacity="0"><animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.66;0.74;0.92;1" dur="6s" begin="-0.42s" repeatCount="indefinite"/></rect>
+<rect class="glow" x="394" y="220" width="215" height="64" opacity="0"><animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.66;0.74;0.92;1" dur="6s" begin="-0.84s" repeatCount="indefinite"/></rect>
+<rect class="glow" x="313" y="915" width="160" height="64" opacity="0"><animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.66;0.74;0.92;1" dur="6s" begin="-1.26s" repeatCount="indefinite"/></rect>
+<rect class="glow" x="559" y="915" width="126" height="64" opacity="0"><animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.66;0.74;0.92;1" dur="6s" begin="0s" repeatCount="indefinite"/></rect>
+<rect class="glow" x="771" y="915" width="155" height="64" opacity="0"><animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.66;0.74;0.92;1" dur="6s" begin="-1.5s" repeatCount="indefinite"/></rect>
+<rect class="glow" x="529" y="479" width="235" height="81" opacity="0"><animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.66;0.74;0.92;1" dur="6s" begin="-0.42s" repeatCount="indefinite"/></rect>
+<rect class="glow" x="529" y="479" width="235" height="81" opacity="0"><animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.66;0.74;0.92;1" dur="6s" begin="-0.84s" repeatCount="indefinite"/></rect>
+<rect class="glow" x="529" y="479" width="235" height="81" opacity="0"><animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.66;0.74;0.92;1" dur="6s" begin="-1.26s" repeatCount="indefinite"/></rect>
+<rect class="glow" x="275" y="770" width="242" height="81" opacity="0"><animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.66;0.74;0.92;1" dur="6s" begin="0s" repeatCount="indefinite"/></rect>
+<rect class="glow" x="17" y="770" width="242" height="81" opacity="0"><animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.66;0.74;0.92;1" dur="6s" begin="-0.42s" repeatCount="indefinite"/></rect>
+<rect class="glow" x="17" y="673" width="235" height="81" opacity="0"><animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.66;0.74;0.92;1" dur="6s" begin="-1.26s" repeatCount="indefinite"/></rect>
+<rect class="glow" x="529" y="479" width="235" height="81" opacity="0"><animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.66;0.74;0.92;1" dur="6s" begin="0s" repeatCount="indefinite"/></rect>
+<rect class="glow" x="198" y="220" width="180" height="64" opacity="0"><animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.66;0.74;0.92;1" dur="6s" begin="-0.42s" repeatCount="indefinite"/></rect>
+<rect class="glow" x="198" y="220" width="180" height="64" opacity="0"><animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.66;0.74;0.92;1" dur="6s" begin="-0.84s" repeatCount="indefinite"/></rect>
+<rect class="glow" x="394" y="220" width="215" height="64" opacity="0"><animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.66;0.74;0.92;1" dur="6s" begin="-1.26s" repeatCount="indefinite"/></rect>
+<rect class="glow" x="559" y="915" width="126" height="64" opacity="0"><animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.66;0.74;0.92;1" dur="6s" begin="-0.75s" repeatCount="indefinite"/></rect>
+<rect class="glow" x="529" y="479" width="235" height="81" opacity="0"><animate attributeName="opacity" values="0;0;1;0;0" keyTimes="0;0.66;0.74;0.92;1" dur="6s" begin="-1.17s" repeatCount="indefinite"/></rect>
+</g>
+<g class="nodes">
+<g class="node t-adr s-stable" data-id="ADR-0001">
+<rect class="box" x="20" y="44" width="234" height="75"/>
+<text class="node-id" x="32" y="66">ADR-0001</text>
+<text class="node-title"><tspan x="32" y="85">スクリーンショットの証拠を1つのau</tspan><tspan x="32" y="102">toloadで撮る</tspan></text>
+</g>
+<g class="node t-tdr s-stable" data-id="TDR-0002">
+<rect class="box" x="20" y="223" width="159" height="58"/>
+<text class="node-id" x="32" y="245">TDR-0002</text>
+<text class="node-title"><tspan x="32" y="264">言語をGDScriptにする</tspan></text>
+</g>
+<g class="node t-tdr s-stable" data-id="TDR-0001">
+<rect class="box" x="201" y="223" width="174" height="58"/>
+<text class="node-id" x="213" y="245">TDR-0001</text>
+<text class="node-title"><tspan x="213" y="264">Godotの版を4.7.2にする</tspan></text>
+</g>
+<g class="node t-tdr s-stable" data-id="TDR-0003">
+<rect class="box" x="397" y="223" width="209" height="58"/>
+<text class="node-id" x="409" y="245">TDR-0003</text>
+<text class="node-title"><tspan x="409" y="264">Godot用のGitの設定をそろえる</tspan></text>
+</g>
+<g class="node t-tdr s-stable" data-id="TDR-0004">
+<rect class="box" x="628" y="223" width="236" height="58"/>
+<text class="node-id" x="640" y="245">TDR-0004</text>
+<text class="node-title"><tspan x="640" y="264">GodotのCIをapp-check.ymlで回す</tspan></text>
+</g>
+<g class="node t-pdr s-stable" data-id="PDR-0005">
+<rect class="box" x="20" y="385" width="236" height="75"/>
+<text class="node-id" x="32" y="407">PDR-0005</text>
+<text class="node-title"><tspan x="32" y="426">CCGSのsession-start.shとsetup</tspan><tspan x="32" y="443">-engineを、rulesのファイルから…</tspan></text>
+</g>
+<g class="node t-pdr s-stable" data-id="PDR-0003">
+<rect class="box" x="278" y="385" width="229" height="75"/>
+<text class="node-id" x="290" y="407">PDR-0003</text>
+<text class="node-title"><tspan x="290" y="426">ルートのCLAUDE.mdはgraphのまま</tspan><tspan x="290" y="443">にし、CCGSの内容はrulesへ移す</tspan></text>
+</g>
+<g class="node t-pdr s-deprecated" data-id="PDR-0002">
+<rect class="box" x="529" y="385" width="239" height="75"/>
+<text class="node-id" x="541" y="407">PDR-0002</text>
+<text class="node-title"><tspan x="541" y="426">graph-project-templateから作り</tspan><tspan x="541" y="443">、CCGSを選んだファイルのcheckou…</tspan></text>
+</g>
+<g class="node t-pdr s-deprecated" data-id="PDR-0004">
+<rect class="box" x="20" y="482" width="236" height="75"/>
+<text class="node-id" x="32" y="504">PDR-0004</text>
+<text class="node-title"><tspan x="32" y="523">ADRを役割で2か所に分け、CCGSのAD</tspan><tspan x="32" y="540">Rはgraphで検証しない</tspan></text>
+</g>
+<g class="node t-pdr s-stable" data-id="PDR-0007">
+<rect class="box" x="278" y="482" width="232" height="75"/>
+<text class="node-id" x="290" y="504">PDR-0007</text>
+<text class="node-title"><tspan x="290" y="523">TDRとADRの最終確認日をフロントマ</tspan><tspan x="290" y="540">ターに持つ</tspan></text>
+</g>
+<g class="node t-pdr s-stable" data-id="PDR-0006">
+<rect class="box" x="532" y="482" width="229" height="75"/>
+<text class="node-id" x="544" y="504">PDR-0006</text>
+<text class="node-title"><tspan x="544" y="523">CCGSを丸ごと取り込み、決定の記録</tspan><tspan x="544" y="540">を4つの種別に分ける</tspan></text>
+</g>
+<g class="node t-pdr s-stable" data-id="PDR-0008">
+<rect class="box" x="20" y="579" width="234" height="75"/>
+<text class="node-id" x="32" y="601">PDR-0008</text>
+<text class="node-title"><tspan x="32" y="620">GDDと設計の文書はgraphの検証の外</tspan><tspan x="32" y="637">に置く</tspan></text>
+</g>
+<g class="node t-pdr s-stable" data-id="PDR-0011">
+<rect class="box" x="276" y="579" width="229" height="75"/>
+<text class="node-id" x="288" y="601">PDR-0011</text>
+<text class="node-title"><tspan x="288" y="620">CCGSの.gitignoreは、エンジンの</tspan><tspan x="288" y="637">節を除いてこの層の節に写す</tspan></text>
+</g>
+<g class="node t-pdr s-deprecated" data-id="PDR-0014">
+<rect class="box" x="527" y="579" width="236" height="75"/>
+<text class="node-id" x="539" y="601">PDR-0014</text>
+<text class="node-title"><tspan x="539" y="620">この層の共通ファイルを、作品が書き</tspan><tspan x="539" y="637">換えないものに限る</tspan></text>
+</g>
+<g class="node t-pdr s-stable" data-id="PDR-0016">
+<rect class="box" x="20" y="676" width="229" height="75"/>
+<text class="node-id" x="32" y="698">PDR-0016</text>
+<text class="node-title"><tspan x="32" y="717">tests/unit/qa/もこの層の共通フ</tspan><tspan x="32" y="734">ァイルにする</tspan></text>
+</g>
+<g class="node t-pdr s-stable" data-id="PDR-0015">
+<rect class="box" x="271" y="676" width="236" height="75"/>
+<text class="node-id" x="283" y="698">PDR-0015</text>
+<text class="node-title"><tspan x="283" y="717">作品が書き換えるこの層のファイルも</tspan><tspan x="283" y="734">、merge=oursにしない</tspan></text>
+</g>
+<g class="node t-pdr s-stable" data-id="PDR-0013">
+<rect class="box" x="529" y="676" width="236" height="75"/>
+<text class="node-id" x="541" y="698">PDR-0013</text>
+<text class="node-title"><tspan x="541" y="717">CODEOWNERSの雛形には、既定の持ち</tspan><tspan x="541" y="734">主を置かない</tspan></text>
+</g>
+<g class="node t-pdr s-stable" data-id="PDR-0012">
+<rect class="box" x="20" y="773" width="236" height="75"/>
+<text class="node-id" x="32" y="795">PDR-0012</text>
+<text class="node-title"><tspan x="32" y="814">複数人で開発するときは、持ち主の承</tspan><tspan x="32" y="831">認を必須にする</tspan></text>
+</g>
+<g class="node t-pdr s-stable" data-id="PDR-0009">
+<rect class="box" x="278" y="773" width="236" height="75"/>
+<text class="node-id" x="290" y="795">PDR-0009</text>
+<text class="node-title"><tspan x="290" y="814">CODEOWNERSは雛形として配り、作品</tspan><tspan x="290" y="831">が担当者を入れる</tspan></text>
+</g>
+<g class="node t-contract s-draft" data-id="CON-01">
+<rect class="box" x="62" y="918" width="162" height="58"/>
+<text class="node-id" x="74" y="940">CON-01</text>
+<text class="node-title"><tspan x="74" y="959">予約確定エンドポイント</tspan></text>
+</g>
+<g class="node t-usecase s-review" data-id="UC-01">
+<rect class="box" x="316" y="918" width="154" height="58"/>
+<text class="node-id" x="328" y="940">UC-01</text>
+<text class="node-title"><tspan x="328" y="959">予約を確定する</tspan></text>
+</g>
+<g class="node t-domain s-stable" data-id="DOM-01">
+<rect class="box" x="562" y="918" width="120" height="58"/>
+<text class="node-id" x="574" y="940">DOM-01</text>
+<text class="node-title"><tspan x="574" y="959">予約</tspan></text>
+</g>
+<g class="node t-architecture s-stable" data-id="ARCH-01">
+<rect class="box" x="774" y="918" width="149" height="58"/>
+<text class="node-id" x="786" y="940">ARCH-01</text>
+<text class="node-title"><tspan x="786" y="959">システム全体構成</tspan></text>
+</g>
+<g class="node t-architecture s-stable" data-id="ARCH-02">
+<rect class="box" x="774" y="998" width="149" height="58"/>
+<text class="node-id" x="786" y="1020">ARCH-02</text>
+<text class="node-title"><tspan x="786" y="1039">ワーカーの実行モデル</tspan></text>
+</g>
+<g class="node t-usecase s-review" data-id="UC-02">
+<rect class="box" x="316" y="1030" width="154" height="58"/>
+<text class="node-id" x="328" y="1052">UC-02</text>
+<text class="node-title"><tspan x="328" y="1071">CCGSの更新を取り込む</tspan></text>
+</g>
+<g class="node t-meta s-stable" data-id="META-07">
+<rect class="box" x="20" y="1162" width="126" height="58"/>
+<text class="node-id" x="32" y="1184">META-07</text>
+<text class="node-title"><tspan x="32" y="1203">issueとPRの流れ</tspan></text>
+</g>
+<g class="node t-meta s-stable" data-id="META-08">
+<rect class="box" x="168" y="1162" width="199" height="58"/>
+<text class="node-id" x="180" y="1184">META-08</text>
+<text class="node-title"><tspan x="180" y="1203">テンプレートの更新を取り込む</tspan></text>
+</g>
+<g class="node t-meta s-stable" data-id="META-01">
+<rect class="box" x="389" y="1162" width="120" height="58"/>
+<text class="node-id" x="401" y="1184">META-01</text>
+<text class="node-title"><tspan x="401" y="1203">グラフの規約</tspan></text>
+</g>
+<g class="node t-meta s-stable" data-id="META-02">
+<rect class="box" x="531" y="1162" width="120" height="58"/>
+<text class="node-id" x="543" y="1184">META-02</text>
+<text class="node-title"><tspan x="543" y="1203">ノード種別と層</tspan></text>
+</g>
+<g class="node t-meta s-stable" data-id="META-03">
+<rect class="box" x="673" y="1162" width="152" height="58"/>
+<text class="node-id" x="685" y="1184">META-03</text>
+<text class="node-title"><tspan x="685" y="1203">本文のレビュー（AI）</tspan></text>
+</g>
+<g class="node t-meta s-stable" data-id="META-05">
+<rect class="box" x="20" y="1242" width="120" height="58"/>
+<text class="node-id" x="32" y="1264">META-05</text>
+<text class="node-title"><tspan x="32" y="1283">開発の流れ</tspan></text>
+</g>
+<g class="node t-meta s-stable" data-id="META-04">
+<rect class="box" x="162" y="1242" width="224" height="58"/>
+<text class="node-id" x="174" y="1264">META-04</text>
+<text class="node-title"><tspan x="174" y="1283">文書と実装を同じリポジトリに置く</tspan></text>
+</g>
+<g class="node t-meta s-stable" data-id="META-06">
+<rect class="box" x="408" y="1242" width="120" height="58"/>
+<text class="node-id" x="420" y="1264">META-06</text>
+<text class="node-title"><tspan x="420" y="1283">開発の原則</tspan></text>
+</g>
+</g>
+</svg>
