@@ -29,7 +29,7 @@ Claude Codeは、リポジトリの根で起動する。CCGSのフックと、�
 
 ## 開発環境を用意する
 
-[SETUP.md](SETUP.md)には、前提ツールの入れ方・作品に参加した人がすること・作品を作った人が1回だけすること・Godotのテストの入れ方と回し方がある。作品の`README.md`を作品の説明に書き換えるときも、`SETUP.md`へのリンクは残す。`README.md`は`merge=ours`なので、作品が書き換えたあとはテンプレートの直しが届かない。`SETUP.md`は共通ファイルなので、取り込むたびに新しくなる。
+[SETUP.md](SETUP.md)には、前提ツールの入れ方・作品に参加した人がすること・作品を作った人が1回だけすること・Godotのテストの入れ方と回し方がある。作品の`README.md`を作品の説明に書き換えるときも、`SETUP.md`へのリンクは残す。`README.md`は`merge=ours`なので、作品が書き換えたあとはテンプレートが直したところが届かない。`SETUP.md`は共通ファイルなので、取り込むたびに新しくなる。
 
 ## テンプレートの更新を取り込む
 
@@ -37,7 +37,7 @@ Claude Codeは、リポジトリの根で起動する。CCGSのフックと、�
 
 | 場面 | この層で足すもの |
 | --- | --- |
-| 初回に上書きする共通ファイル | META-08とgraph-project-templateの一覧に加えて、下の表の共通ファイルを上書きする。この層の版を持つ`tools/graph/layers/game-template.toml`は、`tools/`に含まれる |
+| 初回に上書きする共通ファイル | META-08とgraph-project-templateの一覧に加えて、下の表の共通ファイルを上書きする。この層のバージョンを持つ`tools/graph/layers/game-template.toml`は、`tools/`に含まれる |
 | upstreamのURL | `git remote add template https://github.com/setopic/godot-game-template.git`にする。graph-project-templateを指すと、この層を取り込めない |
 | ラベルを作る | `gh label clone setopic/godot-game-template`を使う |
 | CCGSの更新 | 作品は、CCGSから直接取り込まない。godot-game-templateがCCGSの更新を取り入れたあと（[UC-02](docs/30-usecases/uc-02-ccgs-upgrade.md)）、`make update`で届く |
@@ -50,7 +50,7 @@ Claude Codeは、リポジトリの根で起動する。CCGSのフックと、�
 
 作品のもののうち、`project.yaml`・`graph.toml`・`graph.mk`・`docs/templates/`は`merge=ours`ではないので、この層の変更が取り込みで届く。競合したら、作品の変更とこの層の変更の両方を残して手で解く。`graph.toml`と`graph.mk`に作品が足すものは、末尾の「ここから下は作品が足すもの」の下に書く（[PDR-0015](docs/50-pdr/pdr-0015-no-merge-ours-project-files.md)）。
 
-`/setup-engine`と`/skill-improve`は、共通ファイルを書き換える。エンジンの版を上げるときや、スキルを直すときは、テンプレートの側で行う。
+`/setup-engine`と`/skill-improve`は、共通ファイルを書き換える。エンジンのバージョンを上げるときや、スキルを直すときは、テンプレートの側で行う。
 
 ---
 
@@ -203,8 +203,8 @@ python -m tools.graph render --format mermaid --focus DOM-01
 | `python -m tools.graph new --from <file>` | 1行に1ノードを書いたファイルから、まとめて作る |
 | `python -m tools.graph reset-samples` | 同梱のサンプルノードをまとめて取り除く |
 | `python -m tools.graph upgrade` | テンプレートとの差を調べる（読み取りのみ） |
-| `python -m tools.graph upgrade --label` | 取り込みの版だけを出す（`make update`が使う。fetchはしない） |
-| `python -m tools.graph --version` | テンプレートの版を表示する |
+| `python -m tools.graph upgrade --label` | 取り込みのバージョンだけを出す（`make update`が使う。fetchはしない） |
+| `python -m tools.graph --version` | テンプレートのバージョンを表示する |
 | `python -m tools.graph stats` | ノード数・エッジ数を集計し、構造の見直しの候補を出す（下の「構造の見直しの候補」） |
 | `python -m tools.graph review` | 本文の質をAIに見てもらう（任意・通信あり） |
 | `python -m unittest discover -s tests -t .` | ツール自体のテスト |
@@ -345,13 +345,13 @@ python -m tools.graph linkify
 
 ## テンプレートの更新を取り込む
 
-このテンプレートから作ったプロジェクトに、あとからテンプレート側の改善を反映する手順は、[META-08 テンプレートの更新を取り込む](docs/00-meta/template-upgrade.md)にある。初回の準備、`make update`での取り込み、テンプレートの層ごとの版、取り込みのPRの書き方を扱う。
+このテンプレートから作ったプロジェクトに、あとからテンプレート側の改善を反映する手順は、[META-08 テンプレートの更新を取り込む](docs/00-meta/template-upgrade.md)にある。初回の準備、`make update`での取り込み、テンプレートの層ごとのバージョン、取り込みのPRの書き方を扱う。
 
 手順をこのREADMEに置かないのは、`README.md`が`.gitattributes`の`merge=ours`で、プロジェクトが書き換えたあとは取り込みが届かないからである。META-08は共通ファイルなので、取り込むたびに手順も新しくなる。ここには、この層がMETA-08の手順に足すものだけを書く。
 
 | 場面 | この層で足すもの |
 | --- | --- |
-| 初回に上書きする共通ファイル | META-08の一覧に加えて、`PROJECT_TEMPLATE_CHANGELOG.md`と`CONTRIBUTING.md`を上書きする。この層の版を持つ`tools/graph/layers/graph-project-template.toml`は、`tools/`に含まれる。`docs/00-meta/dev-flow.md`と`.github/workflows/app-check.yml`は`merge=ours`のプロジェクト固有のファイルなので、上書きしない。`.github/ISSUE_TEMPLATE/config.yml`も`merge=ours`だが、中身はテンプレートへの導線なので、テンプレートの内容で上書きする |
+| 初回に上書きする共通ファイル | META-08の一覧に加えて、`PROJECT_TEMPLATE_CHANGELOG.md`と`CONTRIBUTING.md`を上書きする。この層のバージョンを持つ`tools/graph/layers/graph-project-template.toml`は、`tools/`に含まれる。`docs/00-meta/dev-flow.md`と`.github/workflows/app-check.yml`は`merge=ours`のプロジェクト固有のファイルなので、上書きしない。`.github/ISSUE_TEMPLATE/config.yml`も`merge=ours`だが、中身はテンプレートへの導線なので、テンプレートの内容で上書きする |
 | upstreamのURL | `git remote add template https://github.com/setopic/graph-project-template.git`にする。`graph-doc-template`を指すと、この層（META-04〜06、`app-check.yml`、`/lean`など）を取り込めない |
 | ラベルを作る | `gh label clone setopic/graph-project-template`を使う |
 | `merge=ours`のファイル | この層では、`docs/00-meta/dev-flow.md`・`.github/workflows/app-check.yml`・`.github/ISSUE_TEMPLATE/config.yml`も`merge=ours`で、プロジェクトが書き換えたあとは、取り込みでは変わらない。手で反映するものは、この層の変更履歴（[PROJECT_TEMPLATE_CHANGELOG.md](PROJECT_TEMPLATE_CHANGELOG.md)）の「取り込む側の作業」に書く |

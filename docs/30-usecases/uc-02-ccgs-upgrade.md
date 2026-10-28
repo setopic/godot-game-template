@@ -16,21 +16,21 @@ related: []
 | 項目 | 内容 |
 | --- | --- |
 | 実行者 | godot-game-templateを保守する人 |
-| きっかけ | CCGS（Claude-Code-Game-Studios）が新しい版を出したとき。セッションの開始のときに、CCGSの`update-check.sh`が新しい版を知らせる |
-| 完了したときに得られる状態 | CCGSの新しい版の変更が、godot-game-templateに入っている。graph側のファイルと、この層でCCGSのファイルを直した箇所は残っている |
+| きっかけ | CCGS（Claude-Code-Game-Studios）が新しいバージョンを出したとき。セッションの開始のときに、CCGSの`update-check.sh`が新しいバージョンを知らせる |
+| 完了したときに得られる状態 | CCGSの新しいバージョンの変更が、godot-game-templateに入っている。graph側のファイルと、この層でCCGSのファイルを直した箇所は残っている |
 | 影響 | 作業はブランチで行うので、mainは止まらない。作品へは、godot-game-templateをマージした後に`make update`で届く |
 
-CCGSは、[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)のとおり丸ごと取り込み、更新は中身を読んで取り入れる。この層で直したCCGSのファイルの一覧は、手で持たない。いまの版のCCGSと手元を`git diff`で比べて見分ける。履歴が共通でないので、`git merge`は使わない。
+CCGSは、[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)のとおり丸ごと取り込み、更新は中身を読んで取り入れる。この層で直したCCGSのファイルの一覧は、手で持たない。いまのバージョンのCCGSと手元を`git diff`で比べて見分ける。履歴が共通でないので、`git merge`は使わない。
 
 ## 事前条件
 
 - [ ] remoteの`ccgs`がある（`git remote -v`）。無ければ`git remote add ccgs https://github.com/Donchitos/Claude-Code-Game-Studios.git`で足す
-- [ ] いま入っているCCGSの版が分かる。`CHANGELOG.md`の最初の`## [`の見出しが、その版である（`grep -m1 '^## \[' CHANGELOG.md`）
+- [ ] いま入っているCCGSのバージョンが分かる。`CHANGELOG.md`の最初の`## [`の見出しが、そのバージョンである（`grep -m1 '^## \[' CHANGELOG.md`）
 - [ ] 作業ツリーに、コミットしていない変更が無い
 
 ## 手順
 
-1. CCGSを取ってきて、新しい版の`UPGRADING.md`の、いまの版から新しい版までの節を読む。手で合わせるファイル（Merge Carefully）の指示は、手順4で使う。
+1. CCGSを取ってきて、新しいバージョンの`UPGRADING.md`の、いまのバージョンから新しいバージョンまでの節を読む。手で合わせるファイル（Merge Carefully）の指示は、手順4で使う。
 
    ```bash
    git fetch --tags ccgs main
@@ -43,7 +43,7 @@ CCGSは、[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)のとお�
    git switch -c chore/ccgs-<新しい版>
    ```
 
-3. CCGSで変わったファイルを、手元で直したかどうかで分ける。`<いまの版>`には、`1.2.0`のようなCCGSの版を入れる。CCGSのタグは`v1.2.0`の形である。
+3. CCGSで変わったファイルを、手元で直したかどうかで分ける。`<いまの版>`には、`1.2.0`のようなCCGSのバージョンを入れる。CCGSのタグは`v1.2.0`の形である。
 
    ```bash
    v=v<いまの版>
@@ -59,15 +59,15 @@ CCGSは、[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)のとお�
    done
    ```
 
-   1行目の`git diff`は、いまの版から新しい版までにCCGSで変わったファイルを挙げる。`--no-renames`を付けているので、名前が変わったファイルは、消えたファイルと増えたファイルとして出る。`.github/`などのパスを外す理由は、手順5にある。
+   1行目の`git diff`は、いまのバージョンから新しいバージョンまでにCCGSで変わったファイルを挙げる。`--no-renames`を付けているので、名前が変わったファイルは、消えたファイルと増えたファイルとして出る。`.github/`などのパスを外す理由は、手順5にある。
 
-   ループは、挙がったファイルごとに、いまの版のCCGSと手元（`HEAD`）を比べる。差が無いファイルは、手元で直していない。新しい版にあれば`git checkout`で写し、新しい版で消えていれば`git rm`で消す。差があるファイルは、手元で直したか、graph側に同じパスのファイルがある。写さずに「手で合わせる」として名前を出す。
+   ループは、挙がったファイルごとに、いまのバージョンのCCGSと手元（`HEAD`）を比べる。差が無いファイルは、手元で直していない。新しいバージョンにあれば`git checkout`で写し、新しいバージョンで消えていれば`git rm`で消す。差があるファイルは、手元で直したか、graph側に同じパスのファイルがある。写さずに「手で合わせる」として名前を出す。
 
 4. 手順3で「手で合わせる」と出たファイルを、1つずつ合わせる。CCGSの差は`git diff v<いまの版> ccgs/main -- <ファイル>`で、手元で直した箇所は`git diff v<いまの版> HEAD -- <ファイル>`で見る。CCGSの差を手元のファイルに写し、手元で直した箇所は残す。直した理由は、直した箇所の注記（`game-template (PDR-0005)`など）と、`git log -- <ファイル>`で分かる。
 
    `.gitignore`は、CCGSの差のうち、エンジンの節（`# === Engine: Godot ===`・`Unity`・`Unreal`）の変更は写さず、それ以外の節の変更を、この層のCCGSの節に写す（[PDR-0011](../50-pdr/pdr-0011-ccgs-gitignore.md)）。Godotの節の変更は、[TDR-0003](../51-tdr/tdr-0003-godot-git-settings.md)と食い違わないかを見てから、この層のGodotの節に入れるかを決める。
 
-   CCGSの`UPGRADING.md`にMerge Carefullyの指示があるファイルは、その指示にも従う。`project.yaml`は、`framework.version`を新しい版にする。
+   CCGSの`UPGRADING.md`にMerge Carefullyの指示があるファイルは、その指示にも従う。`project.yaml`は、`framework.version`を新しいバージョンにする。
 
 5. 手順3で外したパスのうち、CCGSで変わったものを合わせる。手順3で外すのは、graph側に同じパスのファイルがあり、CCGSのものを入れないファイルである（[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)が引き継いだ、写さなかったものの表）。
 
@@ -101,7 +101,7 @@ CCGSは、[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)のとお�
 | 制約 | 理由 |
 | --- | --- |
 | 1 → 3 | 手順3で使う`v<いまの版>`のタグは、手順1の`git fetch --tags`で取ってくる |
-| 事前条件 → 3 | 手順3のあとでは、`CHANGELOG.md`がもう新しい版になっていて、いまの版が分からなくなる。いまの版は、手順3より前に確かめておく |
+| 事前条件 → 3 | 手順3のあとでは、`CHANGELOG.md`がもう新しいバージョンになっていて、いまのバージョンが分からなくなる。いまのバージョンは、手順3より前に確かめておく |
 | `.claude/hooks`と`.claude/scripts`は、同じPRでそろえる | フックが`.claude/scripts/`の補助を呼ぶ。片方だけ新しいと、フックが動かなくなる（CCGSの`UPGRADING.md`の1.2.0の節）。手順3で片方だけが「手で合わせる」に出たら、手順4で合わせ終えるまでPRにしない |
 | 手順4と5は、どちらからでもよい | 互いに結果を使わない |
 | 手順6と7は、どちらからでもよい | 互いに結果を使わない |
@@ -119,8 +119,8 @@ CCGSは、[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)のとお�
 
 ## 完了の確認
 
-- [ ] `grep -m1 '^## \[' CHANGELOG.md`が、新しい版を出す
-- [ ] `project.yaml`の`framework.version`が、新しい版である
+- [ ] `grep -m1 '^## \[' CHANGELOG.md`が、新しいバージョンを出す
+- [ ] `project.yaml`の`framework.version`が、新しいバージョンである
 - [ ] 手順3で「手で合わせる」と出たファイルを、すべて合わせた
 - [ ] `git status --short`に、手順5で入れないとしたファイルが無い
 - [ ] `claude -p`で`/start`を回し、最初の問いが返る
@@ -131,7 +131,7 @@ CCGSは、[PDR-0006](../50-pdr/pdr-0006-ccgs-whole-import-dr-types.md)のとお�
 
 ## 未確認
 
-この手順は、版を上げる取り込みでまだ試していない。手順3のループは、Git Bashで動くことを前提にしている。手順3で消えたファイルを消すとき、作品の側に`make update`で消えたことが届くかは確かめていない。
+この手順は、バージョンを上げる取り込みでまだ試していない。手順3のループは、Git Bashで動くことを前提にしている。手順3で消えたファイルを消すとき、作品の側に`make update`で消えたことが届くかは確かめていない。
 
 ---
 

@@ -12,7 +12,7 @@ godot-game-templateから作った作品で、開発を始めるまでの手順�
 
 どのOSでも、次の3つを入れる。
 
-- Godot 4.7.2の標準版（.NETでない版）。[GitHubのreleases](https://github.com/godotengine/godot/releases)の4.7.2-stableか、公式サイトから入れる。版の理由は[TDR-0001](docs/51-tdr/tdr-0001-godot-version.md)にある。`project.yaml`の`commands`はPATHの`godot`を呼ぶので、PATHに通す。`/settings`で`engine.path`にエディタのパスを設定する方法もある。`make ci`は、PATHに`godot`が無ければ`engine.path`のエディタを使う。
+- Godot 4.7.2の標準版（.NETでない版）。[GitHubのreleases](https://github.com/godotengine/godot/releases)の4.7.2-stableか、公式サイトから入れる。バージョンの理由は[TDR-0001](docs/51-tdr/tdr-0001-godot-version.md)にある。`project.yaml`の`commands`はPATHの`godot`を呼ぶので、PATHに通す。`/settings`で`engine.path`にエディタのパスを設定する方法もある。`make ci`は、PATHに`godot`が無ければ`engine.path`のエディタを使う。
 - Python 3.12以上。`python -m tools.graph check`と`make ci`が使う。
 - GitとClaude Code。入れ方は、[setup-requirements.md](.claude/docs/setup-requirements.md)の「Required」にある。
 
@@ -84,15 +84,15 @@ git lfs unlock <パス>
 
 4より5を後にするのは、`project.godot`ができた時点で、CIが`tests/unit/qa/`のテストを回そうとするからである。`addons/gdUnit4/`が無いと、`.github/scripts/godot-ci.sh`がそこで落とす。
 
-`/setup-engine`の全体を回さないのは、1〜7が共通ファイルを書き換えるからである。エンジンと版は、このテンプレートで決めてある。5と6は、テンプレートの管理者が`project.godot`だけを変えるPRで行う（[META-05](docs/00-meta/dev-flow.md)の「シーンと`project.godot`」）。作品では、`.github/CODEOWNERS`で`project.godot`の持ち主にした人を、テンプレートの管理者と呼ぶ。`CODEOWNERS`を置かない作品では、作品のリポジトリを作った人がテンプレートの管理者である。役割の分け方の雛形は`.github/CODEOWNERS.example`にある。
+`/setup-engine`の全体を回さないのは、1〜7が共通ファイルを書き換えるからである。エンジンとバージョンは、このテンプレートで決めてある。5と6は、テンプレートの管理者が`project.godot`だけを変えるPRで行う（[META-05](docs/00-meta/dev-flow.md)の「シーンと`project.godot`」）。作品では、`.github/CODEOWNERS`で`project.godot`の持ち主にした人を、テンプレートの管理者と呼ぶ。`CODEOWNERS`を置かない作品では、作品のリポジトリを作った人がテンプレートの管理者である。役割の分け方の雛形は`.github/CODEOWNERS.example`にある。
 
 複数人で開発するなら、mainの保護も設定する（[META-05](docs/00-meta/dev-flow.md)の「複数人で開発するとき」）。
 
 ## 4. Godotのテスト
 
-テストは、[GdUnit4](https://github.com/godot-gdunit-labs/gdUnit4)で書いて回す。このテンプレートは`addons/gdUnit4/`を配っていないので、作品ごとに入れる。Godot 4.7.2で動くことを確かめた版は6.2.2である（[current-best-practices.md](docs/engine-reference/godot/current-best-practices.md)）。
+テストは、[GdUnit4](https://github.com/godot-gdunit-labs/gdUnit4)で書いて回す。このテンプレートは`addons/gdUnit4/`を配っていないので、作品ごとに入れる。Godot 4.7.2で動くことを確かめたバージョンは6.2.2である（[current-best-practices.md](docs/engine-reference/godot/current-best-practices.md)）。
 
-1. [GdUnit4のreleases](https://github.com/godot-gdunit-labs/gdUnit4/releases)から版を選び、中の`addons/gdUnit4/`をリポジトリの根の`addons/gdUnit4/`に置く。`gdUnit4`のUは大文字である。
+1. [GdUnit4のreleases](https://github.com/godot-gdunit-labs/gdUnit4/releases)からバージョンを選び、中の`addons/gdUnit4/`をリポジトリの根の`addons/gdUnit4/`に置く。`gdUnit4`のUは大文字である。
 2. `addons/gdUnit4/bin/GdUnitCmdTool.gd`があることを確かめ、`addons/gdUnit4/`だけのPRを出す。
 3. プラグインの有効化（Project Settings → Plugins → GdUnit4）は`project.godot`を書き換えるので、上の「3. 作品を作った人が1回だけすること」の6で、`project.godot`だけのPRに入れる。エディタを使わずに有効にするときは、`project.godot`に次の節を書く。
 
