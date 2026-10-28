@@ -19,6 +19,8 @@
 README.md merge=ours
 index.md  merge=ours
 docs/50-pdr/pdr-0001-graph-driven-docs.md merge=ours
+# READMEの図（make readmeが書くSVG）も、プロジェクトのノードから作るので、常に自分側が正しい
+docs/graph.svg merge=ours
 
 # PROJECT_CHANGELOG.mdは**そのリポジトリ自身の履歴**であって、上流のものではない。
 # 上流が同じ名前で自分の履歴を持っていると、取り込みのたびに上書きするか
