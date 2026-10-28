@@ -14,13 +14,13 @@
 | [CHANGELOG.md](CHANGELOG.md) | CCGS（`game-template`が取り込んだもの） | 流れてくる |
 | このファイル | このプロジェクト自身 | 流れてこない |
 
-上流の版を上げるときは、このファイルを書き換えない。上流の版は、`tools/graph/version.py`と`tools/graph/layers/`の下の各層の宣言（`graph-project-template.toml`・`game-template.toml`）が持つ。
+上流のバージョンを上げるときは、このファイルを書き換えない。上流のバージョンは、`tools/graph/version.py`と`tools/graph/layers/`の下の各層の宣言（`graph-project-template.toml`・`game-template.toml`）が持つ。
 
 ---
 
 ## 0.1.0（YYYY-MM-DD）
 
-最初の版。
+最初のバージョン。
 
 ### 追加
 

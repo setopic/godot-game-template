@@ -4,7 +4,7 @@
 
 **派生プロジェクトはこのファイルを書き換えない。**
 
-現在の版は、`tools/graph/layers/game-template.toml`の`version`に書く。版の付け方と見出しの書き方は、[PROJECT_TEMPLATE_CHANGELOG.md](PROJECT_TEMPLATE_CHANGELOG.md)の「版の付け方」に合わせる。
+現在のバージョンは、`tools/graph/layers/game-template.toml`の`version`に書く。バージョンの付け方と見出しの書き方は、[PROJECT_TEMPLATE_CHANGELOG.md](PROJECT_TEMPLATE_CHANGELOG.md)の「バージョンの付け方」に合わせる。
 
 ## 上流と共通のファイルを書き換えたもの
 
@@ -16,6 +16,16 @@
 | `.gitignore` | 末尾に、この層のGodotの節（0.11.0）とCCGSの節（0.16.0）を足した | 競合した部分だけを解き、この層の節と上流の行の両方を残す |
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`と`PROJECT_CHANGELOG.md`の雛形（0.22.7）もこの層で書き足している。どちらも`merge=ours`なので、この層と上流の両方が変えたときはこの層の側が残り、競合しない。そのときは上流の変更が入らないので、上流の変更履歴の「取り込む側の作業」を見て手で合わせる。
+
+## 0.23.27（2026-10-28）
+
+### 変更
+
+この層に固有の文書で、バージョンの意味の「版」を「バージョン」に揃えた。上流の1.55.1と0.16.6が同じ置き換えをしている。意味・手順・決まりは変えていない。直したのは、根の`README.md`、`SETUP.md`、`PROJECT_CHANGELOG.md`の雛形の2か所、`GAME_TEMPLATE_CHANGELOG.md`の先頭の説明、`docs/30-usecases/uc-02-ccgs-upgrade.md`である。`README.md`では、「テンプレートの直しが届かない」も「テンプレートが直したところが届かない」に直した。「標準版」と「版管理」は、バージョンの意味ではないので残した。コードブロックの中の`<いまの版>`は、コードなので残した。確定した記録と、変更履歴の過去の項は書き換えていない。
+
+### 取り込む側の作業
+
+なし。`README.md`と`PROJECT_CHANGELOG.md`は`merge=ours`なので、作品が書き換えていれば、この版の直しは届かない。届かなくても、意味は変わっていないので、合わせなくてよい。
 
 ## 0.23.26（2026-10-28）
 
