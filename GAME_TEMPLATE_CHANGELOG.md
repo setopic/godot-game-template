@@ -17,6 +17,16 @@
 
 `docs/00-meta/templates/`は、0.10.0から書き換えていない。この層の`adr.md`・`tdr.md`・`pdr.md`・`ddr.md`は`docs/templates/`に置き、`graph.toml`の各種別の`template`で指している。`docs/00-meta/dev-flow.md`と`PROJECT_CHANGELOG.md`の雛形（0.22.7）もこの層で書き足している。どちらも`merge=ours`なので、この層と上流の両方が変えたときはこの層の側が残り、競合しない。そのときは上流の変更が入らないので、上流の変更履歴の「取り込む側の作業」を見て手で合わせる。
 
+## 0.23.26（2026-10-28）
+
+### 変更
+
+READMEの図を、上流の1.56.0でSVGに切り替えた。この層のノードは多く、`decides`の線を描くと、図の下側で線が重なって読めない。そのため`graph.mk`に`README_GRAPH_ARGS = --hide-edges decides`を足し、`make readme`が`decides`の線を描かないようにした。ノードと、ほかの線は変えていない。
+
+### 取り込む側の作業
+
+`graph.mk`は`merge=ours`ではないので、取り込みで入る。作品が`README_GRAPH_ARGS`を自分で書いていれば競合するので、競合した部分だけを解き、作品の指定を残す。取り込んだら`make readme`を回し、`README.md`と`docs/graph.svg`をコミットする。回すまで、CIの`readme-check`が落ちる。
+
 ## 0.23.25（2026-10-24）
 
 ### 変更
